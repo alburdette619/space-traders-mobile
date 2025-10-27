@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "void-trader",
+    "name": "Void Trader",
     "slug": "void-trader",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -26,7 +26,6 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",
       [
         "expo-splash-screen",
         {
@@ -41,7 +40,6 @@
       ]
     ],
     "experiments": {
-      "typedRoutes": true,
       "reactCompiler": true
     }
   }
