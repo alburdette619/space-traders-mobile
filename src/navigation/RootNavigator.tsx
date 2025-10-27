@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-// import { CharacterList } from '../screens/CharacterList';
+import { NewAgentScreen } from "../screens/NewAgent";
 
 const Stack = createNativeStackNavigator();
 
@@ -8,7 +8,7 @@ export const RootStack = () => {
     <Stack.Navigator
       screenOptions={{ contentStyle: styles.container, headerShown: false }}
     >
-      {/* <Stack.Screen name="Home" component={CharacterList} /> */}
+      <Stack.Screen name="NewAgent" component={NewAgentScreen} />
     </Stack.Navigator>
   );
 };
