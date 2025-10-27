@@ -21,8 +21,8 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ShipRequirements } from '../models-ShipRequirements/shipRequirements';
-import type { ShipModuleSymbol } from './shipModuleSymbol';
+import type { ShipRequirements } from "../models-ShipRequirements/shipRequirements";
+import type { ShipModuleSymbol } from "./shipModuleSymbol";
 
 /**
  * A module can be installed in a ship and provides a set of capabilities such as storage space or quarters for crew. Module installations are permanent.

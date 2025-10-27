@@ -21,8 +21,8 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ContractDeliverGood } from '../models-ContractDeliverGood/contractDeliverGood';
-import type { ContractPayment } from '../models-ContractPayment/contractPayment';
+import type { ContractDeliverGood } from "../models-ContractDeliverGood/contractDeliverGood";
+import type { ContractPayment } from "../models-ContractPayment/contractPayment";
 
 /**
  * The terms to fulfill the contract.

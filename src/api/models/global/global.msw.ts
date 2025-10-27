@@ -21,92 +21,269 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import {
-  faker
-} from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 
-import {
-  HttpResponse,
-  http
-} from 'msw';
-import type {
-  RequestHandlerOptions
-} from 'msw';
+import { HttpResponse, http } from "msw";
+import type { RequestHandlerOptions } from "msw";
 
-import type {
-  GetStatus200
-} from '../getStatus200';
+import type { GetStatus200 } from "../getStatus200";
 
-import type {
-  Register201
-} from '../register201';
-import { Agent } from '../models-Agent/agent';
-import { Contract } from '../models-Contract/contract';
-import { Faction } from '../models-Faction/faction';
-import { Ship } from '../models-Ship/ship';
+import type { Register201 } from "../register201";
+import { Agent } from "../models-Agent/agent";
+import { Contract } from "../models-Contract/contract";
+import { Faction } from "../models-Faction/faction";
+import { Ship } from "../models-Ship/ship";
 
+export const getGetStatusResponseMock = (
+  overrideResponse: Partial<GetStatus200> = {},
+): GetStatus200 => ({
+  announcements: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({
+    body: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    title: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  })),
+  description: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  leaderboards: {
+    mostCredits: Array.from(
+      { length: faker.number.int({ min: 1, max: 10 }) },
+      (_, i) => i + 1,
+    ).map(() => ({
+      agentSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      credits: faker.number.int({ min: undefined, max: undefined }),
+    })),
+    mostSubmittedCharts: Array.from(
+      { length: faker.number.int({ min: 1, max: 10 }) },
+      (_, i) => i + 1,
+    ).map(() => ({
+      agentSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      chartCount: faker.number.int({ min: undefined, max: undefined }),
+    })),
+  },
+  links: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({
+    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    url: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  })),
+  resetDate: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  serverResets: {
+    frequency: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    next: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  },
+  stats: {
+    accounts: faker.helpers.arrayElement([
+      faker.number.int({ min: undefined, max: undefined }),
+      undefined,
+    ]),
+    agents: faker.number.int({ min: undefined, max: undefined }),
+    ships: faker.number.int({ min: undefined, max: undefined }),
+    systems: faker.number.int({ min: undefined, max: undefined }),
+    waypoints: faker.number.int({ min: undefined, max: undefined }),
+  },
+  status: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  version: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  ...overrideResponse,
+});
 
-export const getGetStatusResponseMock = (overrideResponse: Partial< GetStatus200 > = {}): GetStatus200 => ({announcements: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({body: faker.string.alpha({length: {min: 10, max: 20}}), title: faker.string.alpha({length: {min: 10, max: 20}})})), description: faker.string.alpha({length: {min: 10, max: 20}}), leaderboards: {mostCredits: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({agentSymbol: faker.string.alpha({length: {min: 10, max: 20}}), credits: faker.number.int({min: undefined, max: undefined})})), mostSubmittedCharts: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({agentSymbol: faker.string.alpha({length: {min: 10, max: 20}}), chartCount: faker.number.int({min: undefined, max: undefined})}))}, links: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({name: faker.string.alpha({length: {min: 10, max: 20}}), url: faker.string.alpha({length: {min: 10, max: 20}})})), resetDate: faker.string.alpha({length: {min: 10, max: 20}}), serverResets: {frequency: faker.string.alpha({length: {min: 10, max: 20}}), next: faker.string.alpha({length: {min: 10, max: 20}})}, stats: {accounts: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), agents: faker.number.int({min: undefined, max: undefined}), ships: faker.number.int({min: undefined, max: undefined}), systems: faker.number.int({min: undefined, max: undefined}), waypoints: faker.number.int({min: undefined, max: undefined})}, status: faker.string.alpha({length: {min: 10, max: 20}}), version: faker.string.alpha({length: {min: 10, max: 20}}), ...overrideResponse})
+export const getGetStatusResponseMock200 = (
+  overrideResponse: Partial<GetStatus200> = {},
+): GetStatus200 => ({
+  announcements: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({
+    body: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    title: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  })),
+  description: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  leaderboards: {
+    mostCredits: Array.from(
+      { length: faker.number.int({ min: 1, max: 10 }) },
+      (_, i) => i + 1,
+    ).map(() => ({
+      agentSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      credits: faker.number.int({ min: undefined, max: undefined }),
+    })),
+    mostSubmittedCharts: Array.from(
+      { length: faker.number.int({ min: 1, max: 10 }) },
+      (_, i) => i + 1,
+    ).map(() => ({
+      agentSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      chartCount: faker.number.int({ min: undefined, max: undefined }),
+    })),
+  },
+  links: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({
+    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    url: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  })),
+  resetDate: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  serverResets: {
+    frequency: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    next: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  },
+  stats: {
+    accounts: faker.helpers.arrayElement([
+      faker.number.int({ min: undefined, max: undefined }),
+      undefined,
+    ]),
+    agents: faker.number.int({ min: undefined, max: undefined }),
+    ships: faker.number.int({ min: undefined, max: undefined }),
+    systems: faker.number.int({ min: undefined, max: undefined }),
+    waypoints: faker.number.int({ min: undefined, max: undefined }),
+  },
+  status: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  version: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  ...overrideResponse,
+});
 
+export const getRegisterResponseMock = (
+  overrideResponse: Partial<Register201> = {},
+): Register201 => ({
+  data: {
+    agent: {} as Agent,
+    contract: {} as Contract,
+    faction: {} as Faction,
+    ships: faker.helpers.arrayElement([
+      Array.from(
+        { length: faker.number.int({ min: 1, max: 10 }) },
+        (_, i) => i + 1,
+      ).map(() => ({}) as Ship),
+      undefined,
+    ]),
+    token: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  },
+  ...overrideResponse,
+});
 
-export const getGetStatusResponseMock200 = (overrideResponse: Partial< GetStatus200 > = {}): GetStatus200 => ({announcements: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({body: faker.string.alpha({length: {min: 10, max: 20}}), title: faker.string.alpha({length: {min: 10, max: 20}})})), description: faker.string.alpha({length: {min: 10, max: 20}}), leaderboards: {mostCredits: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({agentSymbol: faker.string.alpha({length: {min: 10, max: 20}}), credits: faker.number.int({min: undefined, max: undefined})})), mostSubmittedCharts: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({agentSymbol: faker.string.alpha({length: {min: 10, max: 20}}), chartCount: faker.number.int({min: undefined, max: undefined})}))}, links: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({name: faker.string.alpha({length: {min: 10, max: 20}}), url: faker.string.alpha({length: {min: 10, max: 20}})})), resetDate: faker.string.alpha({length: {min: 10, max: 20}}), serverResets: {frequency: faker.string.alpha({length: {min: 10, max: 20}}), next: faker.string.alpha({length: {min: 10, max: 20}})}, stats: {accounts: faker.helpers.arrayElement([faker.number.int({min: undefined, max: undefined}), undefined]), agents: faker.number.int({min: undefined, max: undefined}), ships: faker.number.int({min: undefined, max: undefined}), systems: faker.number.int({min: undefined, max: undefined}), waypoints: faker.number.int({min: undefined, max: undefined})}, status: faker.string.alpha({length: {min: 10, max: 20}}), version: faker.string.alpha({length: {min: 10, max: 20}}), ...overrideResponse})
+export const getRegisterResponseMock201 = (
+  overrideResponse: Partial<Register201> = {},
+): Register201 => ({
+  data: {
+    agent: {} as Agent,
+    contract: {} as Contract,
+    faction: {} as Faction,
+    ships: faker.helpers.arrayElement([
+      Array.from(
+        { length: faker.number.int({ min: 1, max: 10 }) },
+        (_, i) => i + 1,
+      ).map(() => ({}) as Ship),
+      undefined,
+    ]),
+    token: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  },
+  ...overrideResponse,
+});
 
-export const getRegisterResponseMock = (overrideResponse: Partial< Register201 > = {}): Register201 => ({data: {agent: {} as Agent, contract: {} as Contract, faction: {} as Faction, ships: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({} as Ship)), undefined]), token: faker.string.alpha({length: {min: 10, max: 20}})}, ...overrideResponse})
+export const getGetStatusMockHandler = (
+  overrideResponse?:
+    | GetStatus200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetStatus200> | GetStatus200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetStatusResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
+export const getGetStatusMockHandler200 = (
+  overrideResponse?:
+    | GetStatus200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetStatus200> | GetStatus200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetStatusResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
-export const getRegisterResponseMock201 = (overrideResponse: Partial< Register201 > = {}): Register201 => ({data: {agent: {} as Agent, contract: {} as Contract, faction: {} as Faction, ships: faker.helpers.arrayElement([Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({} as Ship)), undefined]), token: faker.string.alpha({length: {min: 10, max: 20}})}, ...overrideResponse})
+export const getRegisterMockHandler = (
+  overrideResponse?:
+    | Register201
+    | ((
+        info: Parameters<Parameters<typeof http.post>[1]>[0],
+      ) => Promise<Register201> | Register201),
+  options?: RequestHandlerOptions,
+) => {
+  return http.post(
+    "*/register",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getRegisterResponseMock(),
+        ),
+        { status: 201, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
-
-export const getGetStatusMockHandler = (overrideResponse?: GetStatus200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetStatus200> | GetStatus200), options?: RequestHandlerOptions) => {
-  return http.get('*/', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetStatusResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetStatusMockHandler200 = (overrideResponse?: GetStatus200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetStatus200> | GetStatus200), options?: RequestHandlerOptions) => {
-  return http.get('*/', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetStatusResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getRegisterMockHandler = (overrideResponse?: Register201 | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<Register201> | Register201), options?: RequestHandlerOptions) => {
-  return http.post('*/register', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getRegisterResponseMock()),
-      { status: 201,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getRegisterMockHandler201 = (overrideResponse?: Register201 | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<Register201> | Register201), options?: RequestHandlerOptions) => {
-  return http.post('*/register', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getRegisterResponseMock201()),
-      { status: 201,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
+export const getRegisterMockHandler201 = (
+  overrideResponse?:
+    | Register201
+    | ((
+        info: Parameters<Parameters<typeof http.post>[1]>[0],
+      ) => Promise<Register201> | Register201),
+  options?: RequestHandlerOptions,
+) => {
+  return http.post(
+    "*/register",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getRegisterResponseMock201(),
+        ),
+        { status: 201, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 export const getGlobalMock = () => [
   getGetStatusMockHandler(),
-  getRegisterMockHandler()
-]
+  getRegisterMockHandler(),
+];

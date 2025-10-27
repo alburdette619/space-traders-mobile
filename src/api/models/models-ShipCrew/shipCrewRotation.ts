@@ -25,11 +25,11 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 /**
  * The rotation of crew shifts. A stricter shift improves the ship's performance. A more relaxed shift improves the crew's morale.
  */
-export type ShipCrewRotation = typeof ShipCrewRotation[keyof typeof ShipCrewRotation];
-
+export type ShipCrewRotation =
+  (typeof ShipCrewRotation)[keyof typeof ShipCrewRotation];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipCrewRotation = {
-  STRICT: 'STRICT',
-  RELAXED: 'RELAXED',
+  STRICT: "STRICT",
+  RELAXED: "RELAXED",
 } as const;

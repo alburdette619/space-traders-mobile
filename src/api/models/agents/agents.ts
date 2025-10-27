@@ -21,9 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import {
-  useQuery
-} from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -33,309 +31,445 @@ import type {
   QueryKey,
   UndefinedInitialDataOptions,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
-import type {
-  GetAgent200
-} from '../getAgent200';
+import type { GetAgent200 } from "../getAgent200";
 
-import type {
-  GetAgents200
-} from '../getAgents200';
+import type { GetAgents200 } from "../getAgents200";
 
-import type {
-  GetAgentsParams
-} from '../getAgentsParams';
+import type { GetAgentsParams } from "../getAgentsParams";
 
-import type {
-  GetMyAgent200
-} from '../getMyAgent200';
+import type { GetMyAgent200 } from "../getMyAgent200";
 
-import { clientInstance } from '../../client';
-
+import { clientInstance } from "../../client";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
 
 /**
  * Fetch your agent's details.
  * @summary Get Agent
  */
 export const getMyAgent = (
-    
- options?: SecondParameter<typeof clientInstance>,signal?: AbortSignal
+  options?: SecondParameter<typeof clientInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return clientInstance<GetMyAgent200>(
-      {url: `/my/agent`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-
+  return clientInstance<GetMyAgent200>(
+    { url: `/my/agent`, method: "GET", signal },
+    options,
+  );
+};
 
 export const getGetMyAgentQueryKey = () => {
-    return [
-    `/my/agent`
-    ] as const;
-    }
+  return [`/my/agent`] as const;
+};
 
-    
-export const getGetMyAgentQueryOptions = <TData = Awaited<ReturnType<typeof getMyAgent>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyAgent>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
-) => {
+export const getGetMyAgentQueryOptions = <
+  TData = Awaited<ReturnType<typeof getMyAgent>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getMyAgent>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof clientInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetMyAgentQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetMyAgentQueryKey();
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyAgent>>> = ({
+    signal,
+  }) => getMyAgent(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getMyAgent>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyAgent>>> = ({ signal }) => getMyAgent(requestOptions, signal);
+export type GetMyAgentQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMyAgent>>
+>;
+export type GetMyAgentQueryError = unknown;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMyAgent>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetMyAgentQueryResult = NonNullable<Awaited<ReturnType<typeof getMyAgent>>>
-export type GetMyAgentQueryError = unknown
-
-
-export function useGetMyAgent<TData = Awaited<ReturnType<typeof getMyAgent>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyAgent>>, TError, TData>> & Pick<
+export function useGetMyAgent<
+  TData = Awaited<ReturnType<typeof getMyAgent>>,
+  TError = unknown,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getMyAgent>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getMyAgent>>,
           TError,
           Awaited<ReturnType<typeof getMyAgent>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyAgent<TData = Awaited<ReturnType<typeof getMyAgent>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyAgent>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyAgent<
+  TData = Awaited<ReturnType<typeof getMyAgent>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getMyAgent>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getMyAgent>>,
           TError,
           Awaited<ReturnType<typeof getMyAgent>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMyAgent<TData = Awaited<ReturnType<typeof getMyAgent>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyAgent>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyAgent<
+  TData = Awaited<ReturnType<typeof getMyAgent>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getMyAgent>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary Get Agent
  */
 
-export function useGetMyAgent<TData = Awaited<ReturnType<typeof getMyAgent>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMyAgent>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetMyAgent<
+  TData = Awaited<ReturnType<typeof getMyAgent>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getMyAgent>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetMyAgentQueryOptions(options);
 
-  const queryOptions = getGetMyAgentQueryOptions(options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 /**
  * Fetch agents details.
  * @summary List Agents
  */
 export const getAgents = (
-    params?: GetAgentsParams,
- options?: SecondParameter<typeof clientInstance>,signal?: AbortSignal
+  params?: GetAgentsParams,
+  options?: SecondParameter<typeof clientInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return clientInstance<GetAgents200>(
-      {url: `/agents`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+  return clientInstance<GetAgents200>(
+    { url: `/agents`, method: "GET", params, signal },
+    options,
+  );
+};
 
+export const getGetAgentsQueryKey = (params?: GetAgentsParams) => {
+  return [`/agents`, ...(params ? [params] : [])] as const;
+};
 
-
-export const getGetAgentsQueryKey = (params?: GetAgentsParams,) => {
-    return [
-    `/agents`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetAgentsQueryOptions = <TData = Awaited<ReturnType<typeof getAgents>>, TError = unknown>(params?: GetAgentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAgents>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
+export const getGetAgentsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAgents>>,
+  TError = unknown,
+>(
+  params?: GetAgentsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAgents>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetAgentsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAgentsQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAgents>>> = ({
+    signal,
+  }) => getAgents(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getAgents>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAgents>>> = ({ signal }) => getAgents(params, requestOptions, signal);
+export type GetAgentsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAgents>>
+>;
+export type GetAgentsQueryError = unknown;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAgents>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAgentsQueryResult = NonNullable<Awaited<ReturnType<typeof getAgents>>>
-export type GetAgentsQueryError = unknown
-
-
-export function useGetAgents<TData = Awaited<ReturnType<typeof getAgents>>, TError = unknown>(
- params: undefined |  GetAgentsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAgents>>, TError, TData>> & Pick<
+export function useGetAgents<
+  TData = Awaited<ReturnType<typeof getAgents>>,
+  TError = unknown,
+>(
+  params: undefined | GetAgentsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAgents>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAgents>>,
           TError,
           Awaited<ReturnType<typeof getAgents>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAgents<TData = Awaited<ReturnType<typeof getAgents>>, TError = unknown>(
- params?: GetAgentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAgents>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAgents<
+  TData = Awaited<ReturnType<typeof getAgents>>,
+  TError = unknown,
+>(
+  params?: GetAgentsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAgents>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAgents>>,
           TError,
           Awaited<ReturnType<typeof getAgents>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAgents<TData = Awaited<ReturnType<typeof getAgents>>, TError = unknown>(
- params?: GetAgentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAgents>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAgents<
+  TData = Awaited<ReturnType<typeof getAgents>>,
+  TError = unknown,
+>(
+  params?: GetAgentsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAgents>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary List Agents
  */
 
-export function useGetAgents<TData = Awaited<ReturnType<typeof getAgents>>, TError = unknown>(
- params?: GetAgentsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAgents>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetAgents<
+  TData = Awaited<ReturnType<typeof getAgents>>,
+  TError = unknown,
+>(
+  params?: GetAgentsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAgents>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetAgentsQueryOptions(params, options);
 
-  const queryOptions = getGetAgentsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 /**
  * Fetch agent details.
  * @summary Get Public Agent
  */
 export const getAgent = (
-    agentSymbol: string = 'FEBA66',
- options?: SecondParameter<typeof clientInstance>,signal?: AbortSignal
+  agentSymbol: string = "FEBA66",
+  options?: SecondParameter<typeof clientInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return clientInstance<GetAgent200>(
-      {url: `/agents/${encodeURIComponent(String(agentSymbol))}`, method: 'GET', signal
+  return clientInstance<GetAgent200>(
+    {
+      url: `/agents/${encodeURIComponent(String(agentSymbol))}`,
+      method: "GET",
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getGetAgentQueryKey = (agentSymbol: string = "FEBA66") => {
+  return [`/agents/${agentSymbol}`] as const;
+};
 
-
-export const getGetAgentQueryKey = (agentSymbol: string= 'FEBA66',) => {
-    return [
-    `/agents/${agentSymbol}`
-    ] as const;
-    }
-
-    
-export const getGetAgentQueryOptions = <TData = Awaited<ReturnType<typeof getAgent>>, TError = unknown>(agentSymbol: string = 'FEBA66', options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
+export const getGetAgentQueryOptions = <
+  TData = Awaited<ReturnType<typeof getAgent>>,
+  TError = unknown,
+>(
+  agentSymbol: string = "FEBA66",
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetAgentQueryKey(agentSymbol);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetAgentQueryKey(agentSymbol);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAgent>>> = ({
+    signal,
+  }) => getAgent(agentSymbol, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!agentSymbol,
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAgent>>> = ({ signal }) => getAgent(agentSymbol, requestOptions, signal);
+export type GetAgentQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAgent>>
+>;
+export type GetAgentQueryError = unknown;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(agentSymbol), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetAgentQueryResult = NonNullable<Awaited<ReturnType<typeof getAgent>>>
-export type GetAgentQueryError = unknown
-
-
-export function useGetAgent<TData = Awaited<ReturnType<typeof getAgent>>, TError = unknown>(
- agentSymbol: undefined |  string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData>> & Pick<
+export function useGetAgent<
+  TData = Awaited<ReturnType<typeof getAgent>>,
+  TError = unknown,
+>(
+  agentSymbol: undefined | string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAgent>>,
           TError,
           Awaited<ReturnType<typeof getAgent>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAgent<TData = Awaited<ReturnType<typeof getAgent>>, TError = unknown>(
- agentSymbol?: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAgent<
+  TData = Awaited<ReturnType<typeof getAgent>>,
+  TError = unknown,
+>(
+  agentSymbol?: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getAgent>>,
           TError,
           Awaited<ReturnType<typeof getAgent>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetAgent<TData = Awaited<ReturnType<typeof getAgent>>, TError = unknown>(
- agentSymbol?: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAgent<
+  TData = Awaited<ReturnType<typeof getAgent>>,
+  TError = unknown,
+>(
+  agentSymbol?: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary Get Public Agent
  */
 
-export function useGetAgent<TData = Awaited<ReturnType<typeof getAgent>>, TError = unknown>(
- agentSymbol: string = 'FEBA66', options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetAgent<
+  TData = Awaited<ReturnType<typeof getAgent>>,
+  TError = unknown,
+>(
+  agentSymbol: string = "FEBA66",
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetAgentQueryOptions(agentSymbol, options);
 
-  const queryOptions = getGetAgentQueryOptions(agentSymbol,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
-

@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ShipFuelConsumed } from './shipFuelConsumed';
+import type { ShipFuelConsumed } from "./shipFuelConsumed";
 
 /**
  * Details of the ship's fuel tanks including how much fuel was consumed during the last transit or action.

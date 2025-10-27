@@ -22,12 +22,12 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
  * OpenAPI spec version: 2.3.0
  */
 
-export type ShipConditionEventComponent = typeof ShipConditionEventComponent[keyof typeof ShipConditionEventComponent];
-
+export type ShipConditionEventComponent =
+  (typeof ShipConditionEventComponent)[keyof typeof ShipConditionEventComponent];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipConditionEventComponent = {
-  FRAME: 'FRAME',
-  REACTOR: 'REACTOR',
-  ENGINE: 'ENGINE',
+  FRAME: "FRAME",
+  REACTOR: "REACTOR",
+  ENGINE: "ENGINE",
 } as const;

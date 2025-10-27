@@ -25,11 +25,11 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 /**
  * The type of transaction.
  */
-export type MarketTransactionType = typeof MarketTransactionType[keyof typeof MarketTransactionType];
-
+export type MarketTransactionType =
+  (typeof MarketTransactionType)[keyof typeof MarketTransactionType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const MarketTransactionType = {
-  PURCHASE: 'PURCHASE',
-  SELL: 'SELL',
+  PURCHASE: "PURCHASE",
+  SELL: "SELL",
 } as const;

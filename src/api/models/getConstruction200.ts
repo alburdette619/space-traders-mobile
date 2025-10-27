@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { Construction } from './models-Construction/construction';
+import type { Construction } from "./models-Construction/construction";
 
 export type GetConstruction200 = {
   data: Construction;

@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { WaypointTraitSymbol } from '../models-WaypointTraitSymbol/waypointTraitSymbol';
+import type { WaypointTraitSymbol } from "../models-WaypointTraitSymbol/waypointTraitSymbol";
 
 export interface WaypointTrait {
   /** A description of the trait. */

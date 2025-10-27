@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { FulfillContract200Data } from './fulfillContract200Data';
+import type { FulfillContract200Data } from "./fulfillContract200Data";
 
 export type FulfillContract200 = {
   data: FulfillContract200Data;

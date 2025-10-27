@@ -21,12 +21,12 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ScannedShipEngine } from './scannedShipEngine';
-import type { ScannedShipFrame } from './scannedShipFrame';
-import type { ScannedShipMountsItem } from './scannedShipMountsItem';
-import type { ShipNav } from '../models-ShipNav/shipNav';
-import type { ScannedShipReactor } from './scannedShipReactor';
-import type { ShipRegistration } from '../models-ShipRegistration/shipRegistration';
+import type { ScannedShipEngine } from "./scannedShipEngine";
+import type { ScannedShipFrame } from "./scannedShipFrame";
+import type { ScannedShipMountsItem } from "./scannedShipMountsItem";
+import type { ShipNav } from "../models-ShipNav/shipNav";
+import type { ScannedShipReactor } from "./scannedShipReactor";
+import type { ShipRegistration } from "../models-ShipRegistration/shipRegistration";
 
 /**
  * The ship that was scanned. Details include information about the ship that could be detected by the scanner.

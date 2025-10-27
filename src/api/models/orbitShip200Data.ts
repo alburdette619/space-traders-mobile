@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ShipNav } from './models-ShipNav/shipNav';
+import type { ShipNav } from "./models-ShipNav/shipNav";
 
 export type OrbitShip200Data = {
   nav: ShipNav;

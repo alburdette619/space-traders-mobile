@@ -25,13 +25,13 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 /**
  * The symbol of the engine.
  */
-export type ShipEngineSymbol = typeof ShipEngineSymbol[keyof typeof ShipEngineSymbol];
-
+export type ShipEngineSymbol =
+  (typeof ShipEngineSymbol)[keyof typeof ShipEngineSymbol];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipEngineSymbol = {
-  ENGINE_IMPULSE_DRIVE_I: 'ENGINE_IMPULSE_DRIVE_I',
-  ENGINE_ION_DRIVE_I: 'ENGINE_ION_DRIVE_I',
-  ENGINE_ION_DRIVE_II: 'ENGINE_ION_DRIVE_II',
-  ENGINE_HYPER_DRIVE_I: 'ENGINE_HYPER_DRIVE_I',
+  ENGINE_IMPULSE_DRIVE_I: "ENGINE_IMPULSE_DRIVE_I",
+  ENGINE_ION_DRIVE_I: "ENGINE_ION_DRIVE_I",
+  ENGINE_ION_DRIVE_II: "ENGINE_ION_DRIVE_II",
+  ENGINE_HYPER_DRIVE_I: "ENGINE_HYPER_DRIVE_I",
 } as const;

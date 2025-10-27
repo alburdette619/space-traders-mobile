@@ -25,18 +25,18 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 /**
  * The type of good to produce out of the refining process.
  */
-export type ShipRefineBodyProduce = typeof ShipRefineBodyProduce[keyof typeof ShipRefineBodyProduce];
-
+export type ShipRefineBodyProduce =
+  (typeof ShipRefineBodyProduce)[keyof typeof ShipRefineBodyProduce];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipRefineBodyProduce = {
-  IRON: 'IRON',
-  COPPER: 'COPPER',
-  SILVER: 'SILVER',
-  GOLD: 'GOLD',
-  ALUMINUM: 'ALUMINUM',
-  PLATINUM: 'PLATINUM',
-  URANITE: 'URANITE',
-  MERITIUM: 'MERITIUM',
-  FUEL: 'FUEL',
+  IRON: "IRON",
+  COPPER: "COPPER",
+  SILVER: "SILVER",
+  GOLD: "GOLD",
+  ALUMINUM: "ALUMINUM",
+  PLATINUM: "PLATINUM",
+  URANITE: "URANITE",
+  MERITIUM: "MERITIUM",
+  FUEL: "FUEL",
 } as const;

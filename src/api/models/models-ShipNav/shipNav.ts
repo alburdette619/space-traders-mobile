@@ -21,11 +21,11 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ShipNavFlightMode } from '../models-ShipNavFlightMode/shipNavFlightMode';
-import type { ShipNavRoute } from '../models-ShipNavRoute/shipNavRoute';
-import type { ShipNavStatus } from '../models-ShipNavStatus/shipNavStatus';
-import type { SystemSymbol } from '../models-SystemSymbol/systemSymbol';
-import type { WaypointSymbol } from '../models-WaypointSymbol/waypointSymbol';
+import type { ShipNavFlightMode } from "../models-ShipNavFlightMode/shipNavFlightMode";
+import type { ShipNavRoute } from "../models-ShipNavRoute/shipNavRoute";
+import type { ShipNavStatus } from "../models-ShipNavStatus/shipNavStatus";
+import type { SystemSymbol } from "../models-SystemSymbol/systemSymbol";
+import type { WaypointSymbol } from "../models-WaypointSymbol/waypointSymbol";
 
 /**
  * The navigation information of the ship.

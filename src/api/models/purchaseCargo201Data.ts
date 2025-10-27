@@ -21,9 +21,9 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { Agent } from './models-Agent/agent';
-import type { ShipCargo } from './models-ShipCargo/shipCargo';
-import type { MarketTransaction } from './models-MarketTransaction/marketTransaction';
+import type { Agent } from "./models-Agent/agent";
+import type { ShipCargo } from "./models-ShipCargo/shipCargo";
+import type { MarketTransaction } from "./models-MarketTransaction/marketTransaction";
 
 export type PurchaseCargo201Data = {
   agent: Agent;

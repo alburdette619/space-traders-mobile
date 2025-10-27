@@ -21,10 +21,10 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { Agent } from './models-Agent/agent';
-import type { ShipCargo } from './models-ShipCargo/shipCargo';
-import type { ShipModule } from './models-ShipModule/shipModule';
-import type { RemoveShipModule201DataTransaction } from './removeShipModule201DataTransaction';
+import type { Agent } from "./models-Agent/agent";
+import type { ShipCargo } from "./models-ShipCargo/shipCargo";
+import type { ShipModule } from "./models-ShipModule/shipModule";
+import type { RemoveShipModule201DataTransaction } from "./removeShipModule201DataTransaction";
 
 export type RemoveShipModule201Data = {
   agent: Agent;

@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { RepairTransaction } from './models-RepairTransaction/repairTransaction';
+import type { RepairTransaction } from "./models-RepairTransaction/repairTransaction";
 
 export type GetRepairShip200Data = {
   transaction: RepairTransaction;

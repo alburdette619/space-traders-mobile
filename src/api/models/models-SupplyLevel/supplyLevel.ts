@@ -25,14 +25,13 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 /**
  * The supply level of a trade good.
  */
-export type SupplyLevel = typeof SupplyLevel[keyof typeof SupplyLevel];
-
+export type SupplyLevel = (typeof SupplyLevel)[keyof typeof SupplyLevel];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SupplyLevel = {
-  SCARCE: 'SCARCE',
-  LIMITED: 'LIMITED',
-  MODERATE: 'MODERATE',
-  HIGH: 'HIGH',
-  ABUNDANT: 'ABUNDANT',
+  SCARCE: "SCARCE",
+  LIMITED: "LIMITED",
+  MODERATE: "MODERATE",
+  HIGH: "HIGH",
+  ABUNDANT: "ABUNDANT",
 } as const;

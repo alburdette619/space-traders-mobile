@@ -21,13 +21,13 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { Chart } from '../models-Chart/chart';
-import type { WaypointFaction } from '../models-WaypointFaction/waypointFaction';
-import type { WaypointOrbital } from '../models-WaypointOrbital/waypointOrbital';
-import type { WaypointSymbol } from '../models-WaypointSymbol/waypointSymbol';
-import type { SystemSymbol } from '../models-SystemSymbol/systemSymbol';
-import type { WaypointTrait } from '../models-WaypointTrait/waypointTrait';
-import type { WaypointType } from '../models-WaypointType/waypointType';
+import type { Chart } from "../models-Chart/chart";
+import type { WaypointFaction } from "../models-WaypointFaction/waypointFaction";
+import type { WaypointOrbital } from "../models-WaypointOrbital/waypointOrbital";
+import type { WaypointSymbol } from "../models-WaypointSymbol/waypointSymbol";
+import type { SystemSymbol } from "../models-SystemSymbol/systemSymbol";
+import type { WaypointTrait } from "../models-WaypointTrait/waypointTrait";
+import type { WaypointType } from "../models-WaypointType/waypointType";
 
 /**
  * A waypoint that was scanned by a ship.

@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { Register201Data } from './register201Data';
+import type { Register201Data } from "./register201Data";
 
 export type Register201 = {
   data: Register201Data;

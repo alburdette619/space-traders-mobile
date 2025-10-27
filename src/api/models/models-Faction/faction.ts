@@ -21,8 +21,8 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { FactionSymbol } from '../models-FactionSymbol/factionSymbol';
-import type { FactionTrait } from '../models-FactionTrait/factionTrait';
+import type { FactionSymbol } from "../models-FactionSymbol/factionSymbol";
+import type { FactionTrait } from "../models-FactionTrait/factionTrait";
 
 /**
  * Faction details.

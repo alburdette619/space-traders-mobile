@@ -25,12 +25,12 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 /**
  * The type of trade good (export, import, or exchange).
  */
-export type MarketTradeGoodType = typeof MarketTradeGoodType[keyof typeof MarketTradeGoodType];
-
+export type MarketTradeGoodType =
+  (typeof MarketTradeGoodType)[keyof typeof MarketTradeGoodType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const MarketTradeGoodType = {
-  EXPORT: 'EXPORT',
-  IMPORT: 'IMPORT',
-  EXCHANGE: 'EXCHANGE',
+  EXPORT: "EXPORT",
+  IMPORT: "IMPORT",
+  EXCHANGE: "EXCHANGE",
 } as const;

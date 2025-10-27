@@ -21,124 +21,214 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import {
-  faker
-} from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 
-import {
-  HttpResponse,
-  http
-} from 'msw';
-import type {
-  RequestHandlerOptions
-} from 'msw';
+import { HttpResponse, http } from "msw";
+import type { RequestHandlerOptions } from "msw";
 
-import type {
-  GetAgent200
-} from '../getAgent200';
+import type { GetAgent200 } from "../getAgent200";
 
-import type {
-  GetAgents200
-} from '../getAgents200';
+import type { GetAgents200 } from "../getAgents200";
 
-import type {
-  GetMyAgent200
-} from '../getMyAgent200';
-import { Agent } from '../models-Agent/agent';
-import { Meta } from '../models-Meta/meta';
+import type { GetMyAgent200 } from "../getMyAgent200";
+import { Agent } from "../models-Agent/agent";
+import { Meta } from "../models-Meta/meta";
 
+export const getGetMyAgentResponseMock = (
+  overrideResponse: Partial<GetMyAgent200> = {},
+): GetMyAgent200 => ({ data: {} as Agent, ...overrideResponse });
 
-export const getGetMyAgentResponseMock = (overrideResponse: Partial< GetMyAgent200 > = {}): GetMyAgent200 => ({data: {} as Agent, ...overrideResponse})
+export const getGetMyAgentResponseMock200 = (
+  overrideResponse: Partial<GetMyAgent200> = {},
+): GetMyAgent200 => ({ data: {} as Agent, ...overrideResponse });
 
+export const getGetAgentsResponseMock = (
+  overrideResponse: Partial<GetAgents200> = {},
+): GetAgents200 => ({
+  data: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({}) as Agent),
+  meta: {} as Meta,
+  ...overrideResponse,
+});
 
-export const getGetMyAgentResponseMock200 = (overrideResponse: Partial< GetMyAgent200 > = {}): GetMyAgent200 => ({data: {} as Agent, ...overrideResponse})
+export const getGetAgentsResponseMock200 = (
+  overrideResponse: Partial<GetAgents200> = {},
+): GetAgents200 => ({
+  data: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({}) as Agent),
+  meta: {} as Meta,
+  ...overrideResponse,
+});
 
-export const getGetAgentsResponseMock = (overrideResponse: Partial< GetAgents200 > = {}): GetAgents200 => ({data: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({} as Agent)), meta: {} as Meta, ...overrideResponse})
+export const getGetAgentResponseMock = (
+  overrideResponse: Partial<GetAgent200> = {},
+): GetAgent200 => ({ data: {} as Agent, ...overrideResponse });
 
-export const getGetAgentsResponseMock200 = (overrideResponse: Partial< GetAgents200 > = {}): GetAgents200 => ({data: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({} as Agent)), meta: {} as Meta, ...overrideResponse})
+export const getGetAgentResponseMock200 = (
+  overrideResponse: Partial<GetAgent200> = {},
+): GetAgent200 => ({ data: {} as Agent, ...overrideResponse });
 
-export const getGetAgentResponseMock = (overrideResponse: Partial< GetAgent200 > = {}): GetAgent200 => ({data: {} as Agent, ...overrideResponse})
+export const getGetMyAgentMockHandler = (
+  overrideResponse?:
+    | GetMyAgent200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetMyAgent200> | GetMyAgent200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/my/agent",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetMyAgentResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
+export const getGetMyAgentMockHandler200 = (
+  overrideResponse?:
+    | GetMyAgent200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetMyAgent200> | GetMyAgent200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/my/agent",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetMyAgentResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
-export const getGetAgentResponseMock200 = (overrideResponse: Partial< GetAgent200 > = {}): GetAgent200 => ({data: {} as Agent, ...overrideResponse})
+export const getGetAgentsMockHandler = (
+  overrideResponse?:
+    | GetAgents200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetAgents200> | GetAgents200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/agents",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetAgentsResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
+export const getGetAgentsMockHandler200 = (
+  overrideResponse?:
+    | GetAgents200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetAgents200> | GetAgents200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/agents",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetAgentsResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
-export const getGetMyAgentMockHandler = (overrideResponse?: GetMyAgent200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetMyAgent200> | GetMyAgent200), options?: RequestHandlerOptions) => {
-  return http.get('*/my/agent', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetMyAgentResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
+export const getGetAgentMockHandler = (
+  overrideResponse?:
+    | GetAgent200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetAgent200> | GetAgent200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/agents/:agentSymbol",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetAgentResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
-
-export const getGetMyAgentMockHandler200 = (overrideResponse?: GetMyAgent200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetMyAgent200> | GetMyAgent200), options?: RequestHandlerOptions) => {
-  return http.get('*/my/agent', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetMyAgentResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getGetAgentsMockHandler = (overrideResponse?: GetAgents200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetAgents200> | GetAgents200), options?: RequestHandlerOptions) => {
-  return http.get('*/agents', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetAgentsResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetAgentsMockHandler200 = (overrideResponse?: GetAgents200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetAgents200> | GetAgents200), options?: RequestHandlerOptions) => {
-  return http.get('*/agents', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetAgentsResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getGetAgentMockHandler = (overrideResponse?: GetAgent200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetAgent200> | GetAgent200), options?: RequestHandlerOptions) => {
-  return http.get('*/agents/:agentSymbol', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetAgentResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetAgentMockHandler200 = (overrideResponse?: GetAgent200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetAgent200> | GetAgent200), options?: RequestHandlerOptions) => {
-  return http.get('*/agents/:agentSymbol', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetAgentResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
+export const getGetAgentMockHandler200 = (
+  overrideResponse?:
+    | GetAgent200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetAgent200> | GetAgent200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/agents/:agentSymbol",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetAgentResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 export const getAgentsMock = () => [
   getGetMyAgentMockHandler(),
   getGetAgentsMockHandler(),
-  getGetAgentMockHandler()
-]
+  getGetAgentMockHandler(),
+];

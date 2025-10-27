@@ -21,333 +21,610 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import {
-  faker
-} from '@faker-js/faker';
-
-import {
-  HttpResponse,
-  http
-} from 'msw';
-import type {
-  RequestHandlerOptions
-} from 'msw';
-
-import type {
-  GetConstruction200
-} from '../getConstruction200';
-
-import type {
-  GetJumpGate200
-} from '../getJumpGate200';
-
-import type {
-  GetMarket200
-} from '../getMarket200';
-
-import type {
-  GetShipyard200
-} from '../getShipyard200';
-
-import type {
-  GetSystem200
-} from '../getSystem200';
-
-import type {
-  GetSystemWaypoints200
-} from '../getSystemWaypoints200';
-
-import type {
-  GetSystems200
-} from '../getSystems200';
-
-import type {
-  GetWaypoint200
-} from '../getWaypoint200';
-
-import type {
-  SupplyConstruction201
-} from '../supplyConstruction201';
-import { Meta } from '../models-Meta/meta';
-import { System } from '../models-System/system';
-import { Waypoint } from '../models-Waypoint/waypoint';
-import { Market } from '../models-Market/market';
-import { Shipyard } from '../models-Shipyard/shipyard';
-import { JumpGate } from '../models-JumpGate/jumpGate';
-import { Construction } from '../models-Construction/construction';
-import { ShipCargo } from '../models-ShipCargo/shipCargo';
-
-
-export const getGetSystemsResponseMock = (overrideResponse: Partial< GetSystems200 > = {}): GetSystems200 => ({data: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({} as System)), meta: {} as Meta, ...overrideResponse})
-
-
-export const getGetSystemsResponseMock200 = (overrideResponse: Partial< GetSystems200 > = {}): GetSystems200 => ({data: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({} as System)), meta: {} as Meta, ...overrideResponse})
-
-export const getGetSystemResponseMock = (overrideResponse: Partial< GetSystem200 > = {}): GetSystem200 => ({data: {} as System, ...overrideResponse})
-
-
-export const getGetSystemResponseMock200 = (overrideResponse: Partial< GetSystem200 > = {}): GetSystem200 => ({data: {} as System, ...overrideResponse})
-
-export const getGetSystemWaypointsResponseMock = (overrideResponse: Partial< GetSystemWaypoints200 > = {}): GetSystemWaypoints200 => ({data: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({} as Waypoint)), meta: {} as Meta, ...overrideResponse})
-
-
-export const getGetSystemWaypointsResponseMock200 = (overrideResponse: Partial< GetSystemWaypoints200 > = {}): GetSystemWaypoints200 => ({data: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({} as Waypoint)), meta: {} as Meta, ...overrideResponse})
-
-export const getGetWaypointResponseMock = (overrideResponse: Partial< GetWaypoint200 > = {}): GetWaypoint200 => ({data: {} as Waypoint, ...overrideResponse})
-
-
-export const getGetWaypointResponseMock200 = (overrideResponse: Partial< GetWaypoint200 > = {}): GetWaypoint200 => ({data: {} as Waypoint, ...overrideResponse})
-
-export const getGetMarketResponseMock = (overrideResponse: Partial< GetMarket200 > = {}): GetMarket200 => ({data: {} as Market, ...overrideResponse})
-
-
-export const getGetMarketResponseMock200 = (overrideResponse: Partial< GetMarket200 > = {}): GetMarket200 => ({data: {} as Market, ...overrideResponse})
-
-export const getGetShipyardResponseMock = (overrideResponse: Partial< GetShipyard200 > = {}): GetShipyard200 => ({data: {} as Shipyard, ...overrideResponse})
-
-
-export const getGetShipyardResponseMock200 = (overrideResponse: Partial< GetShipyard200 > = {}): GetShipyard200 => ({data: {} as Shipyard, ...overrideResponse})
-
-export const getGetJumpGateResponseMock = (overrideResponse: Partial< GetJumpGate200 > = {}): GetJumpGate200 => ({data: {} as JumpGate, ...overrideResponse})
-
-
-export const getGetJumpGateResponseMock200 = (overrideResponse: Partial< GetJumpGate200 > = {}): GetJumpGate200 => ({data: {} as JumpGate, ...overrideResponse})
-
-export const getGetConstructionResponseMock = (overrideResponse: Partial< GetConstruction200 > = {}): GetConstruction200 => ({data: {} as Construction, ...overrideResponse})
-
-
-export const getGetConstructionResponseMock200 = (overrideResponse: Partial< GetConstruction200 > = {}): GetConstruction200 => ({data: {} as Construction, ...overrideResponse})
-
-export const getSupplyConstructionResponseMock = (overrideResponse: Partial< SupplyConstruction201 > = {}): SupplyConstruction201 => ({data: {cargo: {} as ShipCargo, construction: {} as Construction}, ...overrideResponse})
-
-
-export const getSupplyConstructionResponseMock201 = (overrideResponse: Partial< SupplyConstruction201 > = {}): SupplyConstruction201 => ({data: {cargo: {} as ShipCargo, construction: {} as Construction}, ...overrideResponse})
-
-
-export const getGetSystemsMockHandler = (overrideResponse?: GetSystems200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSystems200> | GetSystems200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetSystemsResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetSystemsMockHandler200 = (overrideResponse?: GetSystems200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSystems200> | GetSystems200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetSystemsResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getGetSystemMockHandler = (overrideResponse?: GetSystem200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSystem200> | GetSystem200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetSystemResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetSystemMockHandler200 = (overrideResponse?: GetSystem200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSystem200> | GetSystem200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetSystemResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getGetSystemWaypointsMockHandler = (overrideResponse?: GetSystemWaypoints200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSystemWaypoints200> | GetSystemWaypoints200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol/waypoints', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetSystemWaypointsResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetSystemWaypointsMockHandler200 = (overrideResponse?: GetSystemWaypoints200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSystemWaypoints200> | GetSystemWaypoints200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol/waypoints', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetSystemWaypointsResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getGetWaypointMockHandler = (overrideResponse?: GetWaypoint200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetWaypoint200> | GetWaypoint200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol/waypoints/:waypointSymbol', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetWaypointResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetWaypointMockHandler200 = (overrideResponse?: GetWaypoint200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetWaypoint200> | GetWaypoint200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol/waypoints/:waypointSymbol', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetWaypointResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getGetMarketMockHandler = (overrideResponse?: GetMarket200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetMarket200> | GetMarket200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol/waypoints/:waypointSymbol/market', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetMarketResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetMarketMockHandler200 = (overrideResponse?: GetMarket200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetMarket200> | GetMarket200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol/waypoints/:waypointSymbol/market', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetMarketResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getGetShipyardMockHandler = (overrideResponse?: GetShipyard200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetShipyard200> | GetShipyard200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol/waypoints/:waypointSymbol/shipyard', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetShipyardResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetShipyardMockHandler200 = (overrideResponse?: GetShipyard200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetShipyard200> | GetShipyard200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol/waypoints/:waypointSymbol/shipyard', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetShipyardResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getGetJumpGateMockHandler = (overrideResponse?: GetJumpGate200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetJumpGate200> | GetJumpGate200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol/waypoints/:waypointSymbol/jump-gate', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetJumpGateResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetJumpGateMockHandler200 = (overrideResponse?: GetJumpGate200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetJumpGate200> | GetJumpGate200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol/waypoints/:waypointSymbol/jump-gate', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetJumpGateResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getGetConstructionMockHandler = (overrideResponse?: GetConstruction200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetConstruction200> | GetConstruction200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol/waypoints/:waypointSymbol/construction', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetConstructionResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetConstructionMockHandler200 = (overrideResponse?: GetConstruction200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetConstruction200> | GetConstruction200), options?: RequestHandlerOptions) => {
-  return http.get('*/systems/:systemSymbol/waypoints/:waypointSymbol/construction', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetConstructionResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getSupplyConstructionMockHandler = (overrideResponse?: SupplyConstruction201 | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<SupplyConstruction201> | SupplyConstruction201), options?: RequestHandlerOptions) => {
-  return http.post('*/systems/:systemSymbol/waypoints/:waypointSymbol/construction/supply', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getSupplyConstructionResponseMock()),
-      { status: 201,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getSupplyConstructionMockHandler201 = (overrideResponse?: SupplyConstruction201 | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<SupplyConstruction201> | SupplyConstruction201), options?: RequestHandlerOptions) => {
-  return http.post('*/systems/:systemSymbol/waypoints/:waypointSymbol/construction/supply', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getSupplyConstructionResponseMock201()),
-      { status: 201,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
+import { faker } from "@faker-js/faker";
+
+import { HttpResponse, http } from "msw";
+import type { RequestHandlerOptions } from "msw";
+
+import type { GetConstruction200 } from "../getConstruction200";
+
+import type { GetJumpGate200 } from "../getJumpGate200";
+
+import type { GetMarket200 } from "../getMarket200";
+
+import type { GetShipyard200 } from "../getShipyard200";
+
+import type { GetSystem200 } from "../getSystem200";
+
+import type { GetSystemWaypoints200 } from "../getSystemWaypoints200";
+
+import type { GetSystems200 } from "../getSystems200";
+
+import type { GetWaypoint200 } from "../getWaypoint200";
+
+import type { SupplyConstruction201 } from "../supplyConstruction201";
+import { Meta } from "../models-Meta/meta";
+import { System } from "../models-System/system";
+import { Waypoint } from "../models-Waypoint/waypoint";
+import { Market } from "../models-Market/market";
+import { Shipyard } from "../models-Shipyard/shipyard";
+import { JumpGate } from "../models-JumpGate/jumpGate";
+import { Construction } from "../models-Construction/construction";
+import { ShipCargo } from "../models-ShipCargo/shipCargo";
+
+export const getGetSystemsResponseMock = (
+  overrideResponse: Partial<GetSystems200> = {},
+): GetSystems200 => ({
+  data: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({}) as System),
+  meta: {} as Meta,
+  ...overrideResponse,
+});
+
+export const getGetSystemsResponseMock200 = (
+  overrideResponse: Partial<GetSystems200> = {},
+): GetSystems200 => ({
+  data: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({}) as System),
+  meta: {} as Meta,
+  ...overrideResponse,
+});
+
+export const getGetSystemResponseMock = (
+  overrideResponse: Partial<GetSystem200> = {},
+): GetSystem200 => ({ data: {} as System, ...overrideResponse });
+
+export const getGetSystemResponseMock200 = (
+  overrideResponse: Partial<GetSystem200> = {},
+): GetSystem200 => ({ data: {} as System, ...overrideResponse });
+
+export const getGetSystemWaypointsResponseMock = (
+  overrideResponse: Partial<GetSystemWaypoints200> = {},
+): GetSystemWaypoints200 => ({
+  data: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({}) as Waypoint),
+  meta: {} as Meta,
+  ...overrideResponse,
+});
+
+export const getGetSystemWaypointsResponseMock200 = (
+  overrideResponse: Partial<GetSystemWaypoints200> = {},
+): GetSystemWaypoints200 => ({
+  data: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({}) as Waypoint),
+  meta: {} as Meta,
+  ...overrideResponse,
+});
+
+export const getGetWaypointResponseMock = (
+  overrideResponse: Partial<GetWaypoint200> = {},
+): GetWaypoint200 => ({ data: {} as Waypoint, ...overrideResponse });
+
+export const getGetWaypointResponseMock200 = (
+  overrideResponse: Partial<GetWaypoint200> = {},
+): GetWaypoint200 => ({ data: {} as Waypoint, ...overrideResponse });
+
+export const getGetMarketResponseMock = (
+  overrideResponse: Partial<GetMarket200> = {},
+): GetMarket200 => ({ data: {} as Market, ...overrideResponse });
+
+export const getGetMarketResponseMock200 = (
+  overrideResponse: Partial<GetMarket200> = {},
+): GetMarket200 => ({ data: {} as Market, ...overrideResponse });
+
+export const getGetShipyardResponseMock = (
+  overrideResponse: Partial<GetShipyard200> = {},
+): GetShipyard200 => ({ data: {} as Shipyard, ...overrideResponse });
+
+export const getGetShipyardResponseMock200 = (
+  overrideResponse: Partial<GetShipyard200> = {},
+): GetShipyard200 => ({ data: {} as Shipyard, ...overrideResponse });
+
+export const getGetJumpGateResponseMock = (
+  overrideResponse: Partial<GetJumpGate200> = {},
+): GetJumpGate200 => ({ data: {} as JumpGate, ...overrideResponse });
+
+export const getGetJumpGateResponseMock200 = (
+  overrideResponse: Partial<GetJumpGate200> = {},
+): GetJumpGate200 => ({ data: {} as JumpGate, ...overrideResponse });
+
+export const getGetConstructionResponseMock = (
+  overrideResponse: Partial<GetConstruction200> = {},
+): GetConstruction200 => ({ data: {} as Construction, ...overrideResponse });
+
+export const getGetConstructionResponseMock200 = (
+  overrideResponse: Partial<GetConstruction200> = {},
+): GetConstruction200 => ({ data: {} as Construction, ...overrideResponse });
+
+export const getSupplyConstructionResponseMock = (
+  overrideResponse: Partial<SupplyConstruction201> = {},
+): SupplyConstruction201 => ({
+  data: { cargo: {} as ShipCargo, construction: {} as Construction },
+  ...overrideResponse,
+});
+
+export const getSupplyConstructionResponseMock201 = (
+  overrideResponse: Partial<SupplyConstruction201> = {},
+): SupplyConstruction201 => ({
+  data: { cargo: {} as ShipCargo, construction: {} as Construction },
+  ...overrideResponse,
+});
+
+export const getGetSystemsMockHandler = (
+  overrideResponse?:
+    | GetSystems200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetSystems200> | GetSystems200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetSystemsResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetSystemsMockHandler200 = (
+  overrideResponse?:
+    | GetSystems200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetSystems200> | GetSystems200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetSystemsResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetSystemMockHandler = (
+  overrideResponse?:
+    | GetSystem200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetSystem200> | GetSystem200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetSystemResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetSystemMockHandler200 = (
+  overrideResponse?:
+    | GetSystem200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetSystem200> | GetSystem200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetSystemResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetSystemWaypointsMockHandler = (
+  overrideResponse?:
+    | GetSystemWaypoints200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetSystemWaypoints200> | GetSystemWaypoints200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol/waypoints",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetSystemWaypointsResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetSystemWaypointsMockHandler200 = (
+  overrideResponse?:
+    | GetSystemWaypoints200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetSystemWaypoints200> | GetSystemWaypoints200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol/waypoints",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetSystemWaypointsResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetWaypointMockHandler = (
+  overrideResponse?:
+    | GetWaypoint200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetWaypoint200> | GetWaypoint200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol/waypoints/:waypointSymbol",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetWaypointResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetWaypointMockHandler200 = (
+  overrideResponse?:
+    | GetWaypoint200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetWaypoint200> | GetWaypoint200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol/waypoints/:waypointSymbol",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetWaypointResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetMarketMockHandler = (
+  overrideResponse?:
+    | GetMarket200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetMarket200> | GetMarket200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol/waypoints/:waypointSymbol/market",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetMarketResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetMarketMockHandler200 = (
+  overrideResponse?:
+    | GetMarket200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetMarket200> | GetMarket200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol/waypoints/:waypointSymbol/market",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetMarketResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetShipyardMockHandler = (
+  overrideResponse?:
+    | GetShipyard200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetShipyard200> | GetShipyard200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol/waypoints/:waypointSymbol/shipyard",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetShipyardResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetShipyardMockHandler200 = (
+  overrideResponse?:
+    | GetShipyard200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetShipyard200> | GetShipyard200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol/waypoints/:waypointSymbol/shipyard",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetShipyardResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetJumpGateMockHandler = (
+  overrideResponse?:
+    | GetJumpGate200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetJumpGate200> | GetJumpGate200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol/waypoints/:waypointSymbol/jump-gate",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetJumpGateResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetJumpGateMockHandler200 = (
+  overrideResponse?:
+    | GetJumpGate200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetJumpGate200> | GetJumpGate200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol/waypoints/:waypointSymbol/jump-gate",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetJumpGateResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetConstructionMockHandler = (
+  overrideResponse?:
+    | GetConstruction200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetConstruction200> | GetConstruction200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol/waypoints/:waypointSymbol/construction",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetConstructionResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getGetConstructionMockHandler200 = (
+  overrideResponse?:
+    | GetConstruction200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetConstruction200> | GetConstruction200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/systems/:systemSymbol/waypoints/:waypointSymbol/construction",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetConstructionResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getSupplyConstructionMockHandler = (
+  overrideResponse?:
+    | SupplyConstruction201
+    | ((
+        info: Parameters<Parameters<typeof http.post>[1]>[0],
+      ) => Promise<SupplyConstruction201> | SupplyConstruction201),
+  options?: RequestHandlerOptions,
+) => {
+  return http.post(
+    "*/systems/:systemSymbol/waypoints/:waypointSymbol/construction/supply",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getSupplyConstructionResponseMock(),
+        ),
+        { status: 201, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+
+export const getSupplyConstructionMockHandler201 = (
+  overrideResponse?:
+    | SupplyConstruction201
+    | ((
+        info: Parameters<Parameters<typeof http.post>[1]>[0],
+      ) => Promise<SupplyConstruction201> | SupplyConstruction201),
+  options?: RequestHandlerOptions,
+) => {
+  return http.post(
+    "*/systems/:systemSymbol/waypoints/:waypointSymbol/construction/supply",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getSupplyConstructionResponseMock201(),
+        ),
+        { status: 201, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 export const getSystemsMock = () => [
   getGetSystemsMockHandler(),
   getGetSystemMockHandler(),
@@ -357,5 +634,5 @@ export const getSystemsMock = () => [
   getGetShipyardMockHandler(),
   getGetJumpGateMockHandler(),
   getGetConstructionMockHandler(),
-  getSupplyConstructionMockHandler()
-]
+  getSupplyConstructionMockHandler(),
+];

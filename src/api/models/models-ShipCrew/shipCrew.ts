@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ShipCrewRotation } from './shipCrewRotation';
+import type { ShipCrewRotation } from "./shipCrewRotation";
 
 /**
  * The ship's crew service and maintain the ship's systems and equipment.

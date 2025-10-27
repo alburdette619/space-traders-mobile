@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { DockShip200Data } from './dockShip200Data';
+import type { DockShip200Data } from "./dockShip200Data";
 
 export type DockShip200 = {
   data: DockShip200Data;

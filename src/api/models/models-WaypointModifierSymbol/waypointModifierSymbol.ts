@@ -25,14 +25,14 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 /**
  * The unique identifier of the modifier.
  */
-export type WaypointModifierSymbol = typeof WaypointModifierSymbol[keyof typeof WaypointModifierSymbol];
-
+export type WaypointModifierSymbol =
+  (typeof WaypointModifierSymbol)[keyof typeof WaypointModifierSymbol];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const WaypointModifierSymbol = {
-  STRIPPED: 'STRIPPED',
-  UNSTABLE: 'UNSTABLE',
-  RADIATION_LEAK: 'RADIATION_LEAK',
-  CRITICAL_LIMIT: 'CRITICAL_LIMIT',
-  CIVIL_UNREST: 'CIVIL_UNREST',
+  STRIPPED: "STRIPPED",
+  UNSTABLE: "UNSTABLE",
+  RADIATION_LEAK: "RADIATION_LEAK",
+  CRITICAL_LIMIT: "CRITICAL_LIMIT",
+  CIVIL_UNREST: "CIVIL_UNREST",
 } as const;

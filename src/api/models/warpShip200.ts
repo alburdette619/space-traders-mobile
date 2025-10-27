@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { WarpShip200Data } from './warpShip200Data';
+import type { WarpShip200Data } from "./warpShip200Data";
 
 export type WarpShip200 = {
   data: WarpShip200Data;

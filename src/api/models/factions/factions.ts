@@ -21,9 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import {
-  useQuery
-} from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -33,212 +31,311 @@ import type {
   QueryKey,
   UndefinedInitialDataOptions,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
-import type {
-  GetFaction200
-} from '../getFaction200';
+import type { GetFaction200 } from "../getFaction200";
 
-import type {
-  GetFactions200
-} from '../getFactions200';
+import type { GetFactions200 } from "../getFactions200";
 
-import type {
-  GetFactionsParams
-} from '../getFactionsParams';
+import type { GetFactionsParams } from "../getFactionsParams";
 
-import { clientInstance } from '../../client';
-
+import { clientInstance } from "../../client";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
 
 /**
  * Return a paginated list of all the factions in the game.
  * @summary List Factions
  */
 export const getFactions = (
-    params?: GetFactionsParams,
- options?: SecondParameter<typeof clientInstance>,signal?: AbortSignal
+  params?: GetFactionsParams,
+  options?: SecondParameter<typeof clientInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return clientInstance<GetFactions200>(
-      {url: `/factions`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+  return clientInstance<GetFactions200>(
+    { url: `/factions`, method: "GET", params, signal },
+    options,
+  );
+};
 
+export const getGetFactionsQueryKey = (params?: GetFactionsParams) => {
+  return [`/factions`, ...(params ? [params] : [])] as const;
+};
 
-
-export const getGetFactionsQueryKey = (params?: GetFactionsParams,) => {
-    return [
-    `/factions`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetFactionsQueryOptions = <TData = Awaited<ReturnType<typeof getFactions>>, TError = unknown>(params?: GetFactionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFactions>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
+export const getGetFactionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getFactions>>,
+  TError = unknown,
+>(
+  params?: GetFactionsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getFactions>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetFactionsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetFactionsQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getFactions>>> = ({
+    signal,
+  }) => getFactions(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getFactions>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFactions>>> = ({ signal }) => getFactions(params, requestOptions, signal);
+export type GetFactionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getFactions>>
+>;
+export type GetFactionsQueryError = unknown;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFactions>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetFactionsQueryResult = NonNullable<Awaited<ReturnType<typeof getFactions>>>
-export type GetFactionsQueryError = unknown
-
-
-export function useGetFactions<TData = Awaited<ReturnType<typeof getFactions>>, TError = unknown>(
- params: undefined |  GetFactionsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFactions>>, TError, TData>> & Pick<
+export function useGetFactions<
+  TData = Awaited<ReturnType<typeof getFactions>>,
+  TError = unknown,
+>(
+  params: undefined | GetFactionsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getFactions>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFactions>>,
           TError,
           Awaited<ReturnType<typeof getFactions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFactions<TData = Awaited<ReturnType<typeof getFactions>>, TError = unknown>(
- params?: GetFactionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFactions>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFactions<
+  TData = Awaited<ReturnType<typeof getFactions>>,
+  TError = unknown,
+>(
+  params?: GetFactionsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getFactions>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFactions>>,
           TError,
           Awaited<ReturnType<typeof getFactions>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFactions<TData = Awaited<ReturnType<typeof getFactions>>, TError = unknown>(
- params?: GetFactionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFactions>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFactions<
+  TData = Awaited<ReturnType<typeof getFactions>>,
+  TError = unknown,
+>(
+  params?: GetFactionsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getFactions>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary List Factions
  */
 
-export function useGetFactions<TData = Awaited<ReturnType<typeof getFactions>>, TError = unknown>(
- params?: GetFactionsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFactions>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetFactions<
+  TData = Awaited<ReturnType<typeof getFactions>>,
+  TError = unknown,
+>(
+  params?: GetFactionsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getFactions>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetFactionsQueryOptions(params, options);
 
-  const queryOptions = getGetFactionsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 /**
  * View the details of a faction.
  * @summary Get Faction
  */
 export const getFaction = (
-    factionSymbol: string,
- options?: SecondParameter<typeof clientInstance>,signal?: AbortSignal
+  factionSymbol: string,
+  options?: SecondParameter<typeof clientInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return clientInstance<GetFaction200>(
-      {url: `/factions/${encodeURIComponent(String(factionSymbol))}`, method: 'GET', signal
+  return clientInstance<GetFaction200>(
+    {
+      url: `/factions/${encodeURIComponent(String(factionSymbol))}`,
+      method: "GET",
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getGetFactionQueryKey = (factionSymbol?: string) => {
+  return [`/factions/${factionSymbol}`] as const;
+};
 
-
-export const getGetFactionQueryKey = (factionSymbol?: string,) => {
-    return [
-    `/factions/${factionSymbol}`
-    ] as const;
-    }
-
-    
-export const getGetFactionQueryOptions = <TData = Awaited<ReturnType<typeof getFaction>>, TError = unknown>(factionSymbol: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFaction>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
+export const getGetFactionQueryOptions = <
+  TData = Awaited<ReturnType<typeof getFaction>>,
+  TError = unknown,
+>(
+  factionSymbol: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getFaction>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey =
+    queryOptions?.queryKey ?? getGetFactionQueryKey(factionSymbol);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetFactionQueryKey(factionSymbol);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getFaction>>> = ({
+    signal,
+  }) => getFaction(factionSymbol, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!factionSymbol,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getFaction>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFaction>>> = ({ signal }) => getFaction(factionSymbol, requestOptions, signal);
+export type GetFactionQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getFaction>>
+>;
+export type GetFactionQueryError = unknown;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(factionSymbol), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFaction>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetFactionQueryResult = NonNullable<Awaited<ReturnType<typeof getFaction>>>
-export type GetFactionQueryError = unknown
-
-
-export function useGetFaction<TData = Awaited<ReturnType<typeof getFaction>>, TError = unknown>(
- factionSymbol: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFaction>>, TError, TData>> & Pick<
+export function useGetFaction<
+  TData = Awaited<ReturnType<typeof getFaction>>,
+  TError = unknown,
+>(
+  factionSymbol: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getFaction>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFaction>>,
           TError,
           Awaited<ReturnType<typeof getFaction>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFaction<TData = Awaited<ReturnType<typeof getFaction>>, TError = unknown>(
- factionSymbol: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFaction>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFaction<
+  TData = Awaited<ReturnType<typeof getFaction>>,
+  TError = unknown,
+>(
+  factionSymbol: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getFaction>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFaction>>,
           TError,
           Awaited<ReturnType<typeof getFaction>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetFaction<TData = Awaited<ReturnType<typeof getFaction>>, TError = unknown>(
- factionSymbol: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFaction>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFaction<
+  TData = Awaited<ReturnType<typeof getFaction>>,
+  TError = unknown,
+>(
+  factionSymbol: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getFaction>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary Get Faction
  */
 
-export function useGetFaction<TData = Awaited<ReturnType<typeof getFaction>>, TError = unknown>(
- factionSymbol: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFaction>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetFaction<
+  TData = Awaited<ReturnType<typeof getFaction>>,
+  TError = unknown,
+>(
+  factionSymbol: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getFaction>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetFactionQueryOptions(factionSymbol, options);
 
-  const queryOptions = getGetFactionQueryOptions(factionSymbol,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
-

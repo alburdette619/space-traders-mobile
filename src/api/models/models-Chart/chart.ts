@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { WaypointSymbol } from '../models-WaypointSymbol/waypointSymbol';
+import type { WaypointSymbol } from "../models-WaypointSymbol/waypointSymbol";
 
 /**
  * The chart of a system or waypoint, which makes the location visible to other agents.

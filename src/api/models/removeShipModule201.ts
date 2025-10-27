@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { RemoveShipModule201Data } from './removeShipModule201Data';
+import type { RemoveShipModule201Data } from "./removeShipModule201Data";
 
 export type RemoveShipModule201 = {
   data: RemoveShipModule201Data;

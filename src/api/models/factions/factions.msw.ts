@@ -21,90 +21,151 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import {
-  faker
-} from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 
-import {
-  HttpResponse,
-  http
-} from 'msw';
-import type {
-  RequestHandlerOptions
-} from 'msw';
+import { HttpResponse, http } from "msw";
+import type { RequestHandlerOptions } from "msw";
 
-import type {
-  GetFaction200
-} from '../getFaction200';
+import type { GetFaction200 } from "../getFaction200";
 
-import type {
-  GetFactions200
-} from '../getFactions200';
-import { Faction } from '../models-Faction/faction';
-import { Meta } from '../models-Meta/meta';
+import type { GetFactions200 } from "../getFactions200";
+import { Faction } from "../models-Faction/faction";
+import { Meta } from "../models-Meta/meta";
 
+export const getGetFactionsResponseMock = (
+  overrideResponse: Partial<GetFactions200> = {},
+): GetFactions200 => ({
+  data: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({}) as Faction),
+  meta: {} as Meta,
+  ...overrideResponse,
+});
 
-export const getGetFactionsResponseMock = (overrideResponse: Partial< GetFactions200 > = {}): GetFactions200 => ({data: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({} as Faction)), meta: {} as Meta, ...overrideResponse})
+export const getGetFactionsResponseMock200 = (
+  overrideResponse: Partial<GetFactions200> = {},
+): GetFactions200 => ({
+  data: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({}) as Faction),
+  meta: {} as Meta,
+  ...overrideResponse,
+});
 
+export const getGetFactionResponseMock = (
+  overrideResponse: Partial<GetFaction200> = {},
+): GetFaction200 => ({ data: {} as Faction, ...overrideResponse });
 
-export const getGetFactionsResponseMock200 = (overrideResponse: Partial< GetFactions200 > = {}): GetFactions200 => ({data: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({} as Faction)), meta: {} as Meta, ...overrideResponse})
+export const getGetFactionResponseMock200 = (
+  overrideResponse: Partial<GetFaction200> = {},
+): GetFaction200 => ({ data: {} as Faction, ...overrideResponse });
 
-export const getGetFactionResponseMock = (overrideResponse: Partial< GetFaction200 > = {}): GetFaction200 => ({data: {} as Faction, ...overrideResponse})
+export const getGetFactionsMockHandler = (
+  overrideResponse?:
+    | GetFactions200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetFactions200> | GetFactions200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/factions",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetFactionsResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
+export const getGetFactionsMockHandler200 = (
+  overrideResponse?:
+    | GetFactions200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetFactions200> | GetFactions200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/factions",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetFactionsResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
-export const getGetFactionResponseMock200 = (overrideResponse: Partial< GetFaction200 > = {}): GetFaction200 => ({data: {} as Faction, ...overrideResponse})
+export const getGetFactionMockHandler = (
+  overrideResponse?:
+    | GetFaction200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetFaction200> | GetFaction200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/factions/:factionSymbol",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetFactionResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
-
-export const getGetFactionsMockHandler = (overrideResponse?: GetFactions200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetFactions200> | GetFactions200), options?: RequestHandlerOptions) => {
-  return http.get('*/factions', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetFactionsResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetFactionsMockHandler200 = (overrideResponse?: GetFactions200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetFactions200> | GetFactions200), options?: RequestHandlerOptions) => {
-  return http.get('*/factions', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetFactionsResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getGetFactionMockHandler = (overrideResponse?: GetFaction200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetFaction200> | GetFaction200), options?: RequestHandlerOptions) => {
-  return http.get('*/factions/:factionSymbol', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetFactionResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetFactionMockHandler200 = (overrideResponse?: GetFaction200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetFaction200> | GetFaction200), options?: RequestHandlerOptions) => {
-  return http.get('*/factions/:factionSymbol', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetFactionResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
+export const getGetFactionMockHandler200 = (
+  overrideResponse?:
+    | GetFaction200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetFaction200> | GetFaction200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/factions/:factionSymbol",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetFactionResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 export const getFactionsMock = () => [
   getGetFactionsMockHandler(),
-  getGetFactionMockHandler()
-]
+  getGetFactionMockHandler(),
+];

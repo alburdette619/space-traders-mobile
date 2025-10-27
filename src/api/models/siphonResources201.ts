@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { SiphonResources201Data } from './siphonResources201Data';
+import type { SiphonResources201Data } from "./siphonResources201Data";
 
 export type SiphonResources201 = {
   data: SiphonResources201Data;

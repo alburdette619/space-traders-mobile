@@ -25,12 +25,11 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 /**
  * The current status of the ship
  */
-export type ShipNavStatus = typeof ShipNavStatus[keyof typeof ShipNavStatus];
-
+export type ShipNavStatus = (typeof ShipNavStatus)[keyof typeof ShipNavStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipNavStatus = {
-  IN_TRANSIT: 'IN_TRANSIT',
-  IN_ORBIT: 'IN_ORBIT',
-  DOCKED: 'DOCKED',
+  IN_TRANSIT: "IN_TRANSIT",
+  IN_ORBIT: "IN_ORBIT",
+  DOCKED: "DOCKED",
 } as const;

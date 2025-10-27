@@ -21,9 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import {
-  useQuery
-} from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -33,110 +31,146 @@ import type {
   QueryKey,
   UndefinedInitialDataOptions,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
-import type {
-  GetSupplyChain200
-} from '../getSupplyChain200';
+import type { GetSupplyChain200 } from "../getSupplyChain200";
 
-import { clientInstance } from '../../client';
-
+import { clientInstance } from "../../client";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
 
 /**
  * Describes which import and exports map to each other.
  * @summary Get Supply Chain
  */
 export const getSupplyChain = (
-    
- options?: SecondParameter<typeof clientInstance>,signal?: AbortSignal
+  options?: SecondParameter<typeof clientInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return clientInstance<GetSupplyChain200>(
-      {url: `/market/supply-chain`, method: 'GET', signal
-    },
-      options);
-    }
-  
-
-
+  return clientInstance<GetSupplyChain200>(
+    { url: `/market/supply-chain`, method: "GET", signal },
+    options,
+  );
+};
 
 export const getGetSupplyChainQueryKey = () => {
-    return [
-    `/market/supply-chain`
-    ] as const;
-    }
+  return [`/market/supply-chain`] as const;
+};
 
-    
-export const getGetSupplyChainQueryOptions = <TData = Awaited<ReturnType<typeof getSupplyChain>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSupplyChain>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
-) => {
+export const getGetSupplyChainQueryOptions = <
+  TData = Awaited<ReturnType<typeof getSupplyChain>>,
+  TError = unknown,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getSupplyChain>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof clientInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetSupplyChainQueryKey();
 
-  const queryKey =  queryOptions?.queryKey ?? getGetSupplyChainQueryKey();
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSupplyChain>>> = ({
+    signal,
+  }) => getSupplyChain(requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getSupplyChain>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getSupplyChain>>> = ({ signal }) => getSupplyChain(requestOptions, signal);
+export type GetSupplyChainQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSupplyChain>>
+>;
+export type GetSupplyChainQueryError = unknown;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getSupplyChain>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetSupplyChainQueryResult = NonNullable<Awaited<ReturnType<typeof getSupplyChain>>>
-export type GetSupplyChainQueryError = unknown
-
-
-export function useGetSupplyChain<TData = Awaited<ReturnType<typeof getSupplyChain>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSupplyChain>>, TError, TData>> & Pick<
+export function useGetSupplyChain<
+  TData = Awaited<ReturnType<typeof getSupplyChain>>,
+  TError = unknown,
+>(
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSupplyChain>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSupplyChain>>,
           TError,
           Awaited<ReturnType<typeof getSupplyChain>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSupplyChain<TData = Awaited<ReturnType<typeof getSupplyChain>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSupplyChain>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSupplyChain<
+  TData = Awaited<ReturnType<typeof getSupplyChain>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSupplyChain>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getSupplyChain>>,
           TError,
           Awaited<ReturnType<typeof getSupplyChain>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetSupplyChain<TData = Awaited<ReturnType<typeof getSupplyChain>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSupplyChain>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSupplyChain<
+  TData = Awaited<ReturnType<typeof getSupplyChain>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSupplyChain>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary Get Supply Chain
  */
 
-export function useGetSupplyChain<TData = Awaited<ReturnType<typeof getSupplyChain>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getSupplyChain>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetSupplyChain<
+  TData = Awaited<ReturnType<typeof getSupplyChain>>,
+  TError = unknown,
+>(
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getSupplyChain>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetSupplyChainQueryOptions(options);
 
-  const queryOptions = getGetSupplyChainQueryOptions(options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
-

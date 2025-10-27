@@ -25,12 +25,11 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 /**
  * Type of contract.
  */
-export type ContractType = typeof ContractType[keyof typeof ContractType];
-
+export type ContractType = (typeof ContractType)[keyof typeof ContractType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ContractType = {
-  PROCUREMENT: 'PROCUREMENT',
-  TRANSPORT: 'TRANSPORT',
-  SHUTTLE: 'SHUTTLE',
+  PROCUREMENT: "PROCUREMENT",
+  TRANSPORT: "TRANSPORT",
+  SHUTTLE: "SHUTTLE",
 } as const;

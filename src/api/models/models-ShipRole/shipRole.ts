@@ -25,23 +25,22 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 /**
  * The registered role of the ship
  */
-export type ShipRole = typeof ShipRole[keyof typeof ShipRole];
-
+export type ShipRole = (typeof ShipRole)[keyof typeof ShipRole];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipRole = {
-  FABRICATOR: 'FABRICATOR',
-  HARVESTER: 'HARVESTER',
-  HAULER: 'HAULER',
-  INTERCEPTOR: 'INTERCEPTOR',
-  EXCAVATOR: 'EXCAVATOR',
-  TRANSPORT: 'TRANSPORT',
-  REPAIR: 'REPAIR',
-  SURVEYOR: 'SURVEYOR',
-  COMMAND: 'COMMAND',
-  CARRIER: 'CARRIER',
-  PATROL: 'PATROL',
-  SATELLITE: 'SATELLITE',
-  EXPLORER: 'EXPLORER',
-  REFINERY: 'REFINERY',
+  FABRICATOR: "FABRICATOR",
+  HARVESTER: "HARVESTER",
+  HAULER: "HAULER",
+  INTERCEPTOR: "INTERCEPTOR",
+  EXCAVATOR: "EXCAVATOR",
+  TRANSPORT: "TRANSPORT",
+  REPAIR: "REPAIR",
+  SURVEYOR: "SURVEYOR",
+  COMMAND: "COMMAND",
+  CARRIER: "CARRIER",
+  PATROL: "PATROL",
+  SATELLITE: "SATELLITE",
+  EXPLORER: "EXPLORER",
+  REFINERY: "REFINERY",
 } as const;

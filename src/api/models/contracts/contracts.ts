@@ -21,10 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -37,230 +34,321 @@ import type {
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
-  UseQueryResult
-} from '@tanstack/react-query';
+  UseQueryResult,
+} from "@tanstack/react-query";
 
-import type {
-  AcceptContract200
-} from '../acceptContract200';
+import type { AcceptContract200 } from "../acceptContract200";
 
-import type {
-  DeliverContract200
-} from '../deliverContract200';
+import type { DeliverContract200 } from "../deliverContract200";
 
-import type {
-  DeliverContractBody
-} from '../deliverContractBody';
+import type { DeliverContractBody } from "../deliverContractBody";
 
-import type {
-  FulfillContract200
-} from '../fulfillContract200';
+import type { FulfillContract200 } from "../fulfillContract200";
 
-import type {
-  GetContract200
-} from '../getContract200';
+import type { GetContract200 } from "../getContract200";
 
-import type {
-  GetContracts200
-} from '../getContracts200';
+import type { GetContracts200 } from "../getContracts200";
 
-import type {
-  GetContractsParams
-} from '../getContractsParams';
+import type { GetContractsParams } from "../getContractsParams";
 
-import { clientInstance } from '../../client';
-
+import { clientInstance } from "../../client";
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
-
-
 
 /**
  * Return a paginated list of all your contracts.
  * @summary List Contracts
  */
 export const getContracts = (
-    params?: GetContractsParams,
- options?: SecondParameter<typeof clientInstance>,signal?: AbortSignal
+  params?: GetContractsParams,
+  options?: SecondParameter<typeof clientInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return clientInstance<GetContracts200>(
-      {url: `/my/contracts`, method: 'GET',
-        params, signal
-    },
-      options);
-    }
-  
+  return clientInstance<GetContracts200>(
+    { url: `/my/contracts`, method: "GET", params, signal },
+    options,
+  );
+};
 
+export const getGetContractsQueryKey = (params?: GetContractsParams) => {
+  return [`/my/contracts`, ...(params ? [params] : [])] as const;
+};
 
-
-export const getGetContractsQueryKey = (params?: GetContractsParams,) => {
-    return [
-    `/my/contracts`, ...(params ? [params]: [])
-    ] as const;
-    }
-
-    
-export const getGetContractsQueryOptions = <TData = Awaited<ReturnType<typeof getContracts>>, TError = unknown>(params?: GetContractsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getContracts>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
+export const getGetContractsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getContracts>>,
+  TError = unknown,
+>(
+  params?: GetContractsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getContracts>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetContractsQueryKey(params);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetContractsQueryKey(params);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getContracts>>> = ({
+    signal,
+  }) => getContracts(params, requestOptions, signal);
 
-  
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getContracts>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getContracts>>> = ({ signal }) => getContracts(params, requestOptions, signal);
+export type GetContractsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getContracts>>
+>;
+export type GetContractsQueryError = unknown;
 
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getContracts>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetContractsQueryResult = NonNullable<Awaited<ReturnType<typeof getContracts>>>
-export type GetContractsQueryError = unknown
-
-
-export function useGetContracts<TData = Awaited<ReturnType<typeof getContracts>>, TError = unknown>(
- params: undefined |  GetContractsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getContracts>>, TError, TData>> & Pick<
+export function useGetContracts<
+  TData = Awaited<ReturnType<typeof getContracts>>,
+  TError = unknown,
+>(
+  params: undefined | GetContractsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getContracts>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getContracts>>,
           TError,
           Awaited<ReturnType<typeof getContracts>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetContracts<TData = Awaited<ReturnType<typeof getContracts>>, TError = unknown>(
- params?: GetContractsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getContracts>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetContracts<
+  TData = Awaited<ReturnType<typeof getContracts>>,
+  TError = unknown,
+>(
+  params?: GetContractsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getContracts>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getContracts>>,
           TError,
           Awaited<ReturnType<typeof getContracts>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetContracts<TData = Awaited<ReturnType<typeof getContracts>>, TError = unknown>(
- params?: GetContractsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getContracts>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetContracts<
+  TData = Awaited<ReturnType<typeof getContracts>>,
+  TError = unknown,
+>(
+  params?: GetContractsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getContracts>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary List Contracts
  */
 
-export function useGetContracts<TData = Awaited<ReturnType<typeof getContracts>>, TError = unknown>(
- params?: GetContractsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getContracts>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetContracts<
+  TData = Awaited<ReturnType<typeof getContracts>>,
+  TError = unknown,
+>(
+  params?: GetContractsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getContracts>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetContractsQueryOptions(params, options);
 
-  const queryOptions = getGetContractsQueryOptions(params,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 /**
  * Get the details of a contract by ID.
  * @summary Get Contract
  */
 export const getContract = (
-    contractId: string,
- options?: SecondParameter<typeof clientInstance>,signal?: AbortSignal
+  contractId: string,
+  options?: SecondParameter<typeof clientInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return clientInstance<GetContract200>(
-      {url: `/my/contracts/${encodeURIComponent(String(contractId))}`, method: 'GET', signal
+  return clientInstance<GetContract200>(
+    {
+      url: `/my/contracts/${encodeURIComponent(String(contractId))}`,
+      method: "GET",
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getGetContractQueryKey = (contractId?: string) => {
+  return [`/my/contracts/${contractId}`] as const;
+};
 
-
-export const getGetContractQueryKey = (contractId?: string,) => {
-    return [
-    `/my/contracts/${contractId}`
-    ] as const;
-    }
-
-    
-export const getGetContractQueryOptions = <TData = Awaited<ReturnType<typeof getContract>>, TError = unknown>(contractId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getContract>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
+export const getGetContractQueryOptions = <
+  TData = Awaited<ReturnType<typeof getContract>>,
+  TError = unknown,
+>(
+  contractId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getContract>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
 ) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
 
-const {query: queryOptions, request: requestOptions} = options ?? {};
+  const queryKey = queryOptions?.queryKey ?? getGetContractQueryKey(contractId);
 
-  const queryKey =  queryOptions?.queryKey ?? getGetContractQueryKey(contractId);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getContract>>> = ({
+    signal,
+  }) => getContract(contractId, requestOptions, signal);
 
-  
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!contractId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getContract>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getContract>>> = ({ signal }) => getContract(contractId, requestOptions, signal);
+export type GetContractQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getContract>>
+>;
+export type GetContractQueryError = unknown;
 
-      
-
-      
-
-   return  { queryKey, queryFn, enabled: !!(contractId), ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getContract>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetContractQueryResult = NonNullable<Awaited<ReturnType<typeof getContract>>>
-export type GetContractQueryError = unknown
-
-
-export function useGetContract<TData = Awaited<ReturnType<typeof getContract>>, TError = unknown>(
- contractId: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getContract>>, TError, TData>> & Pick<
+export function useGetContract<
+  TData = Awaited<ReturnType<typeof getContract>>,
+  TError = unknown,
+>(
+  contractId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getContract>>, TError, TData>
+    > &
+      Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getContract>>,
           TError,
           Awaited<ReturnType<typeof getContract>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetContract<TData = Awaited<ReturnType<typeof getContract>>, TError = unknown>(
- contractId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getContract>>, TError, TData>> & Pick<
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetContract<
+  TData = Awaited<ReturnType<typeof getContract>>,
+  TError = unknown,
+>(
+  contractId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getContract>>, TError, TData>
+    > &
+      Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getContract>>,
           TError,
           Awaited<ReturnType<typeof getContract>>
-        > , 'initialData'
-      >, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetContract<TData = Awaited<ReturnType<typeof getContract>>, TError = unknown>(
- contractId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getContract>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetContract<
+  TData = Awaited<ReturnType<typeof getContract>>,
+  TError = unknown,
+>(
+  contractId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getContract>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
 /**
  * @summary Get Contract
  */
 
-export function useGetContract<TData = Awaited<ReturnType<typeof getContract>>, TError = unknown>(
- contractId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getContract>>, TError, TData>>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+export function useGetContract<
+  TData = Awaited<ReturnType<typeof getContract>>,
+  TError = unknown,
+>(
+  contractId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getContract>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetContractQueryOptions(contractId, options);
 
-  const queryOptions = getGetContractQueryOptions(contractId,options)
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
 
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
+  query.queryKey = queryOptions.queryKey;
 
   return query;
 }
-
-
-
 
 /**
  * Accept a contract by ID. 
@@ -269,65 +357,89 @@ You can only accept contracts that were offered to you, were not accepted yet, a
  * @summary Accept Contract
  */
 export const acceptContract = (
-    contractId: string,
- options?: SecondParameter<typeof clientInstance>,signal?: AbortSignal
+  contractId: string,
+  options?: SecondParameter<typeof clientInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return clientInstance<AcceptContract200>(
-      {url: `/my/contracts/${encodeURIComponent(String(contractId))}/accept`, method: 'POST', signal
+  return clientInstance<AcceptContract200>(
+    {
+      url: `/my/contracts/${encodeURIComponent(String(contractId))}/accept`,
+      method: "POST",
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getAcceptContractMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof acceptContract>>,
+    TError,
+    { contractId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof clientInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof acceptContract>>,
+  TError,
+  { contractId: string },
+  TContext
+> => {
+  const mutationKey = ["acceptContract"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
 
-export const getAcceptContractMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof acceptContract>>, TError,{contractId: string}, TContext>, request?: SecondParameter<typeof clientInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof acceptContract>>, TError,{contractId: string}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof acceptContract>>,
+    { contractId: string }
+  > = (props) => {
+    const { contractId } = props ?? {};
 
-const mutationKey = ['acceptContract'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+    return acceptContract(contractId, requestOptions);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type AcceptContractMutationResult = NonNullable<
+  Awaited<ReturnType<typeof acceptContract>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof acceptContract>>, {contractId: string}> = (props) => {
-          const {contractId} = props ?? {};
+export type AcceptContractMutationError = unknown;
 
-          return  acceptContract(contractId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type AcceptContractMutationResult = NonNullable<Awaited<ReturnType<typeof acceptContract>>>
-    
-    export type AcceptContractMutationError = unknown
-
-    /**
+/**
  * @summary Accept Contract
  */
-export const useAcceptContract = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof acceptContract>>, TError,{contractId: string}, TContext>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof acceptContract>>,
-        TError,
-        {contractId: string},
-        TContext
-      > => {
+export const useAcceptContract = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof acceptContract>>,
+      TError,
+      { contractId: string },
+      TContext
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof acceptContract>>,
+  TError,
+  { contractId: string },
+  TContext
+> => {
+  const mutationOptions = getAcceptContractMutationOptions(options);
 
-      const mutationOptions = getAcceptContractMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+  return useMutation(mutationOptions, queryClient);
+};
+/**
  * Deliver cargo to a contract.
 
 In order to use this API, a ship must be at the delivery location (denoted in the delivery terms as `destinationSymbol` of a contract) and must have a number of units of a good required by this contract in its cargo.
@@ -336,128 +448,175 @@ Cargo that was delivered will be removed from the ship's cargo.
  * @summary Deliver Cargo to Contract
  */
 export const deliverContract = (
-    contractId: string,
-    deliverContractBody: DeliverContractBody,
- options?: SecondParameter<typeof clientInstance>,signal?: AbortSignal
+  contractId: string,
+  deliverContractBody: DeliverContractBody,
+  options?: SecondParameter<typeof clientInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return clientInstance<DeliverContract200>(
-      {url: `/my/contracts/${encodeURIComponent(String(contractId))}/deliver`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: deliverContractBody, signal
+  return clientInstance<DeliverContract200>(
+    {
+      url: `/my/contracts/${encodeURIComponent(String(contractId))}/deliver`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: deliverContractBody,
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getDeliverContractMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deliverContract>>,
+    TError,
+    { contractId: string; data: DeliverContractBody },
+    TContext
+  >;
+  request?: SecondParameter<typeof clientInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deliverContract>>,
+  TError,
+  { contractId: string; data: DeliverContractBody },
+  TContext
+> => {
+  const mutationKey = ["deliverContract"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
 
-export const getDeliverContractMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deliverContract>>, TError,{contractId: string;data: DeliverContractBody}, TContext>, request?: SecondParameter<typeof clientInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof deliverContract>>, TError,{contractId: string;data: DeliverContractBody}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deliverContract>>,
+    { contractId: string; data: DeliverContractBody }
+  > = (props) => {
+    const { contractId, data } = props ?? {};
 
-const mutationKey = ['deliverContract'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+    return deliverContract(contractId, data, requestOptions);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type DeliverContractMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deliverContract>>
+>;
+export type DeliverContractMutationBody = DeliverContractBody;
+export type DeliverContractMutationError = unknown;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deliverContract>>, {contractId: string;data: DeliverContractBody}> = (props) => {
-          const {contractId,data} = props ?? {};
-
-          return  deliverContract(contractId,data,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type DeliverContractMutationResult = NonNullable<Awaited<ReturnType<typeof deliverContract>>>
-    export type DeliverContractMutationBody = DeliverContractBody
-    export type DeliverContractMutationError = unknown
-
-    /**
+/**
  * @summary Deliver Cargo to Contract
  */
-export const useDeliverContract = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deliverContract>>, TError,{contractId: string;data: DeliverContractBody}, TContext>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof deliverContract>>,
-        TError,
-        {contractId: string;data: DeliverContractBody},
-        TContext
-      > => {
+export const useDeliverContract = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deliverContract>>,
+      TError,
+      { contractId: string; data: DeliverContractBody },
+      TContext
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof deliverContract>>,
+  TError,
+  { contractId: string; data: DeliverContractBody },
+  TContext
+> => {
+  const mutationOptions = getDeliverContractMutationOptions(options);
 
-      const mutationOptions = getDeliverContractMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    /**
+  return useMutation(mutationOptions, queryClient);
+};
+/**
  * Fulfill a contract. Can only be used on contracts that have all of their delivery terms fulfilled.
  * @summary Fulfill Contract
  */
 export const fulfillContract = (
-    contractId: string,
- options?: SecondParameter<typeof clientInstance>,signal?: AbortSignal
+  contractId: string,
+  options?: SecondParameter<typeof clientInstance>,
+  signal?: AbortSignal,
 ) => {
-      
-      
-      return clientInstance<FulfillContract200>(
-      {url: `/my/contracts/${encodeURIComponent(String(contractId))}/fulfill`, method: 'POST', signal
+  return clientInstance<FulfillContract200>(
+    {
+      url: `/my/contracts/${encodeURIComponent(String(contractId))}/fulfill`,
+      method: "POST",
+      signal,
     },
-      options);
-    }
-  
+    options,
+  );
+};
 
+export const getFulfillContractMutationOptions = <
+  TError = unknown,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof fulfillContract>>,
+    TError,
+    { contractId: string },
+    TContext
+  >;
+  request?: SecondParameter<typeof clientInstance>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof fulfillContract>>,
+  TError,
+  { contractId: string },
+  TContext
+> => {
+  const mutationKey = ["fulfillContract"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
 
-export const getFulfillContractMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof fulfillContract>>, TError,{contractId: string}, TContext>, request?: SecondParameter<typeof clientInstance>}
-): UseMutationOptions<Awaited<ReturnType<typeof fulfillContract>>, TError,{contractId: string}, TContext> => {
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof fulfillContract>>,
+    { contractId: string }
+  > = (props) => {
+    const { contractId } = props ?? {};
 
-const mutationKey = ['fulfillContract'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
+    return fulfillContract(contractId, requestOptions);
+  };
 
-      
+  return { mutationFn, ...mutationOptions };
+};
 
+export type FulfillContractMutationResult = NonNullable<
+  Awaited<ReturnType<typeof fulfillContract>>
+>;
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof fulfillContract>>, {contractId: string}> = (props) => {
-          const {contractId} = props ?? {};
+export type FulfillContractMutationError = unknown;
 
-          return  fulfillContract(contractId,requestOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type FulfillContractMutationResult = NonNullable<Awaited<ReturnType<typeof fulfillContract>>>
-    
-    export type FulfillContractMutationError = unknown
-
-    /**
+/**
  * @summary Fulfill Contract
  */
-export const useFulfillContract = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof fulfillContract>>, TError,{contractId: string}, TContext>, request?: SecondParameter<typeof clientInstance>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof fulfillContract>>,
-        TError,
-        {contractId: string},
-        TContext
-      > => {
+export const useFulfillContract = <TError = unknown, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof fulfillContract>>,
+      TError,
+      { contractId: string },
+      TContext
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof fulfillContract>>,
+  TError,
+  { contractId: string },
+  TContext
+> => {
+  const mutationOptions = getFulfillContractMutationOptions(options);
 
-      const mutationOptions = getFulfillContractMutationOptions(options);
-
-      return useMutation(mutationOptions, queryClient);
-    }
-    
+  return useMutation(mutationOptions, queryClient);
+};

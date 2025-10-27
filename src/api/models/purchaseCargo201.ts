@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { PurchaseCargo201Data } from './purchaseCargo201Data';
+import type { PurchaseCargo201Data } from "./purchaseCargo201Data";
 
 export type PurchaseCargo201 = {
   data: PurchaseCargo201Data;

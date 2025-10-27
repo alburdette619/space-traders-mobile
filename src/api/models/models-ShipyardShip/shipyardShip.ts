@@ -21,15 +21,15 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ActivityLevel } from '../models-ActivityLevel/activityLevel';
-import type { ShipyardShipCrew } from './shipyardShipCrew';
-import type { ShipEngine } from '../models-ShipEngine/shipEngine';
-import type { ShipFrame } from '../models-ShipFrame/shipFrame';
-import type { ShipModule } from '../models-ShipModule/shipModule';
-import type { ShipMount } from '../models-ShipMount/shipMount';
-import type { ShipReactor } from '../models-ShipReactor/shipReactor';
-import type { SupplyLevel } from '../models-SupplyLevel/supplyLevel';
-import type { ShipType } from '../models-ShipType/shipType';
+import type { ActivityLevel } from "../models-ActivityLevel/activityLevel";
+import type { ShipyardShipCrew } from "./shipyardShipCrew";
+import type { ShipEngine } from "../models-ShipEngine/shipEngine";
+import type { ShipFrame } from "../models-ShipFrame/shipFrame";
+import type { ShipModule } from "../models-ShipModule/shipModule";
+import type { ShipMount } from "../models-ShipMount/shipMount";
+import type { ShipReactor } from "../models-ShipReactor/shipReactor";
+import type { SupplyLevel } from "../models-SupplyLevel/supplyLevel";
+import type { ShipType } from "../models-ShipType/shipType";
 
 export interface ShipyardShip {
   activity?: ActivityLevel;

@@ -21,10 +21,10 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { Agent } from './models-Agent/agent';
-import type { Cooldown } from './models-Cooldown/cooldown';
-import type { ShipNav } from './models-ShipNav/shipNav';
-import type { MarketTransaction } from './models-MarketTransaction/marketTransaction';
+import type { Agent } from "./models-Agent/agent";
+import type { Cooldown } from "./models-Cooldown/cooldown";
+import type { ShipNav } from "./models-ShipNav/shipNav";
+import type { MarketTransaction } from "./models-MarketTransaction/marketTransaction";
 
 export type JumpShip200Data = {
   agent: Agent;

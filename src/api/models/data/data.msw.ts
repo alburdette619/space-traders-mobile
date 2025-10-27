@@ -21,57 +21,90 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import {
-  faker
-} from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 
-import {
-  HttpResponse,
-  http
-} from 'msw';
-import type {
-  RequestHandlerOptions
-} from 'msw';
+import { HttpResponse, http } from "msw";
+import type { RequestHandlerOptions } from "msw";
 
-import type {
-  GetSupplyChain200
-} from '../getSupplyChain200';
+import type { GetSupplyChain200 } from "../getSupplyChain200";
 
+export const getGetSupplyChainResponseMock = (
+  overrideResponse: Partial<GetSupplyChain200> = {},
+): GetSupplyChain200 => ({
+  data: {
+    exportToImportMap: {
+      [faker.string.alphanumeric(5)]: Array.from(
+        { length: faker.number.int({ min: 1, max: 10 }) },
+        (_, i) => i + 1,
+      ).map(() => faker.string.alpha({ length: { min: 10, max: 20 } })),
+    },
+  },
+  ...overrideResponse,
+});
 
-export const getGetSupplyChainResponseMock = (overrideResponse: Partial< GetSupplyChain200 > = {}): GetSupplyChain200 => ({data: {exportToImportMap: {
-        [faker.string.alphanumeric(5)]: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha({length: {min: 10, max: 20}})))
-      }}, ...overrideResponse})
+export const getGetSupplyChainResponseMock200 = (
+  overrideResponse: Partial<GetSupplyChain200> = {},
+): GetSupplyChain200 => ({
+  data: {
+    exportToImportMap: {
+      [faker.string.alphanumeric(5)]: Array.from(
+        { length: faker.number.int({ min: 1, max: 10 }) },
+        (_, i) => i + 1,
+      ).map(() => faker.string.alpha({ length: { min: 10, max: 20 } })),
+    },
+  },
+  ...overrideResponse,
+});
 
+export const getGetSupplyChainMockHandler = (
+  overrideResponse?:
+    | GetSupplyChain200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetSupplyChain200> | GetSupplyChain200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/market/supply-chain",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetSupplyChainResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
-export const getGetSupplyChainResponseMock200 = (overrideResponse: Partial< GetSupplyChain200 > = {}): GetSupplyChain200 => ({data: {exportToImportMap: {
-        [faker.string.alphanumeric(5)]: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => (faker.string.alpha({length: {min: 10, max: 20}})))
-      }}, ...overrideResponse})
-
-
-export const getGetSupplyChainMockHandler = (overrideResponse?: GetSupplyChain200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSupplyChain200> | GetSupplyChain200), options?: RequestHandlerOptions) => {
-  return http.get('*/market/supply-chain', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetSupplyChainResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetSupplyChainMockHandler200 = (overrideResponse?: GetSupplyChain200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetSupplyChain200> | GetSupplyChain200), options?: RequestHandlerOptions) => {
-  return http.get('*/market/supply-chain', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetSupplyChainResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-export const getDataMock = () => [
-  getGetSupplyChainMockHandler()
-]
+export const getGetSupplyChainMockHandler200 = (
+  overrideResponse?:
+    | GetSupplyChain200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetSupplyChain200> | GetSupplyChain200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/market/supply-chain",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetSupplyChainResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
+export const getDataMock = () => [getGetSupplyChainMockHandler()];

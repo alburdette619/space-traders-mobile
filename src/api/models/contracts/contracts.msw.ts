@@ -21,197 +21,360 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import {
-  faker
-} from '@faker-js/faker';
+import { faker } from "@faker-js/faker";
 
-import {
-  HttpResponse,
-  http
-} from 'msw';
-import type {
-  RequestHandlerOptions
-} from 'msw';
+import { HttpResponse, http } from "msw";
+import type { RequestHandlerOptions } from "msw";
 
-import type {
-  AcceptContract200
-} from '../acceptContract200';
+import type { AcceptContract200 } from "../acceptContract200";
 
-import type {
-  DeliverContract200
-} from '../deliverContract200';
+import type { DeliverContract200 } from "../deliverContract200";
 
-import type {
-  FulfillContract200
-} from '../fulfillContract200';
+import type { FulfillContract200 } from "../fulfillContract200";
 
-import type {
-  GetContract200
-} from '../getContract200';
+import type { GetContract200 } from "../getContract200";
 
-import type {
-  GetContracts200
-} from '../getContracts200';
-import { Contract } from '../models-Contract/contract';
-import { Meta } from '../models-Meta/meta';
-import { Agent } from '../models-Agent/agent';
-import { ShipCargo } from '../models-ShipCargo/shipCargo';
+import type { GetContracts200 } from "../getContracts200";
+import { Contract } from "../models-Contract/contract";
+import { Meta } from "../models-Meta/meta";
+import { Agent } from "../models-Agent/agent";
+import { ShipCargo } from "../models-ShipCargo/shipCargo";
 
+export const getGetContractsResponseMock = (
+  overrideResponse: Partial<GetContracts200> = {},
+): GetContracts200 => ({
+  data: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({}) as Contract),
+  meta: {} as Meta,
+  ...overrideResponse,
+});
 
-export const getGetContractsResponseMock = (overrideResponse: Partial< GetContracts200 > = {}): GetContracts200 => ({data: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({} as Contract)), meta: {} as Meta, ...overrideResponse})
+export const getGetContractsResponseMock200 = (
+  overrideResponse: Partial<GetContracts200> = {},
+): GetContracts200 => ({
+  data: Array.from(
+    { length: faker.number.int({ min: 1, max: 10 }) },
+    (_, i) => i + 1,
+  ).map(() => ({}) as Contract),
+  meta: {} as Meta,
+  ...overrideResponse,
+});
 
+export const getGetContractResponseMock = (
+  overrideResponse: Partial<GetContract200> = {},
+): GetContract200 => ({ data: {} as Contract, ...overrideResponse });
 
-export const getGetContractsResponseMock200 = (overrideResponse: Partial< GetContracts200 > = {}): GetContracts200 => ({data: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({} as Contract)), meta: {} as Meta, ...overrideResponse})
+export const getGetContractResponseMock200 = (
+  overrideResponse: Partial<GetContract200> = {},
+): GetContract200 => ({ data: {} as Contract, ...overrideResponse });
 
-export const getGetContractResponseMock = (overrideResponse: Partial< GetContract200 > = {}): GetContract200 => ({data: {} as Contract, ...overrideResponse})
+export const getAcceptContractResponseMock = (
+  overrideResponse: Partial<AcceptContract200> = {},
+): AcceptContract200 => ({
+  data: { agent: {} as Agent, contract: {} as Contract },
+  ...overrideResponse,
+});
 
+export const getAcceptContractResponseMock200 = (
+  overrideResponse: Partial<AcceptContract200> = {},
+): AcceptContract200 => ({
+  data: { agent: {} as Agent, contract: {} as Contract },
+  ...overrideResponse,
+});
 
-export const getGetContractResponseMock200 = (overrideResponse: Partial< GetContract200 > = {}): GetContract200 => ({data: {} as Contract, ...overrideResponse})
+export const getDeliverContractResponseMock = (
+  overrideResponse: Partial<DeliverContract200> = {},
+): DeliverContract200 => ({
+  data: { cargo: {} as ShipCargo, contract: {} as Contract },
+  ...overrideResponse,
+});
 
-export const getAcceptContractResponseMock = (overrideResponse: Partial< AcceptContract200 > = {}): AcceptContract200 => ({data: {agent: {} as Agent, contract: {} as Contract}, ...overrideResponse})
+export const getDeliverContractResponseMock200 = (
+  overrideResponse: Partial<DeliverContract200> = {},
+): DeliverContract200 => ({
+  data: { cargo: {} as ShipCargo, contract: {} as Contract },
+  ...overrideResponse,
+});
 
+export const getFulfillContractResponseMock = (
+  overrideResponse: Partial<FulfillContract200> = {},
+): FulfillContract200 => ({
+  data: { agent: {} as Agent, contract: {} as Contract },
+  ...overrideResponse,
+});
 
-export const getAcceptContractResponseMock200 = (overrideResponse: Partial< AcceptContract200 > = {}): AcceptContract200 => ({data: {agent: {} as Agent, contract: {} as Contract}, ...overrideResponse})
+export const getFulfillContractResponseMock200 = (
+  overrideResponse: Partial<FulfillContract200> = {},
+): FulfillContract200 => ({
+  data: { agent: {} as Agent, contract: {} as Contract },
+  ...overrideResponse,
+});
 
-export const getDeliverContractResponseMock = (overrideResponse: Partial< DeliverContract200 > = {}): DeliverContract200 => ({data: {cargo: {} as ShipCargo, contract: {} as Contract}, ...overrideResponse})
+export const getGetContractsMockHandler = (
+  overrideResponse?:
+    | GetContracts200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetContracts200> | GetContracts200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/my/contracts",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetContractsResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
+export const getGetContractsMockHandler200 = (
+  overrideResponse?:
+    | GetContracts200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetContracts200> | GetContracts200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/my/contracts",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetContractsResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
-export const getDeliverContractResponseMock200 = (overrideResponse: Partial< DeliverContract200 > = {}): DeliverContract200 => ({data: {cargo: {} as ShipCargo, contract: {} as Contract}, ...overrideResponse})
+export const getGetContractMockHandler = (
+  overrideResponse?:
+    | GetContract200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetContract200> | GetContract200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/my/contracts/:contractId",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetContractResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
-export const getFulfillContractResponseMock = (overrideResponse: Partial< FulfillContract200 > = {}): FulfillContract200 => ({data: {agent: {} as Agent, contract: {} as Contract}, ...overrideResponse})
+export const getGetContractMockHandler200 = (
+  overrideResponse?:
+    | GetContract200
+    | ((
+        info: Parameters<Parameters<typeof http.get>[1]>[0],
+      ) => Promise<GetContract200> | GetContract200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.get(
+    "*/my/contracts/:contractId",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getGetContractResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
+export const getAcceptContractMockHandler = (
+  overrideResponse?:
+    | AcceptContract200
+    | ((
+        info: Parameters<Parameters<typeof http.post>[1]>[0],
+      ) => Promise<AcceptContract200> | AcceptContract200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.post(
+    "*/my/contracts/:contractId/accept",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getAcceptContractResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
-export const getFulfillContractResponseMock200 = (overrideResponse: Partial< FulfillContract200 > = {}): FulfillContract200 => ({data: {agent: {} as Agent, contract: {} as Contract}, ...overrideResponse})
+export const getAcceptContractMockHandler200 = (
+  overrideResponse?:
+    | AcceptContract200
+    | ((
+        info: Parameters<Parameters<typeof http.post>[1]>[0],
+      ) => Promise<AcceptContract200> | AcceptContract200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.post(
+    "*/my/contracts/:contractId/accept",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getAcceptContractResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
+export const getDeliverContractMockHandler = (
+  overrideResponse?:
+    | DeliverContract200
+    | ((
+        info: Parameters<Parameters<typeof http.post>[1]>[0],
+      ) => Promise<DeliverContract200> | DeliverContract200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.post(
+    "*/my/contracts/:contractId/deliver",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getDeliverContractResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
-export const getGetContractsMockHandler = (overrideResponse?: GetContracts200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetContracts200> | GetContracts200), options?: RequestHandlerOptions) => {
-  return http.get('*/my/contracts', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetContractsResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
+export const getDeliverContractMockHandler200 = (
+  overrideResponse?:
+    | DeliverContract200
+    | ((
+        info: Parameters<Parameters<typeof http.post>[1]>[0],
+      ) => Promise<DeliverContract200> | DeliverContract200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.post(
+    "*/my/contracts/:contractId/deliver",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getDeliverContractResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
+export const getFulfillContractMockHandler = (
+  overrideResponse?:
+    | FulfillContract200
+    | ((
+        info: Parameters<Parameters<typeof http.post>[1]>[0],
+      ) => Promise<FulfillContract200> | FulfillContract200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.post(
+    "*/my/contracts/:contractId/fulfill",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getFulfillContractResponseMock(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 
-export const getGetContractsMockHandler200 = (overrideResponse?: GetContracts200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetContracts200> | GetContracts200), options?: RequestHandlerOptions) => {
-  return http.get('*/my/contracts', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetContractsResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getGetContractMockHandler = (overrideResponse?: GetContract200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetContract200> | GetContract200), options?: RequestHandlerOptions) => {
-  return http.get('*/my/contracts/:contractId', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetContractResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getGetContractMockHandler200 = (overrideResponse?: GetContract200 | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<GetContract200> | GetContract200), options?: RequestHandlerOptions) => {
-  return http.get('*/my/contracts/:contractId', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getGetContractResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getAcceptContractMockHandler = (overrideResponse?: AcceptContract200 | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<AcceptContract200> | AcceptContract200), options?: RequestHandlerOptions) => {
-  return http.post('*/my/contracts/:contractId/accept', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getAcceptContractResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getAcceptContractMockHandler200 = (overrideResponse?: AcceptContract200 | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<AcceptContract200> | AcceptContract200), options?: RequestHandlerOptions) => {
-  return http.post('*/my/contracts/:contractId/accept', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getAcceptContractResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getDeliverContractMockHandler = (overrideResponse?: DeliverContract200 | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<DeliverContract200> | DeliverContract200), options?: RequestHandlerOptions) => {
-  return http.post('*/my/contracts/:contractId/deliver', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getDeliverContractResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getDeliverContractMockHandler200 = (overrideResponse?: DeliverContract200 | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<DeliverContract200> | DeliverContract200), options?: RequestHandlerOptions) => {
-  return http.post('*/my/contracts/:contractId/deliver', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getDeliverContractResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-export const getFulfillContractMockHandler = (overrideResponse?: FulfillContract200 | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<FulfillContract200> | FulfillContract200), options?: RequestHandlerOptions) => {
-  return http.post('*/my/contracts/:contractId/fulfill', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getFulfillContractResponseMock()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
-
-
-export const getFulfillContractMockHandler200 = (overrideResponse?: FulfillContract200 | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<FulfillContract200> | FulfillContract200), options?: RequestHandlerOptions) => {
-  return http.post('*/my/contracts/:contractId/fulfill', async (info) => {
-  
-    return new HttpResponse(JSON.stringify(overrideResponse !== undefined
-    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
-    : getFulfillContractResponseMock200()),
-      { status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      })
-  }, options)
-}
+export const getFulfillContractMockHandler200 = (
+  overrideResponse?:
+    | FulfillContract200
+    | ((
+        info: Parameters<Parameters<typeof http.post>[1]>[0],
+      ) => Promise<FulfillContract200> | FulfillContract200),
+  options?: RequestHandlerOptions,
+) => {
+  return http.post(
+    "*/my/contracts/:contractId/fulfill",
+    async (info) => {
+      return new HttpResponse(
+        JSON.stringify(
+          overrideResponse !== undefined
+            ? typeof overrideResponse === "function"
+              ? await overrideResponse(info)
+              : overrideResponse
+            : getFulfillContractResponseMock200(),
+        ),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      );
+    },
+    options,
+  );
+};
 export const getContractsMock = () => [
   getGetContractsMockHandler(),
   getGetContractMockHandler(),
   getAcceptContractMockHandler(),
   getDeliverContractMockHandler(),
-  getFulfillContractMockHandler()
-]
+  getFulfillContractMockHandler(),
+];

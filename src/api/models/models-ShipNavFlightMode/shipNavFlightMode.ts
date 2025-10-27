@@ -25,13 +25,13 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 /**
  * The ship's set speed when traveling between waypoints or systems.
  */
-export type ShipNavFlightMode = typeof ShipNavFlightMode[keyof typeof ShipNavFlightMode];
-
+export type ShipNavFlightMode =
+  (typeof ShipNavFlightMode)[keyof typeof ShipNavFlightMode];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipNavFlightMode = {
-  DRIFT: 'DRIFT',
-  STEALTH: 'STEALTH',
-  CRUISE: 'CRUISE',
-  BURN: 'BURN',
+  DRIFT: "DRIFT",
+  STEALTH: "STEALTH",
+  CRUISE: "CRUISE",
+  BURN: "BURN",
 } as const;

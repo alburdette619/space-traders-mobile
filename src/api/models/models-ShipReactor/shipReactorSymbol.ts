@@ -25,14 +25,14 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 /**
  * Symbol of the reactor.
  */
-export type ShipReactorSymbol = typeof ShipReactorSymbol[keyof typeof ShipReactorSymbol];
-
+export type ShipReactorSymbol =
+  (typeof ShipReactorSymbol)[keyof typeof ShipReactorSymbol];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipReactorSymbol = {
-  REACTOR_SOLAR_I: 'REACTOR_SOLAR_I',
-  REACTOR_FUSION_I: 'REACTOR_FUSION_I',
-  REACTOR_FISSION_I: 'REACTOR_FISSION_I',
-  REACTOR_CHEMICAL_I: 'REACTOR_CHEMICAL_I',
-  REACTOR_ANTIMATTER_I: 'REACTOR_ANTIMATTER_I',
+  REACTOR_SOLAR_I: "REACTOR_SOLAR_I",
+  REACTOR_FUSION_I: "REACTOR_FUSION_I",
+  REACTOR_FISSION_I: "REACTOR_FISSION_I",
+  REACTOR_CHEMICAL_I: "REACTOR_CHEMICAL_I",
+  REACTOR_ANTIMATTER_I: "REACTOR_ANTIMATTER_I",
 } as const;

@@ -21,9 +21,9 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ShipMountDepositsItem } from './shipMountDepositsItem';
-import type { ShipRequirements } from '../models-ShipRequirements/shipRequirements';
-import type { ShipMountSymbol } from './shipMountSymbol';
+import type { ShipMountDepositsItem } from "./shipMountDepositsItem";
+import type { ShipRequirements } from "../models-ShipRequirements/shipRequirements";
+import type { ShipMountSymbol } from "./shipMountSymbol";
 
 /**
  * A mount is installed on the exterier of a ship.

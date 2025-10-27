@@ -25,12 +25,11 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 /**
  * The size of the deposit. This value indicates how much can be extracted from the survey before it is exhausted.
  */
-export type SurveySize = typeof SurveySize[keyof typeof SurveySize];
-
+export type SurveySize = (typeof SurveySize)[keyof typeof SurveySize];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SurveySize = {
-  SMALL: 'SMALL',
-  MODERATE: 'MODERATE',
-  LARGE: 'LARGE',
+  SMALL: "SMALL",
+  MODERATE: "MODERATE",
+  LARGE: "LARGE",
 } as const;
