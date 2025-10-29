@@ -21,8 +21,8 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ShipConditionEventComponent } from "./shipConditionEventComponent";
-import type { ShipConditionEventSymbol } from "./shipConditionEventSymbol";
+import type { ShipConditionEventComponent } from './shipConditionEventComponent';
+import type { ShipConditionEventSymbol } from './shipConditionEventSymbol';
 
 /**
  * An event that represents damage or wear to a ship's reactor, frame, or engine, reducing the condition of the ship.

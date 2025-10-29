@@ -21,9 +21,9 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { WaypointOrbital } from "../models-WaypointOrbital/waypointOrbital";
-import type { WaypointSymbol } from "../models-WaypointSymbol/waypointSymbol";
-import type { WaypointType } from "../models-WaypointType/waypointType";
+import type { WaypointOrbital } from '../models-WaypointOrbital/waypointOrbital';
+import type { WaypointSymbol } from '../models-WaypointSymbol/waypointSymbol';
+import type { WaypointType } from '../models-WaypointType/waypointType';
 
 /**
  * Waypoint details.

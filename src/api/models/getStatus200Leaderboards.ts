@@ -21,8 +21,8 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { GetStatus200LeaderboardsMostCreditsItem } from "./getStatus200LeaderboardsMostCreditsItem";
-import type { GetStatus200LeaderboardsMostSubmittedChartsItem } from "./getStatus200LeaderboardsMostSubmittedChartsItem";
+import type { GetStatus200LeaderboardsMostCreditsItem } from './getStatus200LeaderboardsMostCreditsItem';
+import type { GetStatus200LeaderboardsMostSubmittedChartsItem } from './getStatus200LeaderboardsMostSubmittedChartsItem';
 
 export type GetStatus200Leaderboards = {
   /** Top agents with the most credits. */

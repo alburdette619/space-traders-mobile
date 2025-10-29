@@ -21,8 +21,8 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { Cooldown } from "./models-Cooldown/cooldown";
-import type { ScannedSystem } from "./models-ScannedSystem/scannedSystem";
+import type { Cooldown } from './models-Cooldown/cooldown';
+import type { ScannedSystem } from './models-ScannedSystem/scannedSystem';
 
 export type CreateShipSystemScan201Data = {
   cooldown: Cooldown;

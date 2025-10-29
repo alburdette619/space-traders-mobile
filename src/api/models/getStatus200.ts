@@ -21,11 +21,11 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { GetStatus200AnnouncementsItem } from "./getStatus200AnnouncementsItem";
-import type { GetStatus200Leaderboards } from "./getStatus200Leaderboards";
-import type { GetStatus200LinksItem } from "./getStatus200LinksItem";
-import type { GetStatus200ServerResets } from "./getStatus200ServerResets";
-import type { GetStatus200Stats } from "./getStatus200Stats";
+import type { GetStatus200AnnouncementsItem } from './getStatus200AnnouncementsItem';
+import type { GetStatus200Leaderboards } from './getStatus200Leaderboards';
+import type { GetStatus200LinksItem } from './getStatus200LinksItem';
+import type { GetStatus200ServerResets } from './getStatus200ServerResets';
+import type { GetStatus200Stats } from './getStatus200Stats';
 
 export type GetStatus200 = {
   announcements: GetStatus200AnnouncementsItem[];

@@ -21,9 +21,9 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { SystemFaction } from "../models-SystemFaction/systemFaction";
-import type { SystemType } from "../models-SystemType/systemType";
-import type { SystemWaypoint } from "../models-SystemWaypoint/systemWaypoint";
+import type { SystemFaction } from '../models-SystemFaction/systemFaction';
+import type { SystemType } from '../models-SystemType/systemType';
+import type { SystemWaypoint } from '../models-SystemWaypoint/systemWaypoint';
 
 /**
  * System details.

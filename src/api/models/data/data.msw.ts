@@ -21,12 +21,12 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { faker } from "@faker-js/faker";
+import { faker } from '@faker-js/faker';
 
-import { HttpResponse, http } from "msw";
-import type { RequestHandlerOptions } from "msw";
+import { HttpResponse, http } from 'msw';
+import type { RequestHandlerOptions } from 'msw';
 
-import type { GetSupplyChain200 } from "../getSupplyChain200";
+import type { GetSupplyChain200 } from '../getSupplyChain200';
 
 export const getGetSupplyChainResponseMock = (
   overrideResponse: Partial<GetSupplyChain200> = {},
@@ -65,17 +65,17 @@ export const getGetSupplyChainMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/market/supply-chain",
+    '*/market/supply-chain',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetSupplyChainResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -91,17 +91,17 @@ export const getGetSupplyChainMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/market/supply-chain",
+    '*/market/supply-chain',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetSupplyChainResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,

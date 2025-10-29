@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -35,15 +35,15 @@ import type {
   UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
-} from "@tanstack/react-query";
+} from '@tanstack/react-query';
 
-import type { GetStatus200 } from "../getStatus200";
+import type { GetStatus200 } from '../getStatus200';
 
-import type { Register201 } from "../register201";
+import type { Register201 } from '../register201';
 
-import type { RegisterBody } from "../registerBody";
+import type { RegisterBody } from '../registerBody';
 
-import { clientInstance } from "../../client";
+import { clientInstance } from '../../client';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -57,7 +57,7 @@ export const getStatus = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetStatus200>(
-    { url: `/`, method: "GET", signal },
+    { url: `/`, method: 'GET', signal },
     options,
   );
 };
@@ -109,7 +109,7 @@ export function useGetStatus<
           TError,
           Awaited<ReturnType<typeof getStatus>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -131,7 +131,7 @@ export function useGetStatus<
           TError,
           Awaited<ReturnType<typeof getStatus>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -204,8 +204,8 @@ export const register = (
   return clientInstance<Register201>(
     {
       url: `/register`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: registerBody,
       signal,
     },
@@ -230,10 +230,10 @@ export const getRegisterMutationOptions = <
   { data: RegisterBody },
   TContext
 > => {
-  const mutationKey = ["register"];
+  const mutationKey = ['register'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }

@@ -21,105 +21,105 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { faker } from "@faker-js/faker";
+import { faker } from '@faker-js/faker';
 
-import { HttpResponse, http } from "msw";
-import type { RequestHandlerOptions } from "msw";
+import { HttpResponse, http } from 'msw';
+import type { RequestHandlerOptions } from 'msw';
 
-import type { CreateChart201 } from "../createChart201";
+import type { CreateChart201 } from '../createChart201';
 
-import type { CreateShipShipScan201 } from "../createShipShipScan201";
+import type { CreateShipShipScan201 } from '../createShipShipScan201';
 
-import type { CreateShipSystemScan201 } from "../createShipSystemScan201";
+import type { CreateShipSystemScan201 } from '../createShipSystemScan201';
 
-import type { CreateShipWaypointScan201 } from "../createShipWaypointScan201";
+import type { CreateShipWaypointScan201 } from '../createShipWaypointScan201';
 
-import type { CreateSurvey201 } from "../createSurvey201";
+import type { CreateSurvey201 } from '../createSurvey201';
 
-import type { DockShip200 } from "../dockShip200";
+import type { DockShip200 } from '../dockShip200';
 
-import type { ExtractResources201 } from "../extractResources201";
+import type { ExtractResources201 } from '../extractResources201';
 
-import type { ExtractResourcesWithSurvey201 } from "../extractResourcesWithSurvey201";
+import type { ExtractResourcesWithSurvey201 } from '../extractResourcesWithSurvey201';
 
-import type { GetMounts200 } from "../getMounts200";
+import type { GetMounts200 } from '../getMounts200';
 
-import type { GetMyShip200 } from "../getMyShip200";
+import type { GetMyShip200 } from '../getMyShip200';
 
-import type { GetMyShipCargo200 } from "../getMyShipCargo200";
+import type { GetMyShipCargo200 } from '../getMyShipCargo200';
 
-import type { GetMyShips200 } from "../getMyShips200";
+import type { GetMyShips200 } from '../getMyShips200';
 
-import type { GetRepairShip200 } from "../getRepairShip200";
+import type { GetRepairShip200 } from '../getRepairShip200';
 
-import type { GetScrapShip200 } from "../getScrapShip200";
+import type { GetScrapShip200 } from '../getScrapShip200';
 
-import type { GetShipCooldown200 } from "../getShipCooldown200";
+import type { GetShipCooldown200 } from '../getShipCooldown200';
 
-import type { GetShipModules200 } from "../getShipModules200";
+import type { GetShipModules200 } from '../getShipModules200';
 
-import type { GetShipNav200 } from "../getShipNav200";
+import type { GetShipNav200 } from '../getShipNav200';
 
-import type { InstallMount201 } from "../installMount201";
+import type { InstallMount201 } from '../installMount201';
 
-import type { InstallShipModule201 } from "../installShipModule201";
+import type { InstallShipModule201 } from '../installShipModule201';
 
-import type { Jettison200 } from "../jettison200";
+import type { Jettison200 } from '../jettison200';
 
-import type { JumpShip200 } from "../jumpShip200";
+import type { JumpShip200 } from '../jumpShip200';
 
-import type { NavigateShip200 } from "../navigateShip200";
+import type { NavigateShip200 } from '../navigateShip200';
 
-import type { NegotiateContract201 } from "../negotiateContract201";
+import type { NegotiateContract201 } from '../negotiateContract201';
 
-import type { OrbitShip200 } from "../orbitShip200";
+import type { OrbitShip200 } from '../orbitShip200';
 
-import type { PatchShipNav200 } from "../patchShipNav200";
+import type { PatchShipNav200 } from '../patchShipNav200';
 
-import type { PurchaseCargo201 } from "../purchaseCargo201";
+import type { PurchaseCargo201 } from '../purchaseCargo201';
 
-import type { PurchaseShip201 } from "../purchaseShip201";
+import type { PurchaseShip201 } from '../purchaseShip201';
 
-import type { RefuelShip200 } from "../refuelShip200";
+import type { RefuelShip200 } from '../refuelShip200';
 
-import type { RemoveMount201 } from "../removeMount201";
+import type { RemoveMount201 } from '../removeMount201';
 
-import type { RemoveShipModule201 } from "../removeShipModule201";
+import type { RemoveShipModule201 } from '../removeShipModule201';
 
-import type { RepairShip200 } from "../repairShip200";
+import type { RepairShip200 } from '../repairShip200';
 
-import type { ScrapShip200 } from "../scrapShip200";
+import type { ScrapShip200 } from '../scrapShip200';
 
-import type { SellCargo201 } from "../sellCargo201";
+import type { SellCargo201 } from '../sellCargo201';
 
-import type { ShipRefine201 } from "../shipRefine201";
+import type { ShipRefine201 } from '../shipRefine201';
 
-import type { SiphonResources201 } from "../siphonResources201";
+import type { SiphonResources201 } from '../siphonResources201';
 
-import type { TransferCargo200 } from "../transferCargo200";
+import type { TransferCargo200 } from '../transferCargo200';
 
-import type { WarpShip200 } from "../warpShip200";
-import { Ship } from "../models-Ship/ship";
-import { Meta } from "../models-Meta/meta";
-import { Agent } from "../models-Agent/agent";
-import { ShipyardTransaction } from "../models-ShipyardTransaction/shipyardTransaction";
-import { ShipCargo } from "../models-ShipCargo/shipCargo";
-import { ShipNav } from "../models-ShipNav/shipNav";
-import { Waypoint } from "../models-Waypoint/waypoint";
-import { Cooldown } from "../models-Cooldown/cooldown";
-import { Survey } from "../models-Survey/survey";
-import { ShipFuel } from "../models-ShipFuel/shipFuel";
-import { MarketTransaction } from "../models-MarketTransaction/marketTransaction";
-import { Contract } from "../models-Contract/contract";
-import { ShipConditionEvent } from "../models-ShipConditionEvent/shipConditionEvent";
-import { Extraction } from "../models-Extraction/extraction";
-import { WaypointModifier } from "../models-WaypointModifier/waypointModifier";
-import { Siphon } from "../models-Siphon/siphon";
-import { ScannedSystem } from "../models-ScannedSystem/scannedSystem";
-import { ScannedWaypoint } from "../models-ScannedWaypoint/scannedWaypoint";
-import { ScannedShip } from "../models-ScannedShip/scannedShip";
-import { ShipMount } from "../models-ShipMount/shipMount";
-import { ShipModule } from "../models-ShipModule/shipModule";
+import type { WarpShip200 } from '../warpShip200';
+import { Ship } from '../models-Ship/ship';
+import { Meta } from '../models-Meta/meta';
+import { Agent } from '../models-Agent/agent';
+import { ShipyardTransaction } from '../models-ShipyardTransaction/shipyardTransaction';
+import { ShipCargo } from '../models-ShipCargo/shipCargo';
+import { ShipNav } from '../models-ShipNav/shipNav';
+import { Waypoint } from '../models-Waypoint/waypoint';
+import { Cooldown } from '../models-Cooldown/cooldown';
+import { Survey } from '../models-Survey/survey';
+import { ShipFuel } from '../models-ShipFuel/shipFuel';
+import { MarketTransaction } from '../models-MarketTransaction/marketTransaction';
+import { Contract } from '../models-Contract/contract';
+import { ShipConditionEvent } from '../models-ShipConditionEvent/shipConditionEvent';
+import { Extraction } from '../models-Extraction/extraction';
+import { WaypointModifier } from '../models-WaypointModifier/waypointModifier';
+import { Siphon } from '../models-Siphon/siphon';
+import { ScannedSystem } from '../models-ScannedSystem/scannedSystem';
+import { ScannedWaypoint } from '../models-ScannedWaypoint/scannedWaypoint';
+import { ScannedShip } from '../models-ScannedShip/scannedShip';
+import { ShipMount } from '../models-ShipMount/shipMount';
+import { ShipModule } from '../models-ShipModule/shipModule';
 
 export const getGetMyShipsResponseMock = (
   overrideResponse: Partial<GetMyShips200> = {},
@@ -950,17 +950,17 @@ export const getGetMyShipsMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships",
+    '*/my/ships',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetMyShipsResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -976,17 +976,17 @@ export const getGetMyShipsMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships",
+    '*/my/ships',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetMyShipsResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1002,17 +1002,17 @@ export const getPurchaseShipMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships",
+    '*/my/ships',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getPurchaseShipResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1028,17 +1028,17 @@ export const getPurchaseShipMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships",
+    '*/my/ships',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getPurchaseShipResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1054,17 +1054,17 @@ export const getGetMyShipMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol",
+    '*/my/ships/:shipSymbol',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetMyShipResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1080,17 +1080,17 @@ export const getGetMyShipMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol",
+    '*/my/ships/:shipSymbol',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetMyShipResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1106,17 +1106,17 @@ export const getGetMyShipCargoMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/cargo",
+    '*/my/ships/:shipSymbol/cargo',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetMyShipCargoResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1132,17 +1132,17 @@ export const getGetMyShipCargoMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/cargo",
+    '*/my/ships/:shipSymbol/cargo',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetMyShipCargoResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1158,17 +1158,17 @@ export const getOrbitShipMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/orbit",
+    '*/my/ships/:shipSymbol/orbit',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getOrbitShipResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1184,17 +1184,17 @@ export const getOrbitShipMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/orbit",
+    '*/my/ships/:shipSymbol/orbit',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getOrbitShipResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1210,17 +1210,17 @@ export const getShipRefineMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/refine",
+    '*/my/ships/:shipSymbol/refine',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getShipRefineResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1236,17 +1236,17 @@ export const getShipRefineMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/refine",
+    '*/my/ships/:shipSymbol/refine',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getShipRefineResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1262,17 +1262,17 @@ export const getCreateChartMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/chart",
+    '*/my/ships/:shipSymbol/chart',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getCreateChartResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1288,17 +1288,17 @@ export const getCreateChartMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/chart",
+    '*/my/ships/:shipSymbol/chart',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getCreateChartResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1315,17 +1315,17 @@ export const getGetShipCooldownMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/cooldown",
+    '*/my/ships/:shipSymbol/cooldown',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetShipCooldownResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1341,17 +1341,17 @@ export const getGetShipCooldownMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/cooldown",
+    '*/my/ships/:shipSymbol/cooldown',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetShipCooldownResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1367,9 +1367,9 @@ export const getGetShipCooldownMockHandler204 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/cooldown",
+    '*/my/ships/:shipSymbol/cooldown',
     async (info) => {
-      if (typeof overrideResponse === "function") {
+      if (typeof overrideResponse === 'function') {
         await overrideResponse(info);
       }
       return new HttpResponse(null, { status: 204 });
@@ -1387,17 +1387,17 @@ export const getDockShipMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/dock",
+    '*/my/ships/:shipSymbol/dock',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getDockShipResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1413,17 +1413,17 @@ export const getDockShipMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/dock",
+    '*/my/ships/:shipSymbol/dock',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getDockShipResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1439,17 +1439,17 @@ export const getCreateSurveyMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/survey",
+    '*/my/ships/:shipSymbol/survey',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getCreateSurveyResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1465,17 +1465,17 @@ export const getCreateSurveyMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/survey",
+    '*/my/ships/:shipSymbol/survey',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getCreateSurveyResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1491,17 +1491,17 @@ export const getExtractResourcesMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/extract",
+    '*/my/ships/:shipSymbol/extract',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getExtractResourcesResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1517,17 +1517,17 @@ export const getExtractResourcesMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/extract",
+    '*/my/ships/:shipSymbol/extract',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getExtractResourcesResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1543,17 +1543,17 @@ export const getSiphonResourcesMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/siphon",
+    '*/my/ships/:shipSymbol/siphon',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getSiphonResourcesResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1569,17 +1569,17 @@ export const getSiphonResourcesMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/siphon",
+    '*/my/ships/:shipSymbol/siphon',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getSiphonResourcesResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1597,17 +1597,17 @@ export const getExtractResourcesWithSurveyMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/extract/survey",
+    '*/my/ships/:shipSymbol/extract/survey',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getExtractResourcesWithSurveyResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1625,17 +1625,17 @@ export const getExtractResourcesWithSurveyMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/extract/survey",
+    '*/my/ships/:shipSymbol/extract/survey',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getExtractResourcesWithSurveyResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1651,17 +1651,17 @@ export const getJettisonMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/jettison",
+    '*/my/ships/:shipSymbol/jettison',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getJettisonResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1677,17 +1677,17 @@ export const getJettisonMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/jettison",
+    '*/my/ships/:shipSymbol/jettison',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getJettisonResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1703,17 +1703,17 @@ export const getJumpShipMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/jump",
+    '*/my/ships/:shipSymbol/jump',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getJumpShipResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1729,17 +1729,17 @@ export const getJumpShipMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/jump",
+    '*/my/ships/:shipSymbol/jump',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getJumpShipResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1755,17 +1755,17 @@ export const getNavigateShipMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/navigate",
+    '*/my/ships/:shipSymbol/navigate',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getNavigateShipResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1781,17 +1781,17 @@ export const getNavigateShipMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/navigate",
+    '*/my/ships/:shipSymbol/navigate',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getNavigateShipResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1807,17 +1807,17 @@ export const getPatchShipNavMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.patch(
-    "*/my/ships/:shipSymbol/nav",
+    '*/my/ships/:shipSymbol/nav',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getPatchShipNavResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1833,17 +1833,17 @@ export const getPatchShipNavMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.patch(
-    "*/my/ships/:shipSymbol/nav",
+    '*/my/ships/:shipSymbol/nav',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getPatchShipNavResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1859,17 +1859,17 @@ export const getGetShipNavMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/nav",
+    '*/my/ships/:shipSymbol/nav',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetShipNavResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1885,17 +1885,17 @@ export const getGetShipNavMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/nav",
+    '*/my/ships/:shipSymbol/nav',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetShipNavResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1911,17 +1911,17 @@ export const getWarpShipMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/warp",
+    '*/my/ships/:shipSymbol/warp',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getWarpShipResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1937,17 +1937,17 @@ export const getWarpShipMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/warp",
+    '*/my/ships/:shipSymbol/warp',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getWarpShipResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1963,17 +1963,17 @@ export const getSellCargoMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/sell",
+    '*/my/ships/:shipSymbol/sell',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getSellCargoResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -1989,17 +1989,17 @@ export const getSellCargoMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/sell",
+    '*/my/ships/:shipSymbol/sell',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getSellCargoResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2015,17 +2015,17 @@ export const getCreateShipSystemScanMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/scan/systems",
+    '*/my/ships/:shipSymbol/scan/systems',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getCreateShipSystemScanResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2041,17 +2041,17 @@ export const getCreateShipSystemScanMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/scan/systems",
+    '*/my/ships/:shipSymbol/scan/systems',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getCreateShipSystemScanResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2067,17 +2067,17 @@ export const getCreateShipWaypointScanMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/scan/waypoints",
+    '*/my/ships/:shipSymbol/scan/waypoints',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getCreateShipWaypointScanResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2093,17 +2093,17 @@ export const getCreateShipWaypointScanMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/scan/waypoints",
+    '*/my/ships/:shipSymbol/scan/waypoints',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getCreateShipWaypointScanResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2119,17 +2119,17 @@ export const getCreateShipShipScanMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/scan/ships",
+    '*/my/ships/:shipSymbol/scan/ships',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getCreateShipShipScanResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2145,17 +2145,17 @@ export const getCreateShipShipScanMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/scan/ships",
+    '*/my/ships/:shipSymbol/scan/ships',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getCreateShipShipScanResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2171,17 +2171,17 @@ export const getRefuelShipMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/refuel",
+    '*/my/ships/:shipSymbol/refuel',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getRefuelShipResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2197,17 +2197,17 @@ export const getRefuelShipMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/refuel",
+    '*/my/ships/:shipSymbol/refuel',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getRefuelShipResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2223,17 +2223,17 @@ export const getPurchaseCargoMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/purchase",
+    '*/my/ships/:shipSymbol/purchase',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getPurchaseCargoResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2249,17 +2249,17 @@ export const getPurchaseCargoMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/purchase",
+    '*/my/ships/:shipSymbol/purchase',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getPurchaseCargoResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2275,17 +2275,17 @@ export const getTransferCargoMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/transfer",
+    '*/my/ships/:shipSymbol/transfer',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getTransferCargoResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2301,17 +2301,17 @@ export const getTransferCargoMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/transfer",
+    '*/my/ships/:shipSymbol/transfer',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getTransferCargoResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2327,17 +2327,17 @@ export const getNegotiateContractMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/negotiate/contract",
+    '*/my/ships/:shipSymbol/negotiate/contract',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getNegotiateContractResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2353,17 +2353,17 @@ export const getNegotiateContractMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/negotiate/contract",
+    '*/my/ships/:shipSymbol/negotiate/contract',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getNegotiateContractResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2379,17 +2379,17 @@ export const getGetMountsMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/mounts",
+    '*/my/ships/:shipSymbol/mounts',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetMountsResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2405,17 +2405,17 @@ export const getGetMountsMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/mounts",
+    '*/my/ships/:shipSymbol/mounts',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetMountsResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2431,17 +2431,17 @@ export const getInstallMountMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/mounts/install",
+    '*/my/ships/:shipSymbol/mounts/install',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getInstallMountResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2457,17 +2457,17 @@ export const getInstallMountMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/mounts/install",
+    '*/my/ships/:shipSymbol/mounts/install',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getInstallMountResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2483,17 +2483,17 @@ export const getRemoveMountMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/mounts/remove",
+    '*/my/ships/:shipSymbol/mounts/remove',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getRemoveMountResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2509,17 +2509,17 @@ export const getRemoveMountMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/mounts/remove",
+    '*/my/ships/:shipSymbol/mounts/remove',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getRemoveMountResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2535,17 +2535,17 @@ export const getGetScrapShipMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/scrap",
+    '*/my/ships/:shipSymbol/scrap',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetScrapShipResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2561,17 +2561,17 @@ export const getGetScrapShipMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/scrap",
+    '*/my/ships/:shipSymbol/scrap',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetScrapShipResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2587,17 +2587,17 @@ export const getScrapShipMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/scrap",
+    '*/my/ships/:shipSymbol/scrap',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getScrapShipResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2613,17 +2613,17 @@ export const getScrapShipMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/scrap",
+    '*/my/ships/:shipSymbol/scrap',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getScrapShipResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2639,17 +2639,17 @@ export const getGetRepairShipMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/repair",
+    '*/my/ships/:shipSymbol/repair',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetRepairShipResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2665,17 +2665,17 @@ export const getGetRepairShipMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/repair",
+    '*/my/ships/:shipSymbol/repair',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetRepairShipResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2691,17 +2691,17 @@ export const getRepairShipMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/repair",
+    '*/my/ships/:shipSymbol/repair',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getRepairShipResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2717,17 +2717,17 @@ export const getRepairShipMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/repair",
+    '*/my/ships/:shipSymbol/repair',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getRepairShipResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2743,17 +2743,17 @@ export const getGetShipModulesMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/modules",
+    '*/my/ships/:shipSymbol/modules',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetShipModulesResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2769,17 +2769,17 @@ export const getGetShipModulesMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/my/ships/:shipSymbol/modules",
+    '*/my/ships/:shipSymbol/modules',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetShipModulesResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2795,17 +2795,17 @@ export const getInstallShipModuleMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/modules/install",
+    '*/my/ships/:shipSymbol/modules/install',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getInstallShipModuleResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2821,17 +2821,17 @@ export const getInstallShipModuleMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/modules/install",
+    '*/my/ships/:shipSymbol/modules/install',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getInstallShipModuleResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2847,17 +2847,17 @@ export const getRemoveShipModuleMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/modules/remove",
+    '*/my/ships/:shipSymbol/modules/remove',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getRemoveShipModuleResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -2873,17 +2873,17 @@ export const getRemoveShipModuleMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/my/ships/:shipSymbol/modules/remove",
+    '*/my/ships/:shipSymbol/modules/remove',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getRemoveShipModuleResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,

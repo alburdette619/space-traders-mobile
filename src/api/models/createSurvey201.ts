@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { CreateSurvey201Data } from "./createSurvey201Data";
+import type { CreateSurvey201Data } from './createSurvey201Data';
 
 export type CreateSurvey201 = {
   data: CreateSurvey201Data;

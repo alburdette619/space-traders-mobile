@@ -29,7 +29,7 @@ export type ShipNavStatus = (typeof ShipNavStatus)[keyof typeof ShipNavStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipNavStatus = {
-  IN_TRANSIT: "IN_TRANSIT",
-  IN_ORBIT: "IN_ORBIT",
-  DOCKED: "DOCKED",
+  IN_TRANSIT: 'IN_TRANSIT',
+  IN_ORBIT: 'IN_ORBIT',
+  DOCKED: 'DOCKED',
 } as const;

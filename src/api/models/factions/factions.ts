@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -32,15 +32,15 @@ import type {
   UndefinedInitialDataOptions,
   UseQueryOptions,
   UseQueryResult,
-} from "@tanstack/react-query";
+} from '@tanstack/react-query';
 
-import type { GetFaction200 } from "../getFaction200";
+import type { GetFaction200 } from '../getFaction200';
 
-import type { GetFactions200 } from "../getFactions200";
+import type { GetFactions200 } from '../getFactions200';
 
-import type { GetFactionsParams } from "../getFactionsParams";
+import type { GetFactionsParams } from '../getFactionsParams';
 
-import { clientInstance } from "../../client";
+import { clientInstance } from '../../client';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -54,7 +54,7 @@ export const getFactions = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetFactions200>(
-    { url: `/factions`, method: "GET", params, signal },
+    { url: `/factions`, method: 'GET', params, signal },
     options,
   );
 };
@@ -110,7 +110,7 @@ export function useGetFactions<
           TError,
           Awaited<ReturnType<typeof getFactions>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -133,7 +133,7 @@ export function useGetFactions<
           TError,
           Awaited<ReturnType<typeof getFactions>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -199,7 +199,7 @@ export const getFaction = (
   return clientInstance<GetFaction200>(
     {
       url: `/factions/${encodeURIComponent(String(factionSymbol))}`,
-      method: "GET",
+      method: 'GET',
       signal,
     },
     options,
@@ -263,7 +263,7 @@ export function useGetFaction<
           TError,
           Awaited<ReturnType<typeof getFaction>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -286,7 +286,7 @@ export function useGetFaction<
           TError,
           Awaited<ReturnType<typeof getFaction>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },

@@ -29,8 +29,8 @@ export type ActivityLevel = (typeof ActivityLevel)[keyof typeof ActivityLevel];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ActivityLevel = {
-  WEAK: "WEAK",
-  GROWING: "GROWING",
-  STRONG: "STRONG",
-  RESTRICTED: "RESTRICTED",
+  WEAK: 'WEAK',
+  GROWING: 'GROWING',
+  STRONG: 'STRONG',
+  RESTRICTED: 'RESTRICTED',
 } as const;

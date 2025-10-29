@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { OrbitShip200Data } from "./orbitShip200Data";
+import type { OrbitShip200Data } from './orbitShip200Data';
 
 export type OrbitShip200 = {
   data: OrbitShip200Data;

@@ -21,10 +21,10 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ActivityLevel } from "../models-ActivityLevel/activityLevel";
-import type { SupplyLevel } from "../models-SupplyLevel/supplyLevel";
-import type { TradeSymbol } from "../models-TradeSymbol/tradeSymbol";
-import type { MarketTradeGoodType } from "./marketTradeGoodType";
+import type { ActivityLevel } from '../models-ActivityLevel/activityLevel';
+import type { SupplyLevel } from '../models-SupplyLevel/supplyLevel';
+import type { TradeSymbol } from '../models-TradeSymbol/tradeSymbol';
+import type { MarketTradeGoodType } from './marketTradeGoodType';
 
 export interface MarketTradeGood {
   activity?: ActivityLevel;

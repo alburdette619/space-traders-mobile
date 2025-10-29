@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { JumpGate } from "./models-JumpGate/jumpGate";
+import type { JumpGate } from './models-JumpGate/jumpGate';
 
 export type GetJumpGate200 = {
   data: JumpGate;

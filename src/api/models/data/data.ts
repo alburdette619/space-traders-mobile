@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -32,11 +32,11 @@ import type {
   UndefinedInitialDataOptions,
   UseQueryOptions,
   UseQueryResult,
-} from "@tanstack/react-query";
+} from '@tanstack/react-query';
 
-import type { GetSupplyChain200 } from "../getSupplyChain200";
+import type { GetSupplyChain200 } from '../getSupplyChain200';
 
-import { clientInstance } from "../../client";
+import { clientInstance } from '../../client';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -49,7 +49,7 @@ export const getSupplyChain = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetSupplyChain200>(
-    { url: `/market/supply-chain`, method: "GET", signal },
+    { url: `/market/supply-chain`, method: 'GET', signal },
     options,
   );
 };
@@ -101,7 +101,7 @@ export function useGetSupplyChain<
           TError,
           Awaited<ReturnType<typeof getSupplyChain>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -123,7 +123,7 @@ export function useGetSupplyChain<
           TError,
           Awaited<ReturnType<typeof getSupplyChain>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },

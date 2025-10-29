@@ -21,10 +21,10 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ShipCargo } from "./models-ShipCargo/shipCargo";
-import type { Cooldown } from "./models-Cooldown/cooldown";
-import type { ShipConditionEvent } from "./models-ShipConditionEvent/shipConditionEvent";
-import type { Extraction } from "./models-Extraction/extraction";
+import type { ShipCargo } from './models-ShipCargo/shipCargo';
+import type { Cooldown } from './models-Cooldown/cooldown';
+import type { ShipConditionEvent } from './models-ShipConditionEvent/shipConditionEvent';
+import type { Extraction } from './models-Extraction/extraction';
 
 export type ExtractResourcesWithSurvey201Data = {
   cargo: ShipCargo;

@@ -21,18 +21,18 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { faker } from "@faker-js/faker";
+import { faker } from '@faker-js/faker';
 
-import { HttpResponse, http } from "msw";
-import type { RequestHandlerOptions } from "msw";
+import { HttpResponse, http } from 'msw';
+import type { RequestHandlerOptions } from 'msw';
 
-import type { GetStatus200 } from "../getStatus200";
+import type { GetStatus200 } from '../getStatus200';
 
-import type { Register201 } from "../register201";
-import { Agent } from "../models-Agent/agent";
-import { Contract } from "../models-Contract/contract";
-import { Faction } from "../models-Faction/faction";
-import { Ship } from "../models-Ship/ship";
+import type { Register201 } from '../register201';
+import { Agent } from '../models-Agent/agent';
+import { Contract } from '../models-Contract/contract';
+import { Faction } from '../models-Faction/faction';
+import { Ship } from '../models-Ship/ship';
 
 export const getGetStatusResponseMock = (
   overrideResponse: Partial<GetStatus200> = {},
@@ -189,17 +189,17 @@ export const getGetStatusMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/",
+    '*/',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetStatusResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -215,17 +215,17 @@ export const getGetStatusMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/",
+    '*/',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetStatusResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -241,17 +241,17 @@ export const getRegisterMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/register",
+    '*/register',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getRegisterResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -267,17 +267,17 @@ export const getRegisterMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/register",
+    '*/register',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getRegisterResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,

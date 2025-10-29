@@ -30,6 +30,6 @@ export type MarketTransactionType =
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const MarketTransactionType = {
-  PURCHASE: "PURCHASE",
-  SELL: "SELL",
+  PURCHASE: 'PURCHASE',
+  SELL: 'SELL',
 } as const;

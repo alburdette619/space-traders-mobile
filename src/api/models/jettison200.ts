@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { Jettison200Data } from "./jettison200Data";
+import type { Jettison200Data } from './jettison200Data';
 
 export type Jettison200 = {
   data: Jettison200Data;

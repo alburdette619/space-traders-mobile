@@ -21,36 +21,36 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { faker } from "@faker-js/faker";
+import { faker } from '@faker-js/faker';
 
-import { HttpResponse, http } from "msw";
-import type { RequestHandlerOptions } from "msw";
+import { HttpResponse, http } from 'msw';
+import type { RequestHandlerOptions } from 'msw';
 
-import type { GetConstruction200 } from "../getConstruction200";
+import type { GetConstruction200 } from '../getConstruction200';
 
-import type { GetJumpGate200 } from "../getJumpGate200";
+import type { GetJumpGate200 } from '../getJumpGate200';
 
-import type { GetMarket200 } from "../getMarket200";
+import type { GetMarket200 } from '../getMarket200';
 
-import type { GetShipyard200 } from "../getShipyard200";
+import type { GetShipyard200 } from '../getShipyard200';
 
-import type { GetSystem200 } from "../getSystem200";
+import type { GetSystem200 } from '../getSystem200';
 
-import type { GetSystemWaypoints200 } from "../getSystemWaypoints200";
+import type { GetSystemWaypoints200 } from '../getSystemWaypoints200';
 
-import type { GetSystems200 } from "../getSystems200";
+import type { GetSystems200 } from '../getSystems200';
 
-import type { GetWaypoint200 } from "../getWaypoint200";
+import type { GetWaypoint200 } from '../getWaypoint200';
 
-import type { SupplyConstruction201 } from "../supplyConstruction201";
-import { Meta } from "../models-Meta/meta";
-import { System } from "../models-System/system";
-import { Waypoint } from "../models-Waypoint/waypoint";
-import { Market } from "../models-Market/market";
-import { Shipyard } from "../models-Shipyard/shipyard";
-import { JumpGate } from "../models-JumpGate/jumpGate";
-import { Construction } from "../models-Construction/construction";
-import { ShipCargo } from "../models-ShipCargo/shipCargo";
+import type { SupplyConstruction201 } from '../supplyConstruction201';
+import { Meta } from '../models-Meta/meta';
+import { System } from '../models-System/system';
+import { Waypoint } from '../models-Waypoint/waypoint';
+import { Market } from '../models-Market/market';
+import { Shipyard } from '../models-Shipyard/shipyard';
+import { JumpGate } from '../models-JumpGate/jumpGate';
+import { Construction } from '../models-Construction/construction';
+import { ShipCargo } from '../models-ShipCargo/shipCargo';
 
 export const getGetSystemsResponseMock = (
   overrideResponse: Partial<GetSystems200> = {},
@@ -167,17 +167,17 @@ export const getGetSystemsMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems",
+    '*/systems',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetSystemsResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -193,17 +193,17 @@ export const getGetSystemsMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems",
+    '*/systems',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetSystemsResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -219,17 +219,17 @@ export const getGetSystemMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol",
+    '*/systems/:systemSymbol',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetSystemResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -245,17 +245,17 @@ export const getGetSystemMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol",
+    '*/systems/:systemSymbol',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetSystemResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -271,17 +271,17 @@ export const getGetSystemWaypointsMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol/waypoints",
+    '*/systems/:systemSymbol/waypoints',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetSystemWaypointsResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -297,17 +297,17 @@ export const getGetSystemWaypointsMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol/waypoints",
+    '*/systems/:systemSymbol/waypoints',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetSystemWaypointsResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -323,17 +323,17 @@ export const getGetWaypointMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol/waypoints/:waypointSymbol",
+    '*/systems/:systemSymbol/waypoints/:waypointSymbol',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetWaypointResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -349,17 +349,17 @@ export const getGetWaypointMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol/waypoints/:waypointSymbol",
+    '*/systems/:systemSymbol/waypoints/:waypointSymbol',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetWaypointResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -375,17 +375,17 @@ export const getGetMarketMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol/waypoints/:waypointSymbol/market",
+    '*/systems/:systemSymbol/waypoints/:waypointSymbol/market',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetMarketResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -401,17 +401,17 @@ export const getGetMarketMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol/waypoints/:waypointSymbol/market",
+    '*/systems/:systemSymbol/waypoints/:waypointSymbol/market',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetMarketResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -427,17 +427,17 @@ export const getGetShipyardMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol/waypoints/:waypointSymbol/shipyard",
+    '*/systems/:systemSymbol/waypoints/:waypointSymbol/shipyard',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetShipyardResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -453,17 +453,17 @@ export const getGetShipyardMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol/waypoints/:waypointSymbol/shipyard",
+    '*/systems/:systemSymbol/waypoints/:waypointSymbol/shipyard',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetShipyardResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -479,17 +479,17 @@ export const getGetJumpGateMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol/waypoints/:waypointSymbol/jump-gate",
+    '*/systems/:systemSymbol/waypoints/:waypointSymbol/jump-gate',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetJumpGateResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -505,17 +505,17 @@ export const getGetJumpGateMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol/waypoints/:waypointSymbol/jump-gate",
+    '*/systems/:systemSymbol/waypoints/:waypointSymbol/jump-gate',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetJumpGateResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -531,17 +531,17 @@ export const getGetConstructionMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol/waypoints/:waypointSymbol/construction",
+    '*/systems/:systemSymbol/waypoints/:waypointSymbol/construction',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetConstructionResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -557,17 +557,17 @@ export const getGetConstructionMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/systems/:systemSymbol/waypoints/:waypointSymbol/construction",
+    '*/systems/:systemSymbol/waypoints/:waypointSymbol/construction',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetConstructionResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -583,17 +583,17 @@ export const getSupplyConstructionMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/systems/:systemSymbol/waypoints/:waypointSymbol/construction/supply",
+    '*/systems/:systemSymbol/waypoints/:waypointSymbol/construction/supply',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getSupplyConstructionResponseMock(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -609,17 +609,17 @@ export const getSupplyConstructionMockHandler201 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
-    "*/systems/:systemSymbol/waypoints/:waypointSymbol/construction/supply",
+    '*/systems/:systemSymbol/waypoints/:waypointSymbol/construction/supply',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getSupplyConstructionResponseMock201(),
         ),
-        { status: 201, headers: { "Content-Type": "application/json" } },
+        { status: 201, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,

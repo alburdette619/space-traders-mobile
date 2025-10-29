@@ -21,8 +21,8 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { SurveyDeposit } from "../models-SurveyDeposit/surveyDeposit";
-import type { SurveySize } from "./surveySize";
+import type { SurveyDeposit } from '../models-SurveyDeposit/surveyDeposit';
+import type { SurveySize } from './surveySize';
 
 /**
  * A resource survey of a waypoint, detailing a specific extraction location and the types of resources that can be found there.

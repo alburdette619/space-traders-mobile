@@ -29,7 +29,7 @@ export type ContractType = (typeof ContractType)[keyof typeof ContractType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ContractType = {
-  PROCUREMENT: "PROCUREMENT",
-  TRANSPORT: "TRANSPORT",
-  SHUTTLE: "SHUTTLE",
+  PROCUREMENT: 'PROCUREMENT',
+  TRANSPORT: 'TRANSPORT',
+  SHUTTLE: 'SHUTTLE',
 } as const;

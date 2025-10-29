@@ -27,7 +27,7 @@ export type ShipConditionEventComponent =
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipConditionEventComponent = {
-  FRAME: "FRAME",
-  REACTOR: "REACTOR",
-  ENGINE: "ENGINE",
+  FRAME: 'FRAME',
+  REACTOR: 'REACTOR',
+  ENGINE: 'ENGINE',
 } as const;

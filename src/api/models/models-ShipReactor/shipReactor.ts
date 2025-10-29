@@ -21,11 +21,11 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ShipComponentCondition } from "../models-ShipComponentCondition/shipComponentCondition";
-import type { ShipComponentIntegrity } from "../models-ShipComponentIntegrity/shipComponentIntegrity";
-import type { ShipComponentQuality } from "../models-ShipComponentQuality/shipComponentQuality";
-import type { ShipRequirements } from "../models-ShipRequirements/shipRequirements";
-import type { ShipReactorSymbol } from "./shipReactorSymbol";
+import type { ShipComponentCondition } from '../models-ShipComponentCondition/shipComponentCondition';
+import type { ShipComponentIntegrity } from '../models-ShipComponentIntegrity/shipComponentIntegrity';
+import type { ShipComponentQuality } from '../models-ShipComponentQuality/shipComponentQuality';
+import type { ShipRequirements } from '../models-ShipRequirements/shipRequirements';
+import type { ShipReactorSymbol } from './shipReactorSymbol';
 
 /**
  * The reactor of the ship. The reactor is responsible for powering the ship's systems and weapons.

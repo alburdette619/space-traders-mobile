@@ -29,14 +29,14 @@ export type SystemType = (typeof SystemType)[keyof typeof SystemType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SystemType = {
-  NEUTRON_STAR: "NEUTRON_STAR",
-  RED_STAR: "RED_STAR",
-  ORANGE_STAR: "ORANGE_STAR",
-  BLUE_STAR: "BLUE_STAR",
-  YOUNG_STAR: "YOUNG_STAR",
-  WHITE_DWARF: "WHITE_DWARF",
-  BLACK_HOLE: "BLACK_HOLE",
-  HYPERGIANT: "HYPERGIANT",
-  NEBULA: "NEBULA",
-  UNSTABLE: "UNSTABLE",
+  NEUTRON_STAR: 'NEUTRON_STAR',
+  RED_STAR: 'RED_STAR',
+  ORANGE_STAR: 'ORANGE_STAR',
+  BLUE_STAR: 'BLUE_STAR',
+  YOUNG_STAR: 'YOUNG_STAR',
+  WHITE_DWARF: 'WHITE_DWARF',
+  BLACK_HOLE: 'BLACK_HOLE',
+  HYPERGIANT: 'HYPERGIANT',
+  NEBULA: 'NEBULA',
+  UNSTABLE: 'UNSTABLE',
 } as const;

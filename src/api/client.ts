@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, isCancel } from "axios";
+import axios, { AxiosRequestConfig, isCancel } from 'axios';
 
 const client = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_BASE_URL,

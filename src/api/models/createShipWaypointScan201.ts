@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { CreateShipWaypointScan201Data } from "./createShipWaypointScan201Data";
+import type { CreateShipWaypointScan201Data } from './createShipWaypointScan201Data';
 
 export type CreateShipWaypointScan201 = {
   data: CreateShipWaypointScan201Data;

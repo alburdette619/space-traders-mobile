@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ShipNavRouteWaypoint } from "../models-ShipNavRouteWaypoint/shipNavRouteWaypoint";
+import type { ShipNavRouteWaypoint } from '../models-ShipNavRouteWaypoint/shipNavRouteWaypoint';
 
 /**
  * The routing information for the ship's most recent transit or current location.

@@ -30,7 +30,7 @@ export type MarketTradeGoodType =
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const MarketTradeGoodType = {
-  EXPORT: "EXPORT",
-  IMPORT: "IMPORT",
-  EXCHANGE: "EXCHANGE",
+  EXPORT: 'EXPORT',
+  IMPORT: 'IMPORT',
+  EXCHANGE: 'EXCHANGE',
 } as const;

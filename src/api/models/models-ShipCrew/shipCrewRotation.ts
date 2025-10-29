@@ -30,6 +30,6 @@ export type ShipCrewRotation =
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipCrewRotation = {
-  STRICT: "STRICT",
-  RELAXED: "RELAXED",
+  STRICT: 'STRICT',
+  RELAXED: 'RELAXED',
 } as const;

@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -35,23 +35,23 @@ import type {
   UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
-} from "@tanstack/react-query";
+} from '@tanstack/react-query';
 
-import type { AcceptContract200 } from "../acceptContract200";
+import type { AcceptContract200 } from '../acceptContract200';
 
-import type { DeliverContract200 } from "../deliverContract200";
+import type { DeliverContract200 } from '../deliverContract200';
 
-import type { DeliverContractBody } from "../deliverContractBody";
+import type { DeliverContractBody } from '../deliverContractBody';
 
-import type { FulfillContract200 } from "../fulfillContract200";
+import type { FulfillContract200 } from '../fulfillContract200';
 
-import type { GetContract200 } from "../getContract200";
+import type { GetContract200 } from '../getContract200';
 
-import type { GetContracts200 } from "../getContracts200";
+import type { GetContracts200 } from '../getContracts200';
 
-import type { GetContractsParams } from "../getContractsParams";
+import type { GetContractsParams } from '../getContractsParams';
 
-import { clientInstance } from "../../client";
+import { clientInstance } from '../../client';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -65,7 +65,7 @@ export const getContracts = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetContracts200>(
-    { url: `/my/contracts`, method: "GET", params, signal },
+    { url: `/my/contracts`, method: 'GET', params, signal },
     options,
   );
 };
@@ -121,7 +121,7 @@ export function useGetContracts<
           TError,
           Awaited<ReturnType<typeof getContracts>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -144,7 +144,7 @@ export function useGetContracts<
           TError,
           Awaited<ReturnType<typeof getContracts>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -210,7 +210,7 @@ export const getContract = (
   return clientInstance<GetContract200>(
     {
       url: `/my/contracts/${encodeURIComponent(String(contractId))}`,
-      method: "GET",
+      method: 'GET',
       signal,
     },
     options,
@@ -273,7 +273,7 @@ export function useGetContract<
           TError,
           Awaited<ReturnType<typeof getContract>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -296,7 +296,7 @@ export function useGetContract<
           TError,
           Awaited<ReturnType<typeof getContract>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -364,7 +364,7 @@ export const acceptContract = (
   return clientInstance<AcceptContract200>(
     {
       url: `/my/contracts/${encodeURIComponent(String(contractId))}/accept`,
-      method: "POST",
+      method: 'POST',
       signal,
     },
     options,
@@ -388,10 +388,10 @@ export const getAcceptContractMutationOptions = <
   { contractId: string },
   TContext
 > => {
-  const mutationKey = ["acceptContract"];
+  const mutationKey = ['acceptContract'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -456,8 +456,8 @@ export const deliverContract = (
   return clientInstance<DeliverContract200>(
     {
       url: `/my/contracts/${encodeURIComponent(String(contractId))}/deliver`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: deliverContractBody,
       signal,
     },
@@ -482,10 +482,10 @@ export const getDeliverContractMutationOptions = <
   { contractId: string; data: DeliverContractBody },
   TContext
 > => {
-  const mutationKey = ["deliverContract"];
+  const mutationKey = ['deliverContract'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -545,7 +545,7 @@ export const fulfillContract = (
   return clientInstance<FulfillContract200>(
     {
       url: `/my/contracts/${encodeURIComponent(String(contractId))}/fulfill`,
-      method: "POST",
+      method: 'POST',
       signal,
     },
     options,
@@ -569,10 +569,10 @@ export const getFulfillContractMutationOptions = <
   { contractId: string },
   TContext
 > => {
-  const mutationKey = ["fulfillContract"];
+  const mutationKey = ['fulfillContract'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }

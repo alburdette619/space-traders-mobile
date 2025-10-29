@@ -21,8 +21,8 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { WaypointType } from "./models-WaypointType/waypointType";
-import type { WaypointTraitSymbol } from "./models-WaypointTraitSymbol/waypointTraitSymbol";
+import type { WaypointType } from './models-WaypointType/waypointType';
+import type { WaypointTraitSymbol } from './models-WaypointTraitSymbol/waypointTraitSymbol';
 
 export type GetSystemWaypointsParams = {
   /**

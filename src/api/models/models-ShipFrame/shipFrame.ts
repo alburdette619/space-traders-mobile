@@ -21,11 +21,11 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ShipComponentCondition } from "../models-ShipComponentCondition/shipComponentCondition";
-import type { ShipComponentIntegrity } from "../models-ShipComponentIntegrity/shipComponentIntegrity";
-import type { ShipComponentQuality } from "../models-ShipComponentQuality/shipComponentQuality";
-import type { ShipRequirements } from "../models-ShipRequirements/shipRequirements";
-import type { ShipFrameSymbol } from "./shipFrameSymbol";
+import type { ShipComponentCondition } from '../models-ShipComponentCondition/shipComponentCondition';
+import type { ShipComponentIntegrity } from '../models-ShipComponentIntegrity/shipComponentIntegrity';
+import type { ShipComponentQuality } from '../models-ShipComponentQuality/shipComponentQuality';
+import type { ShipRequirements } from '../models-ShipRequirements/shipRequirements';
+import type { ShipFrameSymbol } from './shipFrameSymbol';
 
 /**
  * The frame of the ship. The frame determines the number of modules and mounting points of the ship, as well as base fuel capacity. As the condition of the frame takes more wear, the ship will become more sluggish and less maneuverable.

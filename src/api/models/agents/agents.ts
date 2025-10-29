@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -32,17 +32,17 @@ import type {
   UndefinedInitialDataOptions,
   UseQueryOptions,
   UseQueryResult,
-} from "@tanstack/react-query";
+} from '@tanstack/react-query';
 
-import type { GetAgent200 } from "../getAgent200";
+import type { GetAgent200 } from '../getAgent200';
 
-import type { GetAgents200 } from "../getAgents200";
+import type { GetAgents200 } from '../getAgents200';
 
-import type { GetAgentsParams } from "../getAgentsParams";
+import type { GetAgentsParams } from '../getAgentsParams';
 
-import type { GetMyAgent200 } from "../getMyAgent200";
+import type { GetMyAgent200 } from '../getMyAgent200';
 
-import { clientInstance } from "../../client";
+import { clientInstance } from '../../client';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -55,7 +55,7 @@ export const getMyAgent = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetMyAgent200>(
-    { url: `/my/agent`, method: "GET", signal },
+    { url: `/my/agent`, method: 'GET', signal },
     options,
   );
 };
@@ -107,7 +107,7 @@ export function useGetMyAgent<
           TError,
           Awaited<ReturnType<typeof getMyAgent>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -129,7 +129,7 @@ export function useGetMyAgent<
           TError,
           Awaited<ReturnType<typeof getMyAgent>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -191,7 +191,7 @@ export const getAgents = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetAgents200>(
-    { url: `/agents`, method: "GET", params, signal },
+    { url: `/agents`, method: 'GET', params, signal },
     options,
   );
 };
@@ -247,7 +247,7 @@ export function useGetAgents<
           TError,
           Awaited<ReturnType<typeof getAgents>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -270,7 +270,7 @@ export function useGetAgents<
           TError,
           Awaited<ReturnType<typeof getAgents>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -329,21 +329,21 @@ export function useGetAgents<
  * @summary Get Public Agent
  */
 export const getAgent = (
-  agentSymbol: string = "FEBA66",
+  agentSymbol: string = 'FEBA66',
   options?: SecondParameter<typeof clientInstance>,
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetAgent200>(
     {
       url: `/agents/${encodeURIComponent(String(agentSymbol))}`,
-      method: "GET",
+      method: 'GET',
       signal,
     },
     options,
   );
 };
 
-export const getGetAgentQueryKey = (agentSymbol: string = "FEBA66") => {
+export const getGetAgentQueryKey = (agentSymbol: string = 'FEBA66') => {
   return [`/agents/${agentSymbol}`] as const;
 };
 
@@ -351,7 +351,7 @@ export const getGetAgentQueryOptions = <
   TData = Awaited<ReturnType<typeof getAgent>>,
   TError = unknown,
 >(
-  agentSymbol: string = "FEBA66",
+  agentSymbol: string = 'FEBA66',
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData>
@@ -397,7 +397,7 @@ export function useGetAgent<
           TError,
           Awaited<ReturnType<typeof getAgent>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -420,7 +420,7 @@ export function useGetAgent<
           TError,
           Awaited<ReturnType<typeof getAgent>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -451,7 +451,7 @@ export function useGetAgent<
   TData = Awaited<ReturnType<typeof getAgent>>,
   TError = unknown,
 >(
-  agentSymbol: string = "FEBA66",
+  agentSymbol: string = 'FEBA66',
   options?: {
     query?: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData>

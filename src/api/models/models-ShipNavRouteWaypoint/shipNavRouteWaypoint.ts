@@ -21,8 +21,8 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { SystemSymbol } from "../models-SystemSymbol/systemSymbol";
-import type { WaypointType } from "../models-WaypointType/waypointType";
+import type { SystemSymbol } from '../models-SystemSymbol/systemSymbol';
+import type { WaypointType } from '../models-WaypointType/waypointType';
 
 /**
  * The destination or departure of a ships nav route.

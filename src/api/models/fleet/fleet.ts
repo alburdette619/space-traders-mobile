@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -35,119 +35,119 @@ import type {
   UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
-} from "@tanstack/react-query";
+} from '@tanstack/react-query';
 
-import type { CreateChart201 } from "../createChart201";
+import type { CreateChart201 } from '../createChart201';
 
-import type { CreateShipShipScan201 } from "../createShipShipScan201";
+import type { CreateShipShipScan201 } from '../createShipShipScan201';
 
-import type { CreateShipSystemScan201 } from "../createShipSystemScan201";
+import type { CreateShipSystemScan201 } from '../createShipSystemScan201';
 
-import type { CreateShipWaypointScan201 } from "../createShipWaypointScan201";
+import type { CreateShipWaypointScan201 } from '../createShipWaypointScan201';
 
-import type { CreateSurvey201 } from "../createSurvey201";
+import type { CreateSurvey201 } from '../createSurvey201';
 
-import type { DockShip200 } from "../dockShip200";
+import type { DockShip200 } from '../dockShip200';
 
-import type { ExtractResources201 } from "../extractResources201";
+import type { ExtractResources201 } from '../extractResources201';
 
-import type { ExtractResourcesBody } from "../extractResourcesBody";
+import type { ExtractResourcesBody } from '../extractResourcesBody';
 
-import type { ExtractResourcesWithSurvey201 } from "../extractResourcesWithSurvey201";
+import type { ExtractResourcesWithSurvey201 } from '../extractResourcesWithSurvey201';
 
-import type { GetMounts200 } from "../getMounts200";
+import type { GetMounts200 } from '../getMounts200';
 
-import type { GetMyShip200 } from "../getMyShip200";
+import type { GetMyShip200 } from '../getMyShip200';
 
-import type { GetMyShipCargo200 } from "../getMyShipCargo200";
+import type { GetMyShipCargo200 } from '../getMyShipCargo200';
 
-import type { GetMyShips200 } from "../getMyShips200";
+import type { GetMyShips200 } from '../getMyShips200';
 
-import type { GetMyShipsParams } from "../getMyShipsParams";
+import type { GetMyShipsParams } from '../getMyShipsParams';
 
-import type { GetRepairShip200 } from "../getRepairShip200";
+import type { GetRepairShip200 } from '../getRepairShip200';
 
-import type { GetScrapShip200 } from "../getScrapShip200";
+import type { GetScrapShip200 } from '../getScrapShip200';
 
-import type { GetShipCooldown200 } from "../getShipCooldown200";
+import type { GetShipCooldown200 } from '../getShipCooldown200';
 
-import type { GetShipModules200 } from "../getShipModules200";
+import type { GetShipModules200 } from '../getShipModules200';
 
-import type { GetShipNav200 } from "../getShipNav200";
+import type { GetShipNav200 } from '../getShipNav200';
 
-import type { InstallMount201 } from "../installMount201";
+import type { InstallMount201 } from '../installMount201';
 
-import type { InstallMountBody } from "../installMountBody";
+import type { InstallMountBody } from '../installMountBody';
 
-import type { InstallShipModule201 } from "../installShipModule201";
+import type { InstallShipModule201 } from '../installShipModule201';
 
-import type { InstallShipModuleBody } from "../installShipModuleBody";
+import type { InstallShipModuleBody } from '../installShipModuleBody';
 
-import type { Jettison200 } from "../jettison200";
+import type { Jettison200 } from '../jettison200';
 
-import type { JettisonBody } from "../jettisonBody";
+import type { JettisonBody } from '../jettisonBody';
 
-import type { JumpShip200 } from "../jumpShip200";
+import type { JumpShip200 } from '../jumpShip200';
 
-import type { JumpShipBody } from "../jumpShipBody";
+import type { JumpShipBody } from '../jumpShipBody';
 
-import type { NavigateShip200 } from "../navigateShip200";
+import type { NavigateShip200 } from '../navigateShip200';
 
-import type { NavigateShipBody } from "../navigateShipBody";
+import type { NavigateShipBody } from '../navigateShipBody';
 
-import type { NegotiateContract201 } from "../negotiateContract201";
+import type { NegotiateContract201 } from '../negotiateContract201';
 
-import type { OrbitShip200 } from "../orbitShip200";
+import type { OrbitShip200 } from '../orbitShip200';
 
-import type { PatchShipNav200 } from "../patchShipNav200";
+import type { PatchShipNav200 } from '../patchShipNav200';
 
-import type { PatchShipNavBody } from "../patchShipNavBody";
+import type { PatchShipNavBody } from '../patchShipNavBody';
 
-import type { PurchaseCargo201 } from "../purchaseCargo201";
+import type { PurchaseCargo201 } from '../purchaseCargo201';
 
-import type { PurchaseCargoBody } from "../purchaseCargoBody";
+import type { PurchaseCargoBody } from '../purchaseCargoBody';
 
-import type { PurchaseShip201 } from "../purchaseShip201";
+import type { PurchaseShip201 } from '../purchaseShip201';
 
-import type { PurchaseShipBody } from "../purchaseShipBody";
+import type { PurchaseShipBody } from '../purchaseShipBody';
 
-import type { RefuelShip200 } from "../refuelShip200";
+import type { RefuelShip200 } from '../refuelShip200';
 
-import type { RefuelShipBody } from "../refuelShipBody";
+import type { RefuelShipBody } from '../refuelShipBody';
 
-import type { RemoveMount201 } from "../removeMount201";
+import type { RemoveMount201 } from '../removeMount201';
 
-import type { RemoveMountBody } from "../removeMountBody";
+import type { RemoveMountBody } from '../removeMountBody';
 
-import type { RemoveShipModule201 } from "../removeShipModule201";
+import type { RemoveShipModule201 } from '../removeShipModule201';
 
-import type { RemoveShipModuleBody } from "../removeShipModuleBody";
+import type { RemoveShipModuleBody } from '../removeShipModuleBody';
 
-import type { RepairShip200 } from "../repairShip200";
+import type { RepairShip200 } from '../repairShip200';
 
-import type { ScrapShip200 } from "../scrapShip200";
+import type { ScrapShip200 } from '../scrapShip200';
 
-import type { SellCargo201 } from "../sellCargo201";
+import type { SellCargo201 } from '../sellCargo201';
 
-import type { SellCargoBody } from "../sellCargoBody";
+import type { SellCargoBody } from '../sellCargoBody';
 
-import type { ShipRefine201 } from "../shipRefine201";
+import type { ShipRefine201 } from '../shipRefine201';
 
-import type { ShipRefineBody } from "../shipRefineBody";
+import type { ShipRefineBody } from '../shipRefineBody';
 
-import type { SiphonResources201 } from "../siphonResources201";
+import type { SiphonResources201 } from '../siphonResources201';
 
-import type { Survey } from "../models-Survey/survey";
+import type { Survey } from '../models-Survey/survey';
 
-import type { TransferCargo200 } from "../transferCargo200";
+import type { TransferCargo200 } from '../transferCargo200';
 
-import type { TransferCargoBody } from "../transferCargoBody";
+import type { TransferCargoBody } from '../transferCargoBody';
 
-import type { WarpShip200 } from "../warpShip200";
+import type { WarpShip200 } from '../warpShip200';
 
-import type { WarpShipBody } from "../warpShipBody";
+import type { WarpShipBody } from '../warpShipBody';
 
-import { clientInstance } from "../../client";
+import { clientInstance } from '../../client';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -161,7 +161,7 @@ export const getMyShips = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetMyShips200>(
-    { url: `/my/ships`, method: "GET", params, signal },
+    { url: `/my/ships`, method: 'GET', params, signal },
     options,
   );
 };
@@ -217,7 +217,7 @@ export function useGetMyShips<
           TError,
           Awaited<ReturnType<typeof getMyShips>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -240,7 +240,7 @@ export function useGetMyShips<
           TError,
           Awaited<ReturnType<typeof getMyShips>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -308,8 +308,8 @@ export const purchaseShip = (
   return clientInstance<PurchaseShip201>(
     {
       url: `/my/ships`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: purchaseShipBody,
       signal,
     },
@@ -334,10 +334,10 @@ export const getPurchaseShipMutationOptions = <
   { data: PurchaseShipBody },
   TContext
 > => {
-  const mutationKey = ["purchaseShip"];
+  const mutationKey = ['purchaseShip'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -397,7 +397,7 @@ export const getMyShip = (
   return clientInstance<GetMyShip200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}`,
-      method: "GET",
+      method: 'GET',
       signal,
     },
     options,
@@ -458,7 +458,7 @@ export function useGetMyShip<
           TError,
           Awaited<ReturnType<typeof getMyShip>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -481,7 +481,7 @@ export function useGetMyShip<
           TError,
           Awaited<ReturnType<typeof getMyShip>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -547,7 +547,7 @@ export const getMyShipCargo = (
   return clientInstance<GetMyShipCargo200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/cargo`,
-      method: "GET",
+      method: 'GET',
       signal,
     },
     options,
@@ -611,7 +611,7 @@ export function useGetMyShipCargo<
           TError,
           Awaited<ReturnType<typeof getMyShipCargo>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -634,7 +634,7 @@ export function useGetMyShipCargo<
           TError,
           Awaited<ReturnType<typeof getMyShipCargo>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -704,7 +704,7 @@ export const orbitShip = (
   return clientInstance<OrbitShip200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/orbit`,
-      method: "POST",
+      method: 'POST',
       signal,
     },
     options,
@@ -728,10 +728,10 @@ export const getOrbitShipMutationOptions = <
   { shipSymbol: string },
   TContext
 > => {
-  const mutationKey = ["orbitShip"];
+  const mutationKey = ['orbitShip'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -794,8 +794,8 @@ export const shipRefine = (
   return clientInstance<ShipRefine201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/refine`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: shipRefineBody,
       signal,
     },
@@ -820,10 +820,10 @@ export const getShipRefineMutationOptions = <
   { shipSymbol: string; data: ShipRefineBody },
   TContext
 > => {
-  const mutationKey = ["shipRefine"];
+  const mutationKey = ['shipRefine'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -887,7 +887,7 @@ export const createChart = (
   return clientInstance<CreateChart201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/chart`,
-      method: "POST",
+      method: 'POST',
       signal,
     },
     options,
@@ -911,10 +911,10 @@ export const getCreateChartMutationOptions = <
   { shipSymbol: string },
   TContext
 > => {
-  const mutationKey = ["createChart"];
+  const mutationKey = ['createChart'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -978,7 +978,7 @@ export const getShipCooldown = (
   return clientInstance<GetShipCooldown200 | void>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/cooldown`,
-      method: "GET",
+      method: 'GET',
       signal,
     },
     options,
@@ -1050,7 +1050,7 @@ export function useGetShipCooldown<
           TError,
           Awaited<ReturnType<typeof getShipCooldown>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -1077,7 +1077,7 @@ export function useGetShipCooldown<
           TError,
           Awaited<ReturnType<typeof getShipCooldown>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -1155,7 +1155,7 @@ export const dockShip = (
   return clientInstance<DockShip200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/dock`,
-      method: "POST",
+      method: 'POST',
       signal,
     },
     options,
@@ -1179,10 +1179,10 @@ export const getDockShipMutationOptions = <
   { shipSymbol: string },
   TContext
 > => {
-  const mutationKey = ["dockShip"];
+  const mutationKey = ['dockShip'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -1250,7 +1250,7 @@ export const createSurvey = (
   return clientInstance<CreateSurvey201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/survey`,
-      method: "POST",
+      method: 'POST',
       signal,
     },
     options,
@@ -1274,10 +1274,10 @@ export const getCreateSurveyMutationOptions = <
   { shipSymbol: string },
   TContext
 > => {
-  const mutationKey = ["createSurvey"];
+  const mutationKey = ['createSurvey'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -1342,8 +1342,8 @@ export const extractResources = (
   return clientInstance<ExtractResources201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/extract`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: extractResourcesBody,
       signal,
     },
@@ -1368,10 +1368,10 @@ export const getExtractResourcesMutationOptions = <
   { shipSymbol: string; data: ExtractResourcesBody },
   TContext
 > => {
-  const mutationKey = ["extractResources"];
+  const mutationKey = ['extractResources'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -1433,7 +1433,7 @@ export const siphonResources = (
   return clientInstance<SiphonResources201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/siphon`,
-      method: "POST",
+      method: 'POST',
       signal,
     },
     options,
@@ -1457,10 +1457,10 @@ export const getSiphonResourcesMutationOptions = <
   { shipSymbol: string },
   TContext
 > => {
-  const mutationKey = ["siphonResources"];
+  const mutationKey = ['siphonResources'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -1523,8 +1523,8 @@ export const extractResourcesWithSurvey = (
   return clientInstance<ExtractResourcesWithSurvey201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/extract/survey`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: survey,
       signal,
     },
@@ -1549,10 +1549,10 @@ export const getExtractResourcesWithSurveyMutationOptions = <
   { shipSymbol: string; data: Survey },
   TContext
 > => {
-  const mutationKey = ["extractResourcesWithSurvey"];
+  const mutationKey = ['extractResourcesWithSurvey'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -1616,8 +1616,8 @@ export const jettison = (
   return clientInstance<Jettison200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/jettison`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: jettisonBody,
       signal,
     },
@@ -1642,10 +1642,10 @@ export const getJettisonMutationOptions = <
   { shipSymbol: string; data: JettisonBody },
   TContext
 > => {
-  const mutationKey = ["jettison"];
+  const mutationKey = ['jettison'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -1708,8 +1708,8 @@ export const jumpShip = (
   return clientInstance<JumpShip200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/jump`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: jumpShipBody,
       signal,
     },
@@ -1734,10 +1734,10 @@ export const getJumpShipMutationOptions = <
   { shipSymbol: string; data: JumpShipBody },
   TContext
 > => {
-  const mutationKey = ["jumpShip"];
+  const mutationKey = ['jumpShip'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -1802,8 +1802,8 @@ export const navigateShip = (
   return clientInstance<NavigateShip200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/navigate`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: navigateShipBody,
       signal,
     },
@@ -1828,10 +1828,10 @@ export const getNavigateShipMutationOptions = <
   { shipSymbol: string; data: NavigateShipBody },
   TContext
 > => {
-  const mutationKey = ["navigateShip"];
+  const mutationKey = ['navigateShip'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -1893,8 +1893,8 @@ export const patchShipNav = (
   return clientInstance<PatchShipNav200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/nav`,
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
       data: patchShipNavBody,
     },
     options,
@@ -1918,10 +1918,10 @@ export const getPatchShipNavMutationOptions = <
   { shipSymbol: string; data: PatchShipNavBody },
   TContext
 > => {
-  const mutationKey = ["patchShipNav"];
+  const mutationKey = ['patchShipNav'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -1981,7 +1981,7 @@ export const getShipNav = (
   return clientInstance<GetShipNav200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/nav`,
-      method: "GET",
+      method: 'GET',
       signal,
     },
     options,
@@ -2044,7 +2044,7 @@ export function useGetShipNav<
           TError,
           Awaited<ReturnType<typeof getShipNav>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -2067,7 +2067,7 @@ export function useGetShipNav<
           TError,
           Awaited<ReturnType<typeof getShipNav>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -2136,8 +2136,8 @@ export const warpShip = (
   return clientInstance<WarpShip200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/warp`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: warpShipBody,
       signal,
     },
@@ -2162,10 +2162,10 @@ export const getWarpShipMutationOptions = <
   { shipSymbol: string; data: WarpShipBody },
   TContext
 > => {
-  const mutationKey = ["warpShip"];
+  const mutationKey = ['warpShip'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -2226,8 +2226,8 @@ export const sellCargo = (
   return clientInstance<SellCargo201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/sell`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: sellCargoBody,
       signal,
     },
@@ -2252,10 +2252,10 @@ export const getSellCargoMutationOptions = <
   { shipSymbol: string; data: SellCargoBody },
   TContext
 > => {
-  const mutationKey = ["sellCargo"];
+  const mutationKey = ['sellCargo'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -2317,7 +2317,7 @@ export const createShipSystemScan = (
   return clientInstance<CreateShipSystemScan201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scan/systems`,
-      method: "POST",
+      method: 'POST',
       signal,
     },
     options,
@@ -2341,10 +2341,10 @@ export const getCreateShipSystemScanMutationOptions = <
   { shipSymbol: string },
   TContext
 > => {
-  const mutationKey = ["createShipSystemScan"];
+  const mutationKey = ['createShipSystemScan'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -2408,7 +2408,7 @@ export const createShipWaypointScan = (
   return clientInstance<CreateShipWaypointScan201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scan/waypoints`,
-      method: "POST",
+      method: 'POST',
       signal,
     },
     options,
@@ -2432,10 +2432,10 @@ export const getCreateShipWaypointScanMutationOptions = <
   { shipSymbol: string },
   TContext
 > => {
-  const mutationKey = ["createShipWaypointScan"];
+  const mutationKey = ['createShipWaypointScan'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -2499,7 +2499,7 @@ export const createShipShipScan = (
   return clientInstance<CreateShipShipScan201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scan/ships`,
-      method: "POST",
+      method: 'POST',
       signal,
     },
     options,
@@ -2523,10 +2523,10 @@ export const getCreateShipShipScanMutationOptions = <
   { shipSymbol: string },
   TContext
 > => {
-  const mutationKey = ["createShipShipScan"];
+  const mutationKey = ['createShipShipScan'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -2593,8 +2593,8 @@ export const refuelShip = (
   return clientInstance<RefuelShip200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/refuel`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: refuelShipBody,
       signal,
     },
@@ -2619,10 +2619,10 @@ export const getRefuelShipMutationOptions = <
   { shipSymbol: string; data: RefuelShipBody },
   TContext
 > => {
-  const mutationKey = ["refuelShip"];
+  const mutationKey = ['refuelShip'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -2689,8 +2689,8 @@ export const purchaseCargo = (
   return clientInstance<PurchaseCargo201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/purchase`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: purchaseCargoBody,
       signal,
     },
@@ -2715,10 +2715,10 @@ export const getPurchaseCargoMutationOptions = <
   { shipSymbol: string; data: PurchaseCargoBody },
   TContext
 > => {
-  const mutationKey = ["purchaseCargo"];
+  const mutationKey = ['purchaseCargo'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -2783,8 +2783,8 @@ export const transferCargo = (
   return clientInstance<TransferCargo200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/transfer`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: transferCargoBody,
       signal,
     },
@@ -2809,10 +2809,10 @@ export const getTransferCargoMutationOptions = <
   { shipSymbol: string; data: TransferCargoBody },
   TContext
 > => {
-  const mutationKey = ["transferCargo"];
+  const mutationKey = ['transferCargo'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -2878,7 +2878,7 @@ export const negotiateContract = (
   return clientInstance<NegotiateContract201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/negotiate/contract`,
-      method: "POST",
+      method: 'POST',
       signal,
     },
     options,
@@ -2902,10 +2902,10 @@ export const getNegotiateContractMutationOptions = <
   { shipSymbol: string },
   TContext
 > => {
-  const mutationKey = ["negotiateContract"];
+  const mutationKey = ['negotiateContract'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -2965,7 +2965,7 @@ export const getMounts = (
   return clientInstance<GetMounts200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/mounts`,
-      method: "GET",
+      method: 'GET',
       signal,
     },
     options,
@@ -3026,7 +3026,7 @@ export function useGetMounts<
           TError,
           Awaited<ReturnType<typeof getMounts>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -3049,7 +3049,7 @@ export function useGetMounts<
           TError,
           Awaited<ReturnType<typeof getMounts>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -3120,8 +3120,8 @@ export const installMount = (
   return clientInstance<InstallMount201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/mounts/install`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: installMountBody,
       signal,
     },
@@ -3146,10 +3146,10 @@ export const getInstallMountMutationOptions = <
   { shipSymbol: string; data: InstallMountBody },
   TContext
 > => {
-  const mutationKey = ["installMount"];
+  const mutationKey = ['installMount'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -3214,8 +3214,8 @@ export const removeMount = (
   return clientInstance<RemoveMount201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/mounts/remove`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: removeMountBody,
       signal,
     },
@@ -3240,10 +3240,10 @@ export const getRemoveMountMutationOptions = <
   { shipSymbol: string; data: RemoveMountBody },
   TContext
 > => {
-  const mutationKey = ["removeMount"];
+  const mutationKey = ['removeMount'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -3303,7 +3303,7 @@ export const getScrapShip = (
   return clientInstance<GetScrapShip200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scrap`,
-      method: "GET",
+      method: 'GET',
       signal,
     },
     options,
@@ -3367,7 +3367,7 @@ export function useGetScrapShip<
           TError,
           Awaited<ReturnType<typeof getScrapShip>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -3390,7 +3390,7 @@ export function useGetScrapShip<
           TError,
           Awaited<ReturnType<typeof getScrapShip>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -3456,7 +3456,7 @@ export const scrapShip = (
   return clientInstance<ScrapShip200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scrap`,
-      method: "POST",
+      method: 'POST',
       signal,
     },
     options,
@@ -3480,10 +3480,10 @@ export const getScrapShipMutationOptions = <
   { shipSymbol: string },
   TContext
 > => {
-  const mutationKey = ["scrapShip"];
+  const mutationKey = ['scrapShip'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -3543,7 +3543,7 @@ export const getRepairShip = (
   return clientInstance<GetRepairShip200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/repair`,
-      method: "GET",
+      method: 'GET',
       signal,
     },
     options,
@@ -3607,7 +3607,7 @@ export function useGetRepairShip<
           TError,
           Awaited<ReturnType<typeof getRepairShip>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -3630,7 +3630,7 @@ export function useGetRepairShip<
           TError,
           Awaited<ReturnType<typeof getRepairShip>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -3696,7 +3696,7 @@ export const repairShip = (
   return clientInstance<RepairShip200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/repair`,
-      method: "POST",
+      method: 'POST',
       signal,
     },
     options,
@@ -3720,10 +3720,10 @@ export const getRepairShipMutationOptions = <
   { shipSymbol: string },
   TContext
 > => {
-  const mutationKey = ["repairShip"];
+  const mutationKey = ['repairShip'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -3783,7 +3783,7 @@ export const getShipModules = (
   return clientInstance<GetShipModules200>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/modules`,
-      method: "GET",
+      method: 'GET',
       signal,
     },
     options,
@@ -3847,7 +3847,7 @@ export function useGetShipModules<
           TError,
           Awaited<ReturnType<typeof getShipModules>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -3870,7 +3870,7 @@ export function useGetShipModules<
           TError,
           Awaited<ReturnType<typeof getShipModules>>
         >,
-        "initialData"
+        'initialData'
       >;
     request?: SecondParameter<typeof clientInstance>;
   },
@@ -3937,8 +3937,8 @@ export const installShipModule = (
   return clientInstance<InstallShipModule201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/modules/install`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: installShipModuleBody,
       signal,
     },
@@ -3963,10 +3963,10 @@ export const getInstallShipModuleMutationOptions = <
   { shipSymbol: string; data: InstallShipModuleBody },
   TContext
 > => {
-  const mutationKey = ["installShipModule"];
+  const mutationKey = ['installShipModule'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
@@ -4027,8 +4027,8 @@ export const removeShipModule = (
   return clientInstance<RemoveShipModule201>(
     {
       url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/modules/remove`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       data: removeShipModuleBody,
       signal,
     },
@@ -4053,10 +4053,10 @@ export const getRemoveShipModuleMutationOptions = <
   { shipSymbol: string; data: RemoveShipModuleBody },
   TContext
 > => {
-  const mutationKey = ["removeShipModule"];
+  const mutationKey = ['removeShipModule'];
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation &&
-      "mutationKey" in options.mutation &&
+      'mutationKey' in options.mutation &&
       options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }

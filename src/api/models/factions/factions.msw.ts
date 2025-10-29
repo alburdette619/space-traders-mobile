@@ -21,16 +21,16 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { faker } from "@faker-js/faker";
+import { faker } from '@faker-js/faker';
 
-import { HttpResponse, http } from "msw";
-import type { RequestHandlerOptions } from "msw";
+import { HttpResponse, http } from 'msw';
+import type { RequestHandlerOptions } from 'msw';
 
-import type { GetFaction200 } from "../getFaction200";
+import type { GetFaction200 } from '../getFaction200';
 
-import type { GetFactions200 } from "../getFactions200";
-import { Faction } from "../models-Faction/faction";
-import { Meta } from "../models-Meta/meta";
+import type { GetFactions200 } from '../getFactions200';
+import { Faction } from '../models-Faction/faction';
+import { Meta } from '../models-Meta/meta';
 
 export const getGetFactionsResponseMock = (
   overrideResponse: Partial<GetFactions200> = {},
@@ -71,17 +71,17 @@ export const getGetFactionsMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/factions",
+    '*/factions',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetFactionsResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -97,17 +97,17 @@ export const getGetFactionsMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/factions",
+    '*/factions',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetFactionsResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -123,17 +123,17 @@ export const getGetFactionMockHandler = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/factions/:factionSymbol",
+    '*/factions/:factionSymbol',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetFactionResponseMock(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
@@ -149,17 +149,17 @@ export const getGetFactionMockHandler200 = (
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
-    "*/factions/:factionSymbol",
+    '*/factions/:factionSymbol',
     async (info) => {
       return new HttpResponse(
         JSON.stringify(
           overrideResponse !== undefined
-            ? typeof overrideResponse === "function"
+            ? typeof overrideResponse === 'function'
               ? await overrideResponse(info)
               : overrideResponse
             : getGetFactionResponseMock200(),
         ),
-        { status: 200, headers: { "Content-Type": "application/json" } },
+        { status: 200, headers: { 'Content-Type': 'application/json' } },
       );
     },
     options,
