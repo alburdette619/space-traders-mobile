@@ -9,7 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.alburdette619.voidrunner",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,25 +23,36 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.alburdette619.voidrunner"
     },
     "web": {
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      ["expo-splash-screen", { "backgroundColor": "#000020" }],
       [
-        "expo-splash-screen",
+        "expo-font",
         {
-          "image": "./assets/images/splash-background-x6.png",
-          "imageWidth": 2048,
-          "resizeMode": "cover",
-          "backgroundColor": "#000000"
+          "fonts": [
+            "node_modules/@expo-google-fonts/orbitron/400Regular/Orbitron_400Regular.ttf.ttf",
+            "node_modules/@expo-google-fonts/orbitron/500Medium/Orbitron_500Medium.ttf",
+            "node_modules/@expo-google-fonts/orbitron/600SemiBold/Orbitron_600SemiBold.ttf",
+            "node_modules/@expo-google-fonts/orbitron/700Bold/Orbitron_700Bold.ttf",
+            "node_modules/@expo-google-fonts/orbitron/800ExtraBold/Orbitron_800ExtraBold.ttf",
+            "node_modules/@expo-google-fonts/orbitron/900Black/Orbitron_900Black.ttf"
+          ]
         }
       ]
     ],
     "experiments": {
       "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6197a39c-4a7b-4f2c-ab62-767159b353d6"
+      }
     }
   }
 }

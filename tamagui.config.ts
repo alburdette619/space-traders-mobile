@@ -1,7 +1,72 @@
 import { defaultConfig } from '@tamagui/config/v4';
-import { createTamagui, createTokens } from 'tamagui';
+import { createFont, createTamagui, createTokens } from 'tamagui';
+
+const orbitron = createFont({
+  family: 'Orbitron',
+  size: {
+    // Headings expect numeric keys; include 1–10 at least
+    1: 12,
+    2: 14,
+    3: 16,
+    4: 18,
+    5: 20,
+    6: 22,
+    7: 24,
+    8: 28,
+    9: 32,
+    10: 36,
+  },
+  lineHeight: {
+    1: 14,
+    2: 17,
+    3: 19,
+    4: 22,
+    5: 24,
+    6: 26,
+    7: 28,
+    8: 32,
+    9: 36,
+    10: 40,
+  },
+  letterSpacing: {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0.2,
+    5: 0.2,
+    6: 0.2,
+    7: 0.2,
+    8: 0.3,
+    9: 0.3,
+    10: 0.35,
+  },
+  weight: {
+    // optional mapping used by SizableText variants
+    1: '400',
+    2: '400',
+    3: '500',
+    4: '600',
+    5: '700',
+    6: '700',
+    7: '800',
+    8: '800',
+    9: '900',
+    10: '900',
+  },
+  // IMPORTANT for Android: map weights to actual loaded fontFamily names
+  // so weight changes resolve to the right TTF. (RN limitation)
+  face: {
+    400: { normal: 'Orbitron_400Regular' },
+    500: { normal: 'Orbitron_500Medium' },
+    600: { normal: 'Orbitron_600SemiBold' },
+    700: { normal: 'Orbitron_700Bold' },
+    800: { normal: 'Orbitron_800ExtraBold' },
+    900: { normal: 'Orbitron_900Black' },
+  },
+});
 
 const tokens = createTokens({
+  ...defaultConfig.tokens,
   color: {
     // neutrals
     voidBg: '#000020',
@@ -25,8 +90,13 @@ const tokens = createTokens({
   },
 });
 
-export const voidConfig = createTamagui({
+const voidConfig = createTamagui({
   ...defaultConfig,
+  fonts: {
+    ...defaultConfig.fonts,
+    heading: orbitron, // use Orbitron for headings otherwise keep defaults
+  },
+
   tokens,
 
   themes: {
@@ -58,3 +128,5 @@ declare module 'tamagui' {
   interface TamaguiCustomConfig extends VoidConfig {}
 }
 /* eslint-enable @typescript-eslint/no-empty-object-type */
+
+export default voidConfig;

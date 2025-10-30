@@ -17,5 +17,5 @@ export const RootStack = () => {
 };
 
 const styles = {
-  container: { flex: 1, marginVertical: 16 },
+  container: { flex: 1 },
 };
