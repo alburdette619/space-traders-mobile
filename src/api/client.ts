@@ -10,7 +10,10 @@ export const clientInstance = async <T>(
 ) => {
   // Lint warning due to type having the same name, `CancelToken`.
   // eslint-disable-next-line
-    const source = axios.CancelToken.source();
+  const source = axios.CancelToken.source();
+
+  config.headers = config.headers || {};
+  config.headers.Authorization = `Bearer ${process.env.EXPO_PUBLIC_SUPABASE_ANON}`;
 
   try {
     let response = await client<T>({

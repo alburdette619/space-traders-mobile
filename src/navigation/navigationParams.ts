@@ -1,4 +1,5 @@
 export type RootNavigatorParams = {
+  AgentCreationInstructions: undefined;
   BrandSplash: undefined;
   NewAgent: undefined;
 };

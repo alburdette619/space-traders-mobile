@@ -73,14 +73,21 @@ const tokens = createTokens({
     voidBg2: '#000025',
     surface1: '#0F1048',
     surface2: '#0B0B3D',
-    border: '#151659',
-    borderHover: '#1B1D6B',
+
+    border: '#F2F4FF',
+
     text: '#F2F4FF',
     textMuted: '#C6CBF7',
 
     // roles from splash screen art
     brandSolid: '#5A187B', // purple gas
+    brandHover: '#662986', // onBrand 8% overlay
+    brandPress: '#6D318B', // onBrand 12% overlay
     onBrand: '#F6ECFF',
+
+    disabledContainer: '#f2f4ff1f', // ~12% on-surface over bg
+    disabledBorder: '#f2f4ff29', // subtle edge if you keep borders
+    disabledContent: '#f2f4ff61', // ~38% on-surface for label/icon
 
     accentSolid: '#1C9DA7', // cyan (mid) from #9BE8D7/#D0F2FB family
     onAccent: '#031416',
@@ -97,6 +104,11 @@ const voidConfig = createTamagui({
     heading: orbitron, // use Orbitron for headings otherwise keep defaults
   },
 
+  settings: {
+    ...defaultConfig.settings,
+    onlyAllowShorthands: false,
+  },
+
   tokens,
 
   themes: {
@@ -106,9 +118,9 @@ const voidConfig = createTamagui({
       backgroundHover: tokens.color.surface2,
       backgroundPress: tokens.color.surface1,
       borderColor: tokens.color.border,
-      borderColorHover: tokens.color.borderHover,
+      borderColorHover: tokens.color.border,
       color: tokens.color.text,
-      placeholderColor: tokens.color.borderHover,
+      placeholderColor: tokens.color.textMuted,
 
       // role tokens (use directly on components)
       brandSolid: tokens.color.brandSolid,
@@ -117,6 +129,16 @@ const voidConfig = createTamagui({
       onAccent: tokens.color.onAccent,
       infoSolid: tokens.color.infoSolid,
       onInfo: tokens.color.onInfo,
+    },
+    dark_Button: {
+      background: tokens.color.brandSolid,
+      backgroundDisabled: tokens.color.disabledContainer,
+      backgroundHover: tokens.color.brandHover,
+      backgroundPress: tokens.color.brandPress,
+      borderColor: tokens.color.brandSolid,
+      borderColorDisabled: tokens.color.disabledBorder,
+      color: tokens.color.onBrand,
+      colorDisabled: tokens.color.disabledContent,
     },
   },
 });

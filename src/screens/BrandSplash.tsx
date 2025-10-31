@@ -23,7 +23,7 @@ import { useNavigation } from '@react-navigation/native';
 const DRIFT_X_PX = 4; // background horizontal drift amplitude (±px)
 const DRIFT_Y_PX = 4; // background vertical drift amplitude (±px)
 const OVER_SCAN = 2;
-const MIN_SHOW_MS = 5000; // min time to show brand splash
+const MIN_SHOW_MS = __DEV__ ? 1000 : 5000; // min time to show brand splash
 
 const NEAREST = { filter: FilterMode.Nearest, mipmap: MipmapMode.None };
 
