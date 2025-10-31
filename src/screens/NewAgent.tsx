@@ -20,6 +20,7 @@ import { Select } from '../components/Select';
 import { useNavigation } from '@react-navigation/native';
 import { setItemAsync } from 'expo-secure-store';
 import { agentKey } from '../constants/storageKeys';
+import { useRegister } from '../api/models/global/global';
 
 export const NewAgentScreen = () => {
   const { navigate } = useNavigation();
@@ -63,7 +64,28 @@ export const NewAgentScreen = () => {
     // TODO: validate token, fetch agent data, navigate to the main app.
   }, []);
 
-  const handleCreateGuestAgent = useCallback(() => {}, []);
+  // TODO: handle success/error states
+  const handleGuestRegistrationSuccess = useCallback(() => {}, []);
+
+  const handleGuestRegistrationError = useCallback(() => {}, []);
+
+  const { mutate: register } = useRegister({
+    mutation: {
+      onSuccess: handleGuestRegistrationSuccess,
+      onError: handleGuestRegistrationError,
+    },
+  });
+
+  const handleCreateGuestAgent = useCallback(() => {
+    if (!selectedFaction) return;
+
+    register({
+      data: {
+        symbol: guestAgentName,
+        faction: selectedFaction.symbol,
+      },
+    });
+  }, [guestAgentName, register, selectedFaction]);
 
   return (
     <View flex={1} bg="$background" px="$4">
@@ -113,6 +135,7 @@ export const NewAgentScreen = () => {
                 autoCapitalize="words"
                 autoComplete="off"
                 autoCorrect={false}
+                // Max length to match API validation
                 maxLength={14}
                 onChangeText={setGuestAgentName}
                 placeholder="Enter Agent Name"
@@ -126,6 +149,7 @@ export const NewAgentScreen = () => {
               />
               <Button
                 backgroundColor="$brandSolid"
+                // Min length 3 to match API validation
                 disabled={guestAgentName.length < 3 || !selectedFaction}
                 onPress={handleCreateGuestAgent}
               >

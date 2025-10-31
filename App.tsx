@@ -4,19 +4,23 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NavigationContainer } from '@react-navigation/native';
 import { TamaguiProvider } from 'tamagui';
 import voidConfig from './tamagui.config';
+import { ToastProvider, ToastViewport } from '@tamagui/toast';
 
 const queryClient = new QueryClient();
 
 const App = () => {
   return (
     <TamaguiProvider config={voidConfig}>
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <QueryClientProvider client={queryClient}>
-            <RootStack />
-          </QueryClientProvider>
-        </NavigationContainer>
-      </SafeAreaProvider>
+      <ToastProvider>
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <QueryClientProvider client={queryClient}>
+              <RootStack />
+            </QueryClientProvider>
+          </NavigationContainer>
+          <ToastViewport />
+        </SafeAreaProvider>
+      </ToastProvider>
     </TamaguiProvider>
   );
 };
