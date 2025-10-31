@@ -1,5 +1,4 @@
-// BrandSplashScreen.tsx
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, useWindowDimensions } from 'react-native';
 import {
   Canvas,
@@ -8,111 +7,175 @@ import {
   FilterMode,
   MipmapMode,
 } from '@shopify/react-native-skia';
-import * as SplashScreen from 'expo-splash-screen';
 import { getTokens, Heading } from 'tamagui';
 import { useLoadFonts } from '../hooks/useLoadFonts';
+import {
+  Easing,
+  useDerivedValue,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated';
+import { agentKey } from '../constants/storageKeys';
+import * as SecureStore from 'expo-secure-store';
+import { useNavigation } from '@react-navigation/native';
 
 const DRIFT_X_PX = 4; // background horizontal drift amplitude (±px)
-const DRIFT_Y_PX = 2; // background vertical drift amplitude (±px)
-const PLANET_SPEED_X = 0.006;
-const PLANET_BOB_Y = 0.01;
-const BG_DRIFT_SPEED_X = 0.004;
-const BG_DRIFT_SPEED_Y = 0.003;
+const DRIFT_Y_PX = 4; // background vertical drift amplitude (±px)
 const OVER_SCAN = 2;
-const MIN_SHOW_MS = 2000; // min time to show brand splash
+const MIN_SHOW_MS = 5000; // min time to show brand splash
 
 const NEAREST = { filter: FilterMode.Nearest, mipmap: MipmapMode.None };
 
 export const BrandSplashScreen = () => {
+  const { navigate } = useNavigation();
   const { width, height } = useWindowDimensions();
-  const isTallScreen = true; //height / width >= 1.95;
 
-  const imgBgLandscape = useImage(
+  const imgBg = useImage(
     require('../../assets/images/splash-background-x8.png'),
-  );
-  const imgBgPortrait = useImage(
-    require('../../assets/images/splash-background-portrait-x8.png'),
   );
   const imgPlanet = useImage(
     require('../../assets/images/splash-planet-foreground.png'),
   );
 
   // Choose bg image based on aspect ratio
-  const imgBg = isTallScreen ? imgBgPortrait : imgBgLandscape;
 
   // load custom fonts
   const { fontsLoaded, error: fontLoadingError } = useLoadFonts();
 
-  // animation clock
-  const [tick, setTick] = useState(0);
-  const rafRef = useRef<number | null>(null);
+  // Check for existing agent
+  const [hasAgent, setHasAgent] = useState<boolean | null>(null);
   useEffect(() => {
-    const loop = () => {
-      setTick((t) => (t + 1) % 1_000_000);
-      rafRef.current = requestAnimationFrame(loop);
+    const checkAgent = async () => {
+      try {
+        const agentKeyValue = await SecureStore.getItemAsync(agentKey);
+        setHasAgent(!!agentKeyValue);
+      } catch {
+        setHasAgent(false);
+      }
     };
-    rafRef.current = requestAnimationFrame(loop);
-    return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-    };
+
+    checkAgent();
   }, []);
+
+  // animation clock
+  const bgProgX = useSharedValue(0);
+  const bgProgY = useSharedValue(0);
+  const plProgX = useSharedValue(0);
+  const plProgY = useSharedValue(0);
+
+  useEffect(() => {
+    // linear ping-pong loops (autoReverse: true)
+    bgProgX.value = withRepeat(
+      withTiming(1, { duration: 12000, easing: Easing.linear }),
+      -1,
+      true,
+    );
+    bgProgY.value = withRepeat(
+      withTiming(1, { duration: 12000, easing: Easing.linear }),
+      -1,
+      true,
+    );
+    plProgX.value = withRepeat(
+      withTiming(1, { duration: 9000, easing: Easing.linear }),
+      -1,
+      true,
+    );
+    plProgY.value = withRepeat(
+      withTiming(1, { duration: 14000, easing: Easing.linear }),
+      -1,
+      true,
+    );
+  }, [bgProgX, bgProgY, plProgX, plProgY]);
 
   // hide native splash once images are ready + min brand time elapsed
   const [start] = useState(() => Date.now());
   useEffect(() => {
-    if (!imgBg || !imgPlanet) return;
+    if (!imgBg || !imgPlanet || !fontsLoaded || hasAgent === null) return;
 
-    if (fontsLoaded) {
-      const left = Math.max(0, MIN_SHOW_MS - (Date.now() - start));
-      const t = setTimeout(() => {
-        SplashScreen.hideAsync().catch(() => {});
-      }, left);
-      return () => clearTimeout(t);
-    } else if (fontLoadingError) {
-      // on error, just hide immediately?
-      SplashScreen.hideAsync().catch(() => {});
-    }
-  }, [fontsLoaded, fontLoadingError, imgBg, imgPlanet, start]);
+    const left = Math.max(0, MIN_SHOW_MS - (Date.now() - start));
+    const t = setTimeout(() => {
+      console.log('BrandSplash: done');
+      if (hasAgent) {
+        // navigate to main app
+      } else {
+        navigate('NewAgent');
+      }
+      // Navigate away from splash screen based on auth state
+    }, left);
+    return () => clearTimeout(t);
+  }, [
+    fontsLoaded,
+    fontLoadingError,
+    hasAgent,
+    imgBg,
+    imgPlanet,
+    navigate,
+    start,
+  ]);
 
   // layout + integer-pixel motion (avoid shimmer in pixel art)
-  const L = useMemo(() => {
-    if (!imgBg || !imgPlanet) return null;
+  const imageLayout = useMemo(() => {
+    if (!imgBg || !imgPlanet) return undefined;
 
-    // --- BACKGROUND: compute "cover + bleed" scale from the image's real size
+    // --- BACKGROUND: cover + tiny bleed from the chosen image's intrinsic size
     const imgW = imgBg.width();
     const imgH = imgBg.height();
-
-    // we need to cover the device + a small buffer for drift so edges never show
     const needW = width + 2 * DRIFT_X_PX;
     const needH = height + 2 * DRIFT_Y_PX;
-
     const scale = Math.max(needW / imgW, needH / imgH);
     const bgW = Math.ceil(imgW * scale);
     const bgH = Math.ceil(imgH * scale);
 
-    // slow background drift (snap to whole px)
-    const bgDriftX = Math.round(Math.sin(tick * BG_DRIFT_SPEED_X) * DRIFT_X_PX);
-    const bgDriftY = Math.round(Math.cos(tick * BG_DRIFT_SPEED_Y) * DRIFT_Y_PX);
+    const baseBgX = Math.round((width - bgW) / 2);
+    const baseBgY = Math.round((height - bgH) / 2);
 
-    // center, then apply drift
-    const bgX = Math.round((width - bgW) / 2 + bgDriftX);
-    const bgY = Math.round((height - bgH) / 2 + bgDriftY);
-
-    // --- PLANET: keep your alignment math, using overScan only for planet size
+    // --- PLANET: keep your alignment exactly, just swap to ping-pong motion
     const planetW = Math.ceil(imgPlanet.width() * OVER_SCAN);
     const planetH = Math.ceil(imgPlanet.height() * OVER_SCAN);
 
-    // planet motion a bit stronger than bg
-    const driftX = Math.round(Math.sin(tick * PLANET_SPEED_X) * 6); // ±6 px
-    const bobY = Math.round(Math.sin(tick * PLANET_BOB_Y) * 2); // ±2 px
+    const basePlanetX = Math.round(width - planetW * 0.8);
+    const basePlanetY = Math.round(height / 3);
 
-    const planetX = Math.round(width - planetW * 0.8 - driftX);
-    const planetY = Math.round(height / 3 + bobY);
+    return {
+      baseBgX,
+      baseBgY,
+      bgW,
+      bgH,
+      basePlanetX,
+      basePlanetY,
+      planetW,
+      planetH,
+    };
+  }, [imgBg, imgPlanet, width, height]);
 
-    return { bgX, bgY, bgW, bgH, planetX, planetY, planetW, planetH };
-  }, [imgBg, imgPlanet, width, height, tick]);
+  // Map 0..1 -> -A..+A and round to whole pixels (pixel-art safe)
+  const baseBgX = imageLayout?.baseBgX ?? 0;
+  const baseBgY = imageLayout?.baseBgY ?? 0;
+  const basePlanetX = imageLayout?.basePlanetX ?? 0;
+  const basePlanetY = imageLayout?.basePlanetY ?? 0;
 
-  if (!imgBg || !imgPlanet || !L || !fontsLoaded) return null;
+  const bgX = useDerivedValue(() => {
+    const offset = Math.round((bgProgX.value * 2 - 1) * DRIFT_X_PX);
+    return baseBgX + offset;
+  }, [baseBgX]);
+
+  const bgY = useDerivedValue(() => {
+    const offset = Math.round((bgProgY.value * 2 - 1) * DRIFT_Y_PX);
+    return baseBgY + offset;
+  }, [baseBgY]);
+
+  const planetX = useDerivedValue(() => {
+    const offset = Math.round((plProgX.value * 2 - 1) * 6);
+    return basePlanetX - offset;
+  }, [basePlanetX]);
+
+  const planetY = useDerivedValue(() => {
+    const offset = Math.round((plProgY.value * 2 - 1) * 2);
+    return basePlanetY + offset;
+  }, [basePlanetY]);
+
+  if (!imgBg || !imgPlanet || !imageLayout || !fontsLoaded) return null;
 
   return (
     <>
@@ -124,22 +187,29 @@ export const BrandSplashScreen = () => {
       >
         <SkImage
           image={imgBg}
-          x={L.bgX}
-          y={L.bgY}
-          width={L.bgW}
-          height={L.bgH}
+          x={bgX}
+          y={bgY}
+          width={imageLayout.bgW}
+          height={imageLayout.bgH}
           sampling={NEAREST}
         />
         <SkImage
           image={imgPlanet}
-          x={L.planetX}
-          y={L.planetY}
-          width={L.planetW}
-          height={L.planetH}
+          x={planetX}
+          y={planetY}
+          width={imageLayout.planetW}
+          height={imageLayout.planetH}
           sampling={NEAREST}
         />
       </Canvas>
-      <Heading fontWeight="900" fontSize="$9" position="absolute" b={50} l={20}>
+      <Heading
+        background="red"
+        fontWeight="900"
+        fontSize="$9"
+        position="absolute"
+        b={50}
+        l={20}
+      >
         {'/// VOID RUNNER'}
       </Heading>
     </>

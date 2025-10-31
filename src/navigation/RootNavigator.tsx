@@ -1,8 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NewAgentScreen } from '../screens/NewAgent';
 import { BrandSplashScreen } from '../screens/BrandSplash';
+import { RootNavigatorParams } from './navigationParams';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootNavigatorParams>();
 
 export const RootStack = () => {
   return (
