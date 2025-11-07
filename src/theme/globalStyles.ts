@@ -25,3 +25,9 @@ export const flexStyles = StyleSheet.create({
     flexDirection: 'row',
   },
 });
+
+export const miscStyles = StyleSheet.create({
+  link: {
+    textDecorationLine: 'underline',
+  },
+});
