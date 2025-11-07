@@ -37,7 +37,6 @@ export const FactionsBottomSheet = ({
   const handleFactionChange = useCallback(
     (value: Faction) => {
       const faction = factions?.find((f) => f.name === value.name) || null;
-      console.log('Selected faction:', faction);
       setSelectedFaction(faction);
 
       // Delay closing to ensure state updates properly
