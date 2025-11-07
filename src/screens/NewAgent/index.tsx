@@ -70,6 +70,14 @@ export const NewAgentScreen = () => {
     bottomSheetRef.current?.expand();
   }, []);
 
+  const handleAgentNameChange = useCallback((text: string) => {
+    const upperCasedText = text.toUpperCase();
+    const agentNamePattern = /^[A-Z0-9_]+$/;
+    if (upperCasedText === '' || agentNamePattern.test(upperCasedText)) {
+      setGuestAgentName(upperCasedText);
+    }
+  }, []);
+
   return (
     <>
       <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -120,7 +128,7 @@ export const NewAgentScreen = () => {
                   autoCorrect={false}
                   // Max length to match API validation
                   maxLength={14}
-                  onChangeText={setGuestAgentName}
+                  onChangeText={handleAgentNameChange}
                   placeholder="Enter Agent Name"
                   value={guestAgentName}
                 />
