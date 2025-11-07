@@ -7,7 +7,6 @@ import {
   FilterMode,
   MipmapMode,
 } from '@shopify/react-native-skia';
-import { getTokens, Heading } from 'tamagui';
 import { useLoadFonts } from '../hooks/useLoadFonts';
 import {
   Easing,
@@ -19,6 +18,7 @@ import {
 import { agentKey } from '../constants/storageKeys';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from '@react-navigation/native';
+import { Text, useTheme } from 'react-native-paper';
 
 const DRIFT_X_PX = 4; // background horizontal drift amplitude (±px)
 const DRIFT_Y_PX = 4; // background vertical drift amplitude (±px)
@@ -30,6 +30,7 @@ const NEAREST = { filter: FilterMode.Nearest, mipmap: MipmapMode.None };
 export const BrandSplashScreen = () => {
   const { navigate } = useNavigation();
   const { width, height } = useWindowDimensions();
+  const { colors } = useTheme();
 
   const imgBg = useImage(
     require('../../assets/images/splash-background-x8.png'),
@@ -182,7 +183,7 @@ export const BrandSplashScreen = () => {
       <Canvas
         style={{
           ...StyleSheet.absoluteFillObject,
-          backgroundColor: getTokens().color.voidBg.val,
+          backgroundColor: colors.background,
         }}
       >
         <SkImage
@@ -202,16 +203,17 @@ export const BrandSplashScreen = () => {
           sampling={NEAREST}
         />
       </Canvas>
-      <Heading
-        background="red"
-        fontWeight="900"
-        fontSize="$9"
-        position="absolute"
-        b={50}
-        l={20}
-      >
+      <Text style={styles.appNameText} variant="displayLarge">
         {'/// VOID RUNNER'}
-      </Heading>
+      </Text>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  appNameText: {
+    position: 'absolute',
+    bottom: 50,
+    left: 20,
+  },
+});

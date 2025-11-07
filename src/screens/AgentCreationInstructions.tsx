@@ -1,5 +1,18 @@
-import { View } from 'tamagui';
+import { StyleSheet, View } from 'react-native';
+import { useTheme } from 'react-native-paper';
 
 export const AgentCreationInstructionsScreen = () => {
-  return <View flex={1} bg="$background"></View>;
+  const theme = useTheme();
+
+  return (
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}
+    ></View>
+  );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
