@@ -1,16 +1,17 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGetFactions } from '../../api/models/factions/factions';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Faction } from '../../api/models/models-Faction/faction';
 import { useNavigation } from '@react-navigation/native';
-import { setItemAsync } from 'expo-secure-store';
+import { setItemAsync, deleteItemAsync } from 'expo-secure-store';
 import { agentKey } from '../../constants/storageKeys';
-import { useRegister } from '../../api/models/global/global';
+import { useGetStatus, useRegister } from '../../api/models/global/global';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import {
   Button,
   Divider,
   Icon,
+  Snackbar,
   Text,
   TextInput,
   useTheme,
@@ -19,6 +20,9 @@ import { flexStyles, gapStyles } from '../../theme/globalStyles';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { getFactionImageUrl } from '../../constants/urls';
 import { FactionsBottomSheet } from './components/FactionsBottomSheet';
+import { Register201 } from '@/src/api/models/register201';
+import { SpaceTradersErrorResponse } from '@/src/types/spaceTraders';
+import { useGetMyAgent } from '@/src/api/models/agents/agents';
 
 export const NewAgentScreen = () => {
   const { navigate } = useNavigation();
@@ -26,29 +30,92 @@ export const NewAgentScreen = () => {
 
   // TODO: handle loading/error states
   const { data: factions, isFetching: isFetchingFactions } = useGetFactions();
+  const { data: status, isFetching: isFetchingStatus } = useGetStatus();
 
   const [selectedFaction, setSelectedFaction] = useState<Faction | null>(null);
   const [guestAgentName, setGuestAgentName] = useState<string>('');
   const [agentToken, setAgentToken] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [shouldAttemptAgentLogin, setShouldAttemptAgentLogin] =
+    useState<boolean>(false);
+
+  // Fetch user-supplied agent data when attempting login with token for validation.
+  const {
+    data: userSuppliedAgent,
+    error: errorUserSuppliedAgent,
+    isError: isErrorUserSuppliedAgent,
+    isFetching: isFetchingUserSuppliedAgent,
+  } = useGetMyAgent({
+    query: {
+      enabled: shouldAttemptAgentLogin && !!agentToken,
+    },
+  });
 
   const bottomSheetRef = useRef<BottomSheet>(null);
+
+  // Handle side effects of user-supplied agent fetch.
+  useEffect(() => {
+    const deleteTokenIfInvalid = async () => {
+      await deleteItemAsync(agentKey);
+    };
+
+    if (isFetchingUserSuppliedAgent) return;
+
+    if (userSuppliedAgent) {
+      // TODO: Navigate to main app.
+    } else if (isErrorUserSuppliedAgent && errorUserSuppliedAgent) {
+      // Unset invalid token.
+      deleteTokenIfInvalid();
+      setErrorMessage(errorUserSuppliedAgent.message);
+    }
+  }, [
+    agentToken,
+    errorUserSuppliedAgent,
+    isErrorUserSuppliedAgent,
+    isFetchingUserSuppliedAgent,
+    userSuppliedAgent,
+  ]);
 
   const handleAgentCreationInfo = useCallback(() => {
     navigate('AgentCreationInstructions');
   }, [navigate]);
 
   const handleAgentLogin = useCallback(async () => {
+    // Store the token and attempt to fetch agent data.
+    // The token will be picked up and used by the api client when set.
     await setItemAsync(agentKey, agentToken);
+    setShouldAttemptAgentLogin(true);
 
     // TODO: validate token, fetch agent data, navigate to the main app.
   }, [agentToken]);
 
-  // TODO: handle success/error states
-  const handleGuestRegistrationSuccess = useCallback(() => {}, []);
+  const handleGuestRegistrationSuccess = useCallback(
+    async (result: Register201 | undefined) => {
+      const data = result?.data;
 
-  const handleGuestRegistrationError = useCallback(() => {}, []);
+      if (!data) {
+        // We don't expect this to happen, but just in case.
+        setErrorMessage('Registration failed. Please try again.');
+        return;
+      }
 
-  const { mutate: register } = useRegister({
+      // TODO: There's initial data for agent, ships, the first contract, etc.
+      // We should use this as initial data for the specific initial queries after auth.
+      await setItemAsync(agentKey, data.token);
+
+      // TODO: Navigate to the main app.
+    },
+    [],
+  );
+
+  const handleGuestRegistrationError = useCallback(
+    ({ error }: SpaceTradersErrorResponse) => {
+      setErrorMessage(error.message);
+    },
+    [],
+  );
+
+  const { mutate: register, isPending: isRegisteringAgent } = useRegister({
     mutation: {
       onSuccess: handleGuestRegistrationSuccess,
       onError: handleGuestRegistrationError,
@@ -76,6 +143,10 @@ export const NewAgentScreen = () => {
     if (upperCasedText === '' || agentNamePattern.test(upperCasedText)) {
       setGuestAgentName(upperCasedText);
     }
+  }, []);
+
+  const handleSnackbarDismiss = useCallback(() => {
+    setErrorMessage('');
   }, []);
 
   return (
@@ -106,7 +177,11 @@ export const NewAgentScreen = () => {
                   value={agentToken}
                 />
               </View>
-              <Button mode="contained" onPress={handleAgentLogin}>
+              <Button
+                loading={isFetchingUserSuppliedAgent}
+                mode="contained"
+                onPress={handleAgentLogin}
+              >
                 Login
               </Button>
             </View>
@@ -133,6 +208,7 @@ export const NewAgentScreen = () => {
                   value={guestAgentName}
                 />
                 <Pressable
+                  disabled={isFetchingFactions}
                   style={[
                     styles.selectFactionButton,
                     !selectedFaction && styles.selectFactionButtonEmpty,
@@ -159,6 +235,7 @@ export const NewAgentScreen = () => {
                 <Button
                   // Min length 3 to match API validation
                   disabled={guestAgentName.length < 3 || !selectedFaction}
+                  loading={isRegisteringAgent}
                   onPress={handleCreateGuestAgent}
                   mode="contained"
                 >
@@ -174,6 +251,13 @@ export const NewAgentScreen = () => {
         factions={factions?.data}
         setSelectedFaction={setSelectedFaction}
       />
+      <Snackbar
+        visible={!!errorMessage}
+        duration={3000}
+        onDismiss={handleSnackbarDismiss}
+      >
+        {errorMessage}
+      </Snackbar>
     </>
   );
 };

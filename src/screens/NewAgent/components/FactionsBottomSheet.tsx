@@ -35,8 +35,8 @@ export const FactionsBottomSheet = ({
   );
 
   const handleFactionChange = useCallback(
-    (value: Faction) => {
-      const faction = factions?.find((f) => f.name === value.name) || null;
+    (faction: Faction) => {
+      console.log('Selected faction:', faction);
       setSelectedFaction(faction);
 
       // Delay closing to ensure state updates properly
@@ -44,7 +44,7 @@ export const FactionsBottomSheet = ({
         bottomSheetRef.current?.close();
       }, 100);
     },
-    [bottomSheetRef, factions, setSelectedFaction],
+    [bottomSheetRef, setSelectedFaction],
   );
 
   const renderFactionItem = useCallback(
@@ -71,6 +71,7 @@ export const FactionsBottomSheet = ({
         borderTopRightRadius: 8,
       }}
       index={-1}
+      backgroundStyle={{ backgroundColor: colors.background }}
     >
       <BottomSheetFlatList<Faction>
         alwaysBounceVertical={false}
