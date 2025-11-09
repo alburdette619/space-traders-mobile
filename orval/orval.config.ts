@@ -1,13 +1,10 @@
-import path from 'path';
-
-// import * as orvalUtils from './utils';
-
-import type { Config, OptionsExport } from 'orval';
-
-// const { addOrvalInputFilters, monorepoRoot, specsPath } = orvalUtils;
+import type { Config } from 'orval';
 
 const orvalConfig: Config = {
   spaceTraders: {
+    hooks: {
+      afterAllFilesWrite: 'prettier --write',
+    },
     input: {
       target: './SpaceTraders.json',
     },
@@ -20,6 +17,7 @@ const orvalConfig: Config = {
         generateEachHttpStatus: true,
         indexMockFiles: true,
         type: 'msw',
+        useExamples: true,
       },
       mode: 'tags-split',
       override: {

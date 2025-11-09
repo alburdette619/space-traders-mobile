@@ -6,6 +6,9 @@ import { PaperProvider } from 'react-native-paper';
 import { voidTheme } from './src/theme/voidTheme';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+// Import API interceptors to set up globally
+import './src/api/interceptors';
+
 const queryClient = new QueryClient();
 
 const App = () => {

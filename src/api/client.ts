@@ -1,10 +1,9 @@
 import axios, { AxiosError, AxiosRequestConfig, isCancel } from 'axios';
-import { getItemAsync } from 'expo-secure-store';
-import { agentKey } from '../constants/storageKeys';
-import { SpaceTradersErrorResponse } from '../types/spacetraders';
+import { SpaceTradersErrorResponse } from '../types/spaceTraders';
 
-const client = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_BASE_URL,
+// By default, use the Supabase base URL.
+export const client = axios.create({
+  baseURL: process.env.EXPO_PUBLIC_SUPABASE_BASE_URL,
 });
 
 export const clientInstance = async <T>(
@@ -14,14 +13,6 @@ export const clientInstance = async <T>(
   // Lint warning due to type having the same name, `CancelToken`.
   // eslint-disable-next-line
   const source = axios.CancelToken.source();
-
-  // Get agent key from secure storage and use it if available. Most traffic,
-  // should use the agent key for requests.
-  const agentKeyValue = await getItemAsync(agentKey);
-  const bearer = `Bearer ${agentKeyValue || process.env.EXPO_PUBLIC_SUPABASE_ANON}`;
-
-  config.headers = config.headers || {};
-  config.headers.Authorization = bearer;
 
   try {
     let response = await client<T>({
@@ -51,5 +42,4 @@ export const clientInstance = async <T>(
   }
 };
 
-export type ErrorType<SpaceTradersErrorResponse> =
-  AxiosError<SpaceTradersErrorResponse>;
+export type ErrorType<_Error = unknown> = AxiosError<SpaceTradersErrorResponse>;
