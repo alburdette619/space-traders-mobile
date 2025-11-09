@@ -5,7 +5,7 @@ import { Faction } from '../../api/models/models-Faction/faction';
 import { useNavigation } from '@react-navigation/native';
 import { setItemAsync, deleteItemAsync } from 'expo-secure-store';
 import { agentKey } from '../../constants/storageKeys';
-import { useGetStatus, useRegister } from '../../api/models/global/global';
+import { useRegister } from '../../api/models/global/global';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import {
   Button,
@@ -23,6 +23,8 @@ import { FactionsBottomSheet } from './components/FactionsBottomSheet';
 import { Register201 } from '@/src/api/models/register201';
 import { SpaceTradersErrorResponse } from '@/src/types/spaceTraders';
 import { useGetMyAgent } from '@/src/api/models/agents/agents';
+import { useServerResetCountdown } from '@/src/hooks/useServerResetCountdown';
+import { CountdownContainer } from '@/src/components/CountdownContainer';
 
 export const NewAgentScreen = () => {
   const { navigate } = useNavigation();
@@ -30,7 +32,7 @@ export const NewAgentScreen = () => {
 
   // TODO: handle loading/error states
   const { data: factions, isFetching: isFetchingFactions } = useGetFactions();
-  const { data: status, isFetching: isFetchingStatus } = useGetStatus();
+  const { humanReadableResetDate } = useServerResetCountdown();
 
   const [selectedFaction, setSelectedFaction] = useState<Faction | null>(null);
   const [guestAgentName, setGuestAgentName] = useState<string>('');
@@ -153,94 +155,101 @@ export const NewAgentScreen = () => {
     <>
       <View style={[styles.container, { backgroundColor: colors.background }]}>
         <SafeAreaView style={flexStyles.flex}>
-          <Text variant="displayLarge">{'/// New Agent'}</Text>
-          <View style={styles.innerContainer}>
-            <View style={gapStyles.gapLarge}>
-              <View style={gapStyles.gapMedium}>
-                <Pressable
-                  style={[
-                    gapStyles.gapMedium,
-                    styles.agentCreationInstructionsContainer,
-                    { borderColor: colors.primary },
-                  ]}
-                  onPress={handleAgentCreationInfo}
-                >
-                  <Icon source="help-circle" size={16} />
-                  <Text variant="labelSmall">Help</Text>
-                </Pressable>
-                <TextInput
-                  autoCapitalize="none"
-                  autoComplete="off"
-                  autoCorrect={false}
-                  onChangeText={setAgentToken}
-                  placeholder="Enter Agent Token"
-                  value={agentToken}
-                />
-              </View>
-              <Button
-                loading={isFetchingUserSuppliedAgent}
-                mode="contained"
-                onPress={handleAgentLogin}
-              >
-                Login
-              </Button>
-            </View>
-            <View style={[gapStyles.gapMedium, styles.dividerContainer]}>
-              <Divider bold style={flexStyles.flex} />
-              <Text variant="bodyMedium">OR</Text>
-              <Divider bold style={flexStyles.flex} />
-            </View>
-            <View style={gapStyles.gapSmall}>
-              <Text variant="titleMedium">Guest mode</Text>
+          <View style={gapStyles.gapSmall}>
+            <Text style={styles.containerPadding} variant="displayLarge">
+              {'/// New Agent'}
+            </Text>
+            <CountdownContainer countdownString={humanReadableResetDate} />
+          </View>
+          <View style={[flexStyles.flex, styles.containerPadding]}>
+            <View style={styles.innerContainer}>
               <View style={gapStyles.gapLarge}>
-                <Text>
-                  This mode could experience slowdowns due to resource
-                  constraints.
-                </Text>
-                <TextInput
-                  autoCapitalize="words"
-                  autoComplete="off"
-                  autoCorrect={false}
-                  // Max length to match API validation
-                  maxLength={14}
-                  onChangeText={handleAgentNameChange}
-                  placeholder="Enter Agent Name"
-                  value={guestAgentName}
-                />
-                <Pressable
-                  disabled={isFetchingFactions}
-                  style={[
-                    styles.selectFactionButton,
-                    !selectedFaction && styles.selectFactionButtonEmpty,
-                    {
-                      borderColor: colors.primary,
-                    },
-                  ]}
-                  onPress={handleChangeFaction}
-                >
-                  {selectedFaction ? (
-                    <View style={[gapStyles.gapSmall, flexStyles.flexRow]}>
-                      <Image
-                        source={{
-                          uri: getFactionImageUrl(selectedFaction.symbol),
-                        }}
-                        style={styles.factionImage}
-                      />
-                      <Text variant="titleSmall">{selectedFaction.name}</Text>
-                    </View>
-                  ) : (
-                    <Text variant="titleSmall">Select Faction</Text>
-                  )}
-                </Pressable>
+                <View style={gapStyles.gapMedium}>
+                  <Pressable
+                    style={[
+                      gapStyles.gapMedium,
+                      styles.agentCreationInstructionsContainer,
+                      { borderColor: colors.primary },
+                    ]}
+                    onPress={handleAgentCreationInfo}
+                  >
+                    <Icon source="help-circle" size={16} />
+                    <Text variant="labelSmall">Help</Text>
+                  </Pressable>
+                  <TextInput
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    onChangeText={setAgentToken}
+                    placeholder="Enter Agent Token"
+                    value={agentToken}
+                  />
+                </View>
                 <Button
-                  // Min length 3 to match API validation
-                  disabled={guestAgentName.length < 3 || !selectedFaction}
-                  loading={isRegisteringAgent}
-                  onPress={handleCreateGuestAgent}
+                  loading={isFetchingUserSuppliedAgent}
                   mode="contained"
+                  onPress={handleAgentLogin}
                 >
-                  Create Agent
+                  Login
                 </Button>
+              </View>
+              <View style={[gapStyles.gapMedium, styles.dividerContainer]}>
+                <Divider bold style={flexStyles.flex} />
+                <Text variant="bodyMedium">OR</Text>
+                <Divider bold style={flexStyles.flex} />
+              </View>
+              <View style={gapStyles.gapSmall}>
+                <Text variant="titleMedium">Guest mode</Text>
+                <View style={gapStyles.gapLarge}>
+                  <Text>
+                    This mode could experience slowdowns due to resource
+                    constraints.
+                  </Text>
+                  <TextInput
+                    autoCapitalize="words"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    // Max length to match API validation
+                    maxLength={14}
+                    onChangeText={handleAgentNameChange}
+                    placeholder="Enter Agent Name"
+                    value={guestAgentName}
+                  />
+                  <Pressable
+                    disabled={isFetchingFactions}
+                    style={[
+                      styles.selectFactionButton,
+                      !selectedFaction && styles.selectFactionButtonEmpty,
+                      {
+                        borderColor: colors.primary,
+                      },
+                    ]}
+                    onPress={handleChangeFaction}
+                  >
+                    {selectedFaction ? (
+                      <View style={[gapStyles.gapSmall, flexStyles.flexRow]}>
+                        <Image
+                          source={{
+                            uri: getFactionImageUrl(selectedFaction.symbol),
+                          }}
+                          style={styles.factionImage}
+                        />
+                        <Text variant="titleSmall">{selectedFaction.name}</Text>
+                      </View>
+                    ) : (
+                      <Text variant="titleSmall">Select Faction</Text>
+                    )}
+                  </Pressable>
+                  <Button
+                    // Min length 3 to match API validation
+                    disabled={guestAgentName.length < 3 || !selectedFaction}
+                    loading={isRegisteringAgent}
+                    onPress={handleCreateGuestAgent}
+                    mode="contained"
+                  >
+                    Create Agent
+                  </Button>
+                </View>
               </View>
             </View>
           </View>
@@ -274,6 +283,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  containerPadding: {
     paddingHorizontal: 16,
   },
   dividerContainer: {
