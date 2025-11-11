@@ -21,7 +21,6 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -37,14 +36,14 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 
+import { useMutation, useQuery } from '@tanstack/react-query';
+
+import type { ErrorType } from '../../client';
 import type { GetStatus200 } from '../getStatus200';
-
 import type { Register201 } from '../register201';
-
 import type { RegisterBody } from '../registerBody';
 
 import { clientInstance } from '../../client';
-import type { ErrorType } from '../../client';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -58,7 +57,7 @@ export const getStatus = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetStatus200>(
-    { url: `/`, method: 'GET', signal },
+    { method: 'GET', signal, url: `/` },
     options,
   );
 };
@@ -84,17 +83,17 @@ export const getGetStatusQueryOptions = <
     signal,
   }) => getStatus(requestOptions, signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+  return { queryFn, queryKey, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getStatus>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetStatusQueryError = ErrorType<unknown>;
 export type GetStatusQueryResult = NonNullable<
   Awaited<ReturnType<typeof getStatus>>
 >;
-export type GetStatusQueryError = ErrorType<unknown>;
 
 export function useGetStatus<
   TData = Awaited<ReturnType<typeof getStatus>>,
@@ -204,11 +203,11 @@ export const register = (
 ) => {
   return clientInstance<Register201>(
     {
-      url: `/register`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: registerBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/register`,
     },
     options,
   );
@@ -252,11 +251,11 @@ export const getRegisterMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type RegisterMutationBody = RegisterBody;
+export type RegisterMutationError = ErrorType<unknown>;
 export type RegisterMutationResult = NonNullable<
   Awaited<ReturnType<typeof register>>
 >;
-export type RegisterMutationBody = RegisterBody;
-export type RegisterMutationError = ErrorType<unknown>;
 
 /**
  * @summary Register New Agent

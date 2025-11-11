@@ -21,7 +21,6 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -37,22 +36,18 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 
+import { useMutation, useQuery } from '@tanstack/react-query';
+
+import type { ErrorType } from '../../client';
 import type { AcceptContract200 } from '../acceptContract200';
-
 import type { DeliverContract200 } from '../deliverContract200';
-
 import type { DeliverContractBody } from '../deliverContractBody';
-
 import type { FulfillContract200 } from '../fulfillContract200';
-
 import type { GetContract200 } from '../getContract200';
-
 import type { GetContracts200 } from '../getContracts200';
-
 import type { GetContractsParams } from '../getContractsParams';
 
 import { clientInstance } from '../../client';
-import type { ErrorType } from '../../client';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -66,7 +61,7 @@ export const getContracts = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetContracts200>(
-    { url: `/my/contracts`, method: 'GET', params, signal },
+    { method: 'GET', params, signal, url: `/my/contracts` },
     options,
   );
 };
@@ -95,23 +90,23 @@ export const getGetContractsQueryOptions = <
     signal,
   }) => getContracts(params, requestOptions, signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+  return { queryFn, queryKey, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getContracts>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetContractsQueryError = ErrorType<unknown>;
 export type GetContractsQueryResult = NonNullable<
   Awaited<ReturnType<typeof getContracts>>
 >;
-export type GetContractsQueryError = ErrorType<unknown>;
 
 export function useGetContracts<
   TData = Awaited<ReturnType<typeof getContracts>>,
   TError = ErrorType<unknown>,
 >(
-  params: undefined | GetContractsParams,
+  params: GetContractsParams | undefined,
   options: {
     query: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getContracts>>, TError, TData>
@@ -210,9 +205,9 @@ export const getContract = (
 ) => {
   return clientInstance<GetContract200>(
     {
-      url: `/my/contracts/${encodeURIComponent(String(contractId))}`,
       method: 'GET',
       signal,
+      url: `/my/contracts/${encodeURIComponent(String(contractId))}`,
     },
     options,
   );
@@ -243,9 +238,9 @@ export const getGetContractQueryOptions = <
   }) => getContract(contractId, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!contractId,
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof getContract>>,
@@ -254,10 +249,10 @@ export const getGetContractQueryOptions = <
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetContractQueryError = ErrorType<unknown>;
 export type GetContractQueryResult = NonNullable<
   Awaited<ReturnType<typeof getContract>>
 >;
-export type GetContractQueryError = ErrorType<unknown>;
 
 export function useGetContract<
   TData = Awaited<ReturnType<typeof getContract>>,
@@ -364,9 +359,9 @@ export const acceptContract = (
 ) => {
   return clientInstance<AcceptContract200>(
     {
-      url: `/my/contracts/${encodeURIComponent(String(contractId))}/accept`,
       method: 'POST',
       signal,
+      url: `/my/contracts/${encodeURIComponent(String(contractId))}/accept`,
     },
     options,
   );
@@ -410,11 +405,11 @@ export const getAcceptContractMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type AcceptContractMutationError = ErrorType<unknown>;
+
 export type AcceptContractMutationResult = NonNullable<
   Awaited<ReturnType<typeof acceptContract>>
 >;
-
-export type AcceptContractMutationError = ErrorType<unknown>;
 
 /**
  * @summary Accept Contract
@@ -459,11 +454,11 @@ export const deliverContract = (
 ) => {
   return clientInstance<DeliverContract200>(
     {
-      url: `/my/contracts/${encodeURIComponent(String(contractId))}/deliver`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: deliverContractBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/contracts/${encodeURIComponent(String(contractId))}/deliver`,
     },
     options,
   );
@@ -507,11 +502,11 @@ export const getDeliverContractMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type DeliverContractMutationBody = DeliverContractBody;
+export type DeliverContractMutationError = ErrorType<unknown>;
 export type DeliverContractMutationResult = NonNullable<
   Awaited<ReturnType<typeof deliverContract>>
 >;
-export type DeliverContractMutationBody = DeliverContractBody;
-export type DeliverContractMutationError = ErrorType<unknown>;
 
 /**
  * @summary Deliver Cargo to Contract
@@ -551,9 +546,9 @@ export const fulfillContract = (
 ) => {
   return clientInstance<FulfillContract200>(
     {
-      url: `/my/contracts/${encodeURIComponent(String(contractId))}/fulfill`,
       method: 'POST',
       signal,
+      url: `/my/contracts/${encodeURIComponent(String(contractId))}/fulfill`,
     },
     options,
   );
@@ -597,11 +592,11 @@ export const getFulfillContractMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type FulfillContractMutationError = ErrorType<unknown>;
+
 export type FulfillContractMutationResult = NonNullable<
   Awaited<ReturnType<typeof fulfillContract>>
 >;
-
-export type FulfillContractMutationError = ErrorType<unknown>;
 
 /**
  * @summary Fulfill Contract

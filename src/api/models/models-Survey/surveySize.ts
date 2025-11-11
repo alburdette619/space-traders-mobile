@@ -29,7 +29,7 @@ export type SurveySize = (typeof SurveySize)[keyof typeof SurveySize];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SurveySize = {
-  SMALL: 'SMALL',
-  MODERATE: 'MODERATE',
   LARGE: 'LARGE',
+  MODERATE: 'MODERATE',
+  SMALL: 'SMALL',
 } as const;

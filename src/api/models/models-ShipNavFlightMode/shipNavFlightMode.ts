@@ -30,8 +30,8 @@ export type ShipNavFlightMode =
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipNavFlightMode = {
+  BURN: 'BURN',
+  CRUISE: 'CRUISE',
   DRIFT: 'DRIFT',
   STEALTH: 'STEALTH',
-  CRUISE: 'CRUISE',
-  BURN: 'BURN',
 } as const;

@@ -29,18 +29,18 @@ export type ShipRole = (typeof ShipRole)[keyof typeof ShipRole];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipRole = {
+  CARRIER: 'CARRIER',
+  COMMAND: 'COMMAND',
+  EXCAVATOR: 'EXCAVATOR',
+  EXPLORER: 'EXPLORER',
   FABRICATOR: 'FABRICATOR',
   HARVESTER: 'HARVESTER',
   HAULER: 'HAULER',
   INTERCEPTOR: 'INTERCEPTOR',
-  EXCAVATOR: 'EXCAVATOR',
-  TRANSPORT: 'TRANSPORT',
-  REPAIR: 'REPAIR',
-  SURVEYOR: 'SURVEYOR',
-  COMMAND: 'COMMAND',
-  CARRIER: 'CARRIER',
   PATROL: 'PATROL',
-  SATELLITE: 'SATELLITE',
-  EXPLORER: 'EXPLORER',
   REFINERY: 'REFINERY',
+  REPAIR: 'REPAIR',
+  SATELLITE: 'SATELLITE',
+  SURVEYOR: 'SURVEYOR',
+  TRANSPORT: 'TRANSPORT',
 } as const;

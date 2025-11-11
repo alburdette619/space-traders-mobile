@@ -21,10 +21,10 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { faker } from '@faker-js/faker';
-
-import { HttpResponse, http } from 'msw';
 import type { RequestHandlerOptions } from 'msw';
+
+import { faker } from '@faker-js/faker';
+import { http, HttpResponse } from 'msw';
 
 import type { GetSupplyChain200 } from '../getSupplyChain200';
 
@@ -34,9 +34,9 @@ export const getGetSupplyChainResponseMock = (
   data: {
     exportToImportMap: {
       [faker.string.alphanumeric(5)]: Array.from(
-        { length: faker.number.int({ min: 1, max: 10 }) },
+        { length: faker.number.int({ max: 10, min: 1 }) },
         (_, i) => i + 1,
-      ).map(() => faker.string.alpha({ length: { min: 10, max: 20 } })),
+      ).map(() => faker.string.alpha({ length: { max: 20, min: 10 } })),
     },
   },
   ...overrideResponse,
@@ -48,9 +48,9 @@ export const getGetSupplyChainResponseMock200 = (
   data: {
     exportToImportMap: {
       [faker.string.alphanumeric(5)]: Array.from(
-        { length: faker.number.int({ min: 1, max: 10 }) },
+        { length: faker.number.int({ max: 10, min: 1 }) },
         (_, i) => i + 1,
-      ).map(() => faker.string.alpha({ length: { min: 10, max: 20 } })),
+      ).map(() => faker.string.alpha({ length: { max: 20, min: 10 } })),
     },
   },
   ...overrideResponse,
@@ -58,10 +58,10 @@ export const getGetSupplyChainResponseMock200 = (
 
 export const getGetSupplyChainMockHandler = (
   overrideResponse?:
-    | GetSupplyChain200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetSupplyChain200> | GetSupplyChain200),
+      ) => GetSupplyChain200 | Promise<GetSupplyChain200>)
+    | GetSupplyChain200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -75,7 +75,7 @@ export const getGetSupplyChainMockHandler = (
               : overrideResponse
             : getGetSupplyChainResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -84,10 +84,10 @@ export const getGetSupplyChainMockHandler = (
 
 export const getGetSupplyChainMockHandler200 = (
   overrideResponse?:
-    | GetSupplyChain200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetSupplyChain200> | GetSupplyChain200),
+      ) => GetSupplyChain200 | Promise<GetSupplyChain200>)
+    | GetSupplyChain200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -101,7 +101,7 @@ export const getGetSupplyChainMockHandler200 = (
               : overrideResponse
             : getGetSupplyChainResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,

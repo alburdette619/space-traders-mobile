@@ -29,9 +29,9 @@ export type SupplyLevel = (typeof SupplyLevel)[keyof typeof SupplyLevel];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SupplyLevel = {
-  SCARCE: 'SCARCE',
+  ABUNDANT: 'ABUNDANT',
+  HIGH: 'HIGH',
   LIMITED: 'LIMITED',
   MODERATE: 'MODERATE',
-  HIGH: 'HIGH',
-  ABUNDANT: 'ABUNDANT',
+  SCARCE: 'SCARCE',
 } as const;

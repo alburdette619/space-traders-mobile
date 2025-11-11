@@ -21,8 +21,8 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { ShipCargo } from '../models-ShipCargo/shipCargo';
 import type { Cooldown } from '../models-Cooldown/cooldown';
+import type { ShipCargo } from '../models-ShipCargo/shipCargo';
 import type { ShipCrew } from '../models-ShipCrew/shipCrew';
 import type { ShipEngine } from '../models-ShipEngine/shipEngine';
 import type { ShipFrame } from '../models-ShipFrame/shipFrame';

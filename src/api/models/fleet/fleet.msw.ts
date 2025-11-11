@@ -21,111 +21,77 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { faker } from '@faker-js/faker';
 
-import { HttpResponse, http } from 'msw';
 import type { RequestHandlerOptions } from 'msw';
 
+import { faker } from '@faker-js/faker';
+import { http, HttpResponse } from 'msw';
+
 import type { CreateChart201 } from '../createChart201';
-
 import type { CreateShipShipScan201 } from '../createShipShipScan201';
-
 import type { CreateShipSystemScan201 } from '../createShipSystemScan201';
-
 import type { CreateShipWaypointScan201 } from '../createShipWaypointScan201';
-
 import type { CreateSurvey201 } from '../createSurvey201';
-
 import type { DockShip200 } from '../dockShip200';
-
 import type { ExtractResources201 } from '../extractResources201';
-
 import type { ExtractResourcesWithSurvey201 } from '../extractResourcesWithSurvey201';
-
 import type { GetMounts200 } from '../getMounts200';
-
 import type { GetMyShip200 } from '../getMyShip200';
-
 import type { GetMyShipCargo200 } from '../getMyShipCargo200';
-
 import type { GetMyShips200 } from '../getMyShips200';
-
 import type { GetRepairShip200 } from '../getRepairShip200';
-
 import type { GetScrapShip200 } from '../getScrapShip200';
-
 import type { GetShipCooldown200 } from '../getShipCooldown200';
-
 import type { GetShipModules200 } from '../getShipModules200';
-
 import type { GetShipNav200 } from '../getShipNav200';
-
 import type { InstallMount201 } from '../installMount201';
-
 import type { InstallShipModule201 } from '../installShipModule201';
-
 import type { Jettison200 } from '../jettison200';
-
 import type { JumpShip200 } from '../jumpShip200';
-
 import type { NavigateShip200 } from '../navigateShip200';
-
 import type { NegotiateContract201 } from '../negotiateContract201';
-
 import type { OrbitShip200 } from '../orbitShip200';
-
 import type { PatchShipNav200 } from '../patchShipNav200';
-
 import type { PurchaseCargo201 } from '../purchaseCargo201';
-
 import type { PurchaseShip201 } from '../purchaseShip201';
-
 import type { RefuelShip200 } from '../refuelShip200';
-
 import type { RemoveMount201 } from '../removeMount201';
-
 import type { RemoveShipModule201 } from '../removeShipModule201';
-
 import type { RepairShip200 } from '../repairShip200';
-
 import type { ScrapShip200 } from '../scrapShip200';
-
 import type { SellCargo201 } from '../sellCargo201';
-
 import type { ShipRefine201 } from '../shipRefine201';
-
 import type { SiphonResources201 } from '../siphonResources201';
-
 import type { TransferCargo200 } from '../transferCargo200';
-
 import type { WarpShip200 } from '../warpShip200';
-import { Ship } from '../models-Ship/ship';
-import { Meta } from '../models-Meta/meta';
+
 import { Agent } from '../models-Agent/agent';
-import { ShipyardTransaction } from '../models-ShipyardTransaction/shipyardTransaction';
-import { ShipCargo } from '../models-ShipCargo/shipCargo';
-import { ShipNav } from '../models-ShipNav/shipNav';
+import { Contract } from '../models-Contract/contract';
 import { Cooldown } from '../models-Cooldown/cooldown';
-import { Waypoint } from '../models-Waypoint/waypoint';
-import { Survey } from '../models-Survey/survey';
-import { ShipConditionEvent } from '../models-ShipConditionEvent/shipConditionEvent';
 import { Extraction } from '../models-Extraction/extraction';
-import { WaypointModifier } from '../models-WaypointModifier/waypointModifier';
-import { Siphon } from '../models-Siphon/siphon';
 import { MarketTransaction } from '../models-MarketTransaction/marketTransaction';
-import { ShipFuel } from '../models-ShipFuel/shipFuel';
+import { Meta } from '../models-Meta/meta';
+import { ScannedShip } from '../models-ScannedShip/scannedShip';
 import { ScannedSystem } from '../models-ScannedSystem/scannedSystem';
 import { ScannedWaypoint } from '../models-ScannedWaypoint/scannedWaypoint';
-import { ScannedShip } from '../models-ScannedShip/scannedShip';
-import { Contract } from '../models-Contract/contract';
-import { ShipMount } from '../models-ShipMount/shipMount';
+import { Ship } from '../models-Ship/ship';
+import { ShipCargo } from '../models-ShipCargo/shipCargo';
+import { ShipConditionEvent } from '../models-ShipConditionEvent/shipConditionEvent';
+import { ShipFuel } from '../models-ShipFuel/shipFuel';
 import { ShipModule } from '../models-ShipModule/shipModule';
+import { ShipMount } from '../models-ShipMount/shipMount';
+import { ShipNav } from '../models-ShipNav/shipNav';
+import { ShipyardTransaction } from '../models-ShipyardTransaction/shipyardTransaction';
+import { Siphon } from '../models-Siphon/siphon';
+import { Survey } from '../models-Survey/survey';
+import { Waypoint } from '../models-Waypoint/waypoint';
+import { WaypointModifier } from '../models-WaypointModifier/waypointModifier';
 
 export const getGetMyShipsResponseMock = (
   overrideResponse: Partial<GetMyShips200> = {},
 ): GetMyShips200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as Ship),
   meta: {} as Meta,
@@ -136,7 +102,7 @@ export const getGetMyShipsResponseMock200 = (
   overrideResponse: Partial<GetMyShips200> = {},
 ): GetMyShips200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as Ship),
   meta: {} as Meta,
@@ -195,19 +161,19 @@ export const getShipRefineResponseMock = (
   data: {
     cargo: {} as ShipCargo,
     consumed: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({
-      tradeSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      units: faker.number.int({ min: undefined, max: undefined }),
+      tradeSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      units: faker.number.int({ max: undefined, min: undefined }),
     })),
     cooldown: {} as Cooldown,
     produced: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({
-      tradeSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      units: faker.number.int({ min: undefined, max: undefined }),
+      tradeSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      units: faker.number.int({ max: undefined, min: undefined }),
     })),
   },
   ...overrideResponse,
@@ -219,19 +185,19 @@ export const getShipRefineResponseMock201 = (
   data: {
     cargo: {} as ShipCargo,
     consumed: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({
-      tradeSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      units: faker.number.int({ min: undefined, max: undefined }),
+      tradeSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      units: faker.number.int({ max: undefined, min: undefined }),
     })),
     cooldown: {} as Cooldown,
     produced: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({
-      tradeSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      units: faker.number.int({ min: undefined, max: undefined }),
+      tradeSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      units: faker.number.int({ max: undefined, min: undefined }),
     })),
   },
   ...overrideResponse,
@@ -273,7 +239,7 @@ export const getCreateSurveyResponseMock = (
   data: {
     cooldown: {} as Cooldown,
     surveys: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as Survey),
   },
@@ -286,7 +252,7 @@ export const getCreateSurveyResponseMock201 = (
   data: {
     cooldown: {} as Cooldown,
     surveys: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as Survey),
   },
@@ -300,13 +266,13 @@ export const getExtractResourcesResponseMock = (
     cargo: {} as ShipCargo,
     cooldown: {} as Cooldown,
     events: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipConditionEvent),
     extraction: {} as Extraction,
     modifiers: faker.helpers.arrayElement([
       Array.from(
-        { length: faker.number.int({ min: 1, max: 10 }) },
+        { length: faker.number.int({ max: 10, min: 1 }) },
         (_, i) => i + 1,
       ).map(() => ({}) as WaypointModifier),
       undefined,
@@ -322,13 +288,13 @@ export const getExtractResourcesResponseMock201 = (
     cargo: {} as ShipCargo,
     cooldown: {} as Cooldown,
     events: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipConditionEvent),
     extraction: {} as Extraction,
     modifiers: faker.helpers.arrayElement([
       Array.from(
-        { length: faker.number.int({ min: 1, max: 10 }) },
+        { length: faker.number.int({ max: 10, min: 1 }) },
         (_, i) => i + 1,
       ).map(() => ({}) as WaypointModifier),
       undefined,
@@ -344,7 +310,7 @@ export const getSiphonResourcesResponseMock = (
     cargo: {} as ShipCargo,
     cooldown: {} as Cooldown,
     events: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipConditionEvent),
     siphon: {} as Siphon,
@@ -359,7 +325,7 @@ export const getSiphonResourcesResponseMock201 = (
     cargo: {} as ShipCargo,
     cooldown: {} as Cooldown,
     events: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipConditionEvent),
     siphon: {} as Siphon,
@@ -374,7 +340,7 @@ export const getExtractResourcesWithSurveyResponseMock = (
     cargo: {} as ShipCargo,
     cooldown: {} as Cooldown,
     events: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipConditionEvent),
     extraction: {} as Extraction,
@@ -389,7 +355,7 @@ export const getExtractResourcesWithSurveyResponseMock201 = (
     cargo: {} as ShipCargo,
     cooldown: {} as Cooldown,
     events: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipConditionEvent),
     extraction: {} as Extraction,
@@ -434,7 +400,7 @@ export const getNavigateShipResponseMock = (
 ): NavigateShip200 => ({
   data: {
     events: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipConditionEvent),
     fuel: {} as ShipFuel,
@@ -448,7 +414,7 @@ export const getNavigateShipResponseMock200 = (
 ): NavigateShip200 => ({
   data: {
     events: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipConditionEvent),
     fuel: {} as ShipFuel,
@@ -462,7 +428,7 @@ export const getPatchShipNavResponseMock = (
 ): PatchShipNav200 => ({
   data: {
     events: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipConditionEvent),
     fuel: {} as ShipFuel,
@@ -476,7 +442,7 @@ export const getPatchShipNavResponseMock200 = (
 ): PatchShipNav200 => ({
   data: {
     events: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipConditionEvent),
     fuel: {} as ShipFuel,
@@ -535,7 +501,7 @@ export const getCreateShipSystemScanResponseMock = (
   data: {
     cooldown: {} as Cooldown,
     systems: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ScannedSystem),
   },
@@ -548,7 +514,7 @@ export const getCreateShipSystemScanResponseMock201 = (
   data: {
     cooldown: {} as Cooldown,
     systems: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ScannedSystem),
   },
@@ -561,7 +527,7 @@ export const getCreateShipWaypointScanResponseMock = (
   data: {
     cooldown: {} as Cooldown,
     waypoints: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ScannedWaypoint),
   },
@@ -574,7 +540,7 @@ export const getCreateShipWaypointScanResponseMock201 = (
   data: {
     cooldown: {} as Cooldown,
     waypoints: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ScannedWaypoint),
   },
@@ -587,7 +553,7 @@ export const getCreateShipShipScanResponseMock = (
   data: {
     cooldown: {} as Cooldown,
     ships: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ScannedShip),
   },
@@ -600,7 +566,7 @@ export const getCreateShipShipScanResponseMock201 = (
   data: {
     cooldown: {} as Cooldown,
     ships: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ScannedShip),
   },
@@ -685,7 +651,7 @@ export const getGetMountsResponseMock = (
   overrideResponse: Partial<GetMounts200> = {},
 ): GetMounts200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as ShipMount),
   ...overrideResponse,
@@ -695,7 +661,7 @@ export const getGetMountsResponseMock200 = (
   overrideResponse: Partial<GetMounts200> = {},
 ): GetMounts200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as ShipMount),
   ...overrideResponse,
@@ -708,7 +674,7 @@ export const getInstallMountResponseMock = (
     agent: {} as Agent,
     cargo: {} as ShipCargo,
     mounts: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipMount),
     transaction: {} as MarketTransaction,
@@ -723,7 +689,7 @@ export const getInstallMountResponseMock201 = (
     agent: {} as Agent,
     cargo: {} as ShipCargo,
     mounts: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipMount),
     transaction: {} as MarketTransaction,
@@ -738,7 +704,7 @@ export const getRemoveMountResponseMock = (
     agent: {} as Agent,
     cargo: {} as ShipCargo,
     mounts: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipMount),
     transaction: {} as MarketTransaction,
@@ -753,7 +719,7 @@ export const getRemoveMountResponseMock201 = (
     agent: {} as Agent,
     cargo: {} as ShipCargo,
     mounts: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipMount),
     transaction: {} as MarketTransaction,
@@ -827,7 +793,7 @@ export const getGetShipModulesResponseMock = (
   overrideResponse: Partial<GetShipModules200> = {},
 ): GetShipModules200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as ShipModule),
   ...overrideResponse,
@@ -837,7 +803,7 @@ export const getGetShipModulesResponseMock200 = (
   overrideResponse: Partial<GetShipModules200> = {},
 ): GetShipModules200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as ShipModule),
   ...overrideResponse,
@@ -850,15 +816,15 @@ export const getInstallShipModuleResponseMock = (
     agent: {} as Agent,
     cargo: {} as ShipCargo,
     modules: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipModule),
     transaction: {
-      shipSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      timestamp: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      totalPrice: faker.number.int({ min: undefined, max: undefined }),
-      tradeSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      waypointSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      shipSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      timestamp: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      totalPrice: faker.number.int({ max: undefined, min: undefined }),
+      tradeSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      waypointSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
     },
   },
   ...overrideResponse,
@@ -871,15 +837,15 @@ export const getInstallShipModuleResponseMock201 = (
     agent: {} as Agent,
     cargo: {} as ShipCargo,
     modules: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipModule),
     transaction: {
-      shipSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      timestamp: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      totalPrice: faker.number.int({ min: undefined, max: undefined }),
-      tradeSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      waypointSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      shipSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      timestamp: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      totalPrice: faker.number.int({ max: undefined, min: undefined }),
+      tradeSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      waypointSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
     },
   },
   ...overrideResponse,
@@ -892,15 +858,15 @@ export const getRemoveShipModuleResponseMock = (
     agent: {} as Agent,
     cargo: {} as ShipCargo,
     modules: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipModule),
     transaction: {
-      shipSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      timestamp: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      totalPrice: faker.number.int({ min: undefined, max: undefined }),
-      tradeSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      waypointSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      shipSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      timestamp: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      totalPrice: faker.number.int({ max: undefined, min: undefined }),
+      tradeSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      waypointSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
     },
   },
   ...overrideResponse,
@@ -913,15 +879,15 @@ export const getRemoveShipModuleResponseMock201 = (
     agent: {} as Agent,
     cargo: {} as ShipCargo,
     modules: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({}) as ShipModule),
     transaction: {
-      shipSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      timestamp: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      totalPrice: faker.number.int({ min: undefined, max: undefined }),
-      tradeSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      waypointSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      shipSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      timestamp: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      totalPrice: faker.number.int({ max: undefined, min: undefined }),
+      tradeSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      waypointSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
     },
   },
   ...overrideResponse,
@@ -929,10 +895,10 @@ export const getRemoveShipModuleResponseMock201 = (
 
 export const getGetMyShipsMockHandler = (
   overrideResponse?:
-    | GetMyShips200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetMyShips200> | GetMyShips200),
+      ) => GetMyShips200 | Promise<GetMyShips200>)
+    | GetMyShips200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -946,7 +912,7 @@ export const getGetMyShipsMockHandler = (
               : overrideResponse
             : getGetMyShipsResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -955,10 +921,10 @@ export const getGetMyShipsMockHandler = (
 
 export const getGetMyShipsMockHandler200 = (
   overrideResponse?:
-    | GetMyShips200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetMyShips200> | GetMyShips200),
+      ) => GetMyShips200 | Promise<GetMyShips200>)
+    | GetMyShips200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -972,7 +938,7 @@ export const getGetMyShipsMockHandler200 = (
               : overrideResponse
             : getGetMyShipsResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -981,10 +947,10 @@ export const getGetMyShipsMockHandler200 = (
 
 export const getPurchaseShipMockHandler = (
   overrideResponse?:
-    | PurchaseShip201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<PurchaseShip201> | PurchaseShip201),
+      ) => Promise<PurchaseShip201> | PurchaseShip201)
+    | PurchaseShip201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -998,7 +964,7 @@ export const getPurchaseShipMockHandler = (
               : overrideResponse
             : getPurchaseShipResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1007,10 +973,10 @@ export const getPurchaseShipMockHandler = (
 
 export const getPurchaseShipMockHandler201 = (
   overrideResponse?:
-    | PurchaseShip201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<PurchaseShip201> | PurchaseShip201),
+      ) => Promise<PurchaseShip201> | PurchaseShip201)
+    | PurchaseShip201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1024,7 +990,7 @@ export const getPurchaseShipMockHandler201 = (
               : overrideResponse
             : getPurchaseShipResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1033,10 +999,10 @@ export const getPurchaseShipMockHandler201 = (
 
 export const getGetMyShipMockHandler = (
   overrideResponse?:
-    | GetMyShip200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetMyShip200> | GetMyShip200),
+      ) => GetMyShip200 | Promise<GetMyShip200>)
+    | GetMyShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -1050,7 +1016,7 @@ export const getGetMyShipMockHandler = (
               : overrideResponse
             : getGetMyShipResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1059,10 +1025,10 @@ export const getGetMyShipMockHandler = (
 
 export const getGetMyShipMockHandler200 = (
   overrideResponse?:
-    | GetMyShip200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetMyShip200> | GetMyShip200),
+      ) => GetMyShip200 | Promise<GetMyShip200>)
+    | GetMyShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -1076,7 +1042,7 @@ export const getGetMyShipMockHandler200 = (
               : overrideResponse
             : getGetMyShipResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1085,10 +1051,10 @@ export const getGetMyShipMockHandler200 = (
 
 export const getGetMyShipCargoMockHandler = (
   overrideResponse?:
-    | GetMyShipCargo200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetMyShipCargo200> | GetMyShipCargo200),
+      ) => GetMyShipCargo200 | Promise<GetMyShipCargo200>)
+    | GetMyShipCargo200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -1102,7 +1068,7 @@ export const getGetMyShipCargoMockHandler = (
               : overrideResponse
             : getGetMyShipCargoResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1111,10 +1077,10 @@ export const getGetMyShipCargoMockHandler = (
 
 export const getGetMyShipCargoMockHandler200 = (
   overrideResponse?:
-    | GetMyShipCargo200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetMyShipCargo200> | GetMyShipCargo200),
+      ) => GetMyShipCargo200 | Promise<GetMyShipCargo200>)
+    | GetMyShipCargo200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -1128,7 +1094,7 @@ export const getGetMyShipCargoMockHandler200 = (
               : overrideResponse
             : getGetMyShipCargoResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1137,10 +1103,10 @@ export const getGetMyShipCargoMockHandler200 = (
 
 export const getOrbitShipMockHandler = (
   overrideResponse?:
-    | OrbitShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<OrbitShip200> | OrbitShip200),
+      ) => OrbitShip200 | Promise<OrbitShip200>)
+    | OrbitShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1154,7 +1120,7 @@ export const getOrbitShipMockHandler = (
               : overrideResponse
             : getOrbitShipResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1163,10 +1129,10 @@ export const getOrbitShipMockHandler = (
 
 export const getOrbitShipMockHandler200 = (
   overrideResponse?:
-    | OrbitShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<OrbitShip200> | OrbitShip200),
+      ) => OrbitShip200 | Promise<OrbitShip200>)
+    | OrbitShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1180,7 +1146,7 @@ export const getOrbitShipMockHandler200 = (
               : overrideResponse
             : getOrbitShipResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1189,10 +1155,10 @@ export const getOrbitShipMockHandler200 = (
 
 export const getShipRefineMockHandler = (
   overrideResponse?:
-    | ShipRefine201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<ShipRefine201> | ShipRefine201),
+      ) => Promise<ShipRefine201> | ShipRefine201)
+    | ShipRefine201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1206,7 +1172,7 @@ export const getShipRefineMockHandler = (
               : overrideResponse
             : getShipRefineResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1215,10 +1181,10 @@ export const getShipRefineMockHandler = (
 
 export const getShipRefineMockHandler201 = (
   overrideResponse?:
-    | ShipRefine201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<ShipRefine201> | ShipRefine201),
+      ) => Promise<ShipRefine201> | ShipRefine201)
+    | ShipRefine201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1232,7 +1198,7 @@ export const getShipRefineMockHandler201 = (
               : overrideResponse
             : getShipRefineResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1241,10 +1207,10 @@ export const getShipRefineMockHandler201 = (
 
 export const getCreateChartMockHandler = (
   overrideResponse?:
-    | CreateChart201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<CreateChart201> | CreateChart201),
+      ) => CreateChart201 | Promise<CreateChart201>)
+    | CreateChart201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1258,7 +1224,7 @@ export const getCreateChartMockHandler = (
               : overrideResponse
             : getCreateChartResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1267,10 +1233,10 @@ export const getCreateChartMockHandler = (
 
 export const getCreateChartMockHandler201 = (
   overrideResponse?:
-    | CreateChart201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<CreateChart201> | CreateChart201),
+      ) => CreateChart201 | Promise<CreateChart201>)
+    | CreateChart201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1284,7 +1250,7 @@ export const getCreateChartMockHandler201 = (
               : overrideResponse
             : getCreateChartResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1293,11 +1259,11 @@ export const getCreateChartMockHandler201 = (
 
 export const getGetShipCooldownMockHandler = (
   overrideResponse?:
-    | GetShipCooldown200
-    | void
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetShipCooldown200 | void> | GetShipCooldown200 | void),
+      ) => GetShipCooldown200 | Promise<GetShipCooldown200 | void> | void)
+    | GetShipCooldown200
+    | void,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -1311,7 +1277,7 @@ export const getGetShipCooldownMockHandler = (
               : overrideResponse
             : getGetShipCooldownResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1320,10 +1286,10 @@ export const getGetShipCooldownMockHandler = (
 
 export const getGetShipCooldownMockHandler200 = (
   overrideResponse?:
-    | GetShipCooldown200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetShipCooldown200> | GetShipCooldown200),
+      ) => GetShipCooldown200 | Promise<GetShipCooldown200>)
+    | GetShipCooldown200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -1337,7 +1303,7 @@ export const getGetShipCooldownMockHandler200 = (
               : overrideResponse
             : getGetShipCooldownResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1346,10 +1312,10 @@ export const getGetShipCooldownMockHandler200 = (
 
 export const getGetShipCooldownMockHandler204 = (
   overrideResponse?:
-    | void
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<void> | void),
+      ) => Promise<void> | void)
+    | void,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -1366,10 +1332,10 @@ export const getGetShipCooldownMockHandler204 = (
 
 export const getDockShipMockHandler = (
   overrideResponse?:
-    | DockShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<DockShip200> | DockShip200),
+      ) => DockShip200 | Promise<DockShip200>)
+    | DockShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1383,7 +1349,7 @@ export const getDockShipMockHandler = (
               : overrideResponse
             : getDockShipResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1392,10 +1358,10 @@ export const getDockShipMockHandler = (
 
 export const getDockShipMockHandler200 = (
   overrideResponse?:
-    | DockShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<DockShip200> | DockShip200),
+      ) => DockShip200 | Promise<DockShip200>)
+    | DockShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1409,7 +1375,7 @@ export const getDockShipMockHandler200 = (
               : overrideResponse
             : getDockShipResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1418,10 +1384,10 @@ export const getDockShipMockHandler200 = (
 
 export const getCreateSurveyMockHandler = (
   overrideResponse?:
-    | CreateSurvey201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<CreateSurvey201> | CreateSurvey201),
+      ) => CreateSurvey201 | Promise<CreateSurvey201>)
+    | CreateSurvey201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1435,7 +1401,7 @@ export const getCreateSurveyMockHandler = (
               : overrideResponse
             : getCreateSurveyResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1444,10 +1410,10 @@ export const getCreateSurveyMockHandler = (
 
 export const getCreateSurveyMockHandler201 = (
   overrideResponse?:
-    | CreateSurvey201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<CreateSurvey201> | CreateSurvey201),
+      ) => CreateSurvey201 | Promise<CreateSurvey201>)
+    | CreateSurvey201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1461,7 +1427,7 @@ export const getCreateSurveyMockHandler201 = (
               : overrideResponse
             : getCreateSurveyResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1470,10 +1436,10 @@ export const getCreateSurveyMockHandler201 = (
 
 export const getExtractResourcesMockHandler = (
   overrideResponse?:
-    | ExtractResources201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<ExtractResources201> | ExtractResources201),
+      ) => ExtractResources201 | Promise<ExtractResources201>)
+    | ExtractResources201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1487,7 +1453,7 @@ export const getExtractResourcesMockHandler = (
               : overrideResponse
             : getExtractResourcesResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1496,10 +1462,10 @@ export const getExtractResourcesMockHandler = (
 
 export const getExtractResourcesMockHandler201 = (
   overrideResponse?:
-    | ExtractResources201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<ExtractResources201> | ExtractResources201),
+      ) => ExtractResources201 | Promise<ExtractResources201>)
+    | ExtractResources201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1513,7 +1479,7 @@ export const getExtractResourcesMockHandler201 = (
               : overrideResponse
             : getExtractResourcesResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1522,10 +1488,10 @@ export const getExtractResourcesMockHandler201 = (
 
 export const getSiphonResourcesMockHandler = (
   overrideResponse?:
-    | SiphonResources201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<SiphonResources201> | SiphonResources201),
+      ) => Promise<SiphonResources201> | SiphonResources201)
+    | SiphonResources201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1539,7 +1505,7 @@ export const getSiphonResourcesMockHandler = (
               : overrideResponse
             : getSiphonResourcesResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1548,10 +1514,10 @@ export const getSiphonResourcesMockHandler = (
 
 export const getSiphonResourcesMockHandler201 = (
   overrideResponse?:
-    | SiphonResources201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<SiphonResources201> | SiphonResources201),
+      ) => Promise<SiphonResources201> | SiphonResources201)
+    | SiphonResources201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1565,7 +1531,7 @@ export const getSiphonResourcesMockHandler201 = (
               : overrideResponse
             : getSiphonResourcesResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1574,12 +1540,12 @@ export const getSiphonResourcesMockHandler201 = (
 
 export const getExtractResourcesWithSurveyMockHandler = (
   overrideResponse?:
-    | ExtractResourcesWithSurvey201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
       ) =>
-        | Promise<ExtractResourcesWithSurvey201>
-        | ExtractResourcesWithSurvey201),
+        | ExtractResourcesWithSurvey201
+        | Promise<ExtractResourcesWithSurvey201>)
+    | ExtractResourcesWithSurvey201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1593,7 +1559,7 @@ export const getExtractResourcesWithSurveyMockHandler = (
               : overrideResponse
             : getExtractResourcesWithSurveyResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1602,12 +1568,12 @@ export const getExtractResourcesWithSurveyMockHandler = (
 
 export const getExtractResourcesWithSurveyMockHandler201 = (
   overrideResponse?:
-    | ExtractResourcesWithSurvey201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
       ) =>
-        | Promise<ExtractResourcesWithSurvey201>
-        | ExtractResourcesWithSurvey201),
+        | ExtractResourcesWithSurvey201
+        | Promise<ExtractResourcesWithSurvey201>)
+    | ExtractResourcesWithSurvey201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1621,7 +1587,7 @@ export const getExtractResourcesWithSurveyMockHandler201 = (
               : overrideResponse
             : getExtractResourcesWithSurveyResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1630,10 +1596,10 @@ export const getExtractResourcesWithSurveyMockHandler201 = (
 
 export const getJettisonMockHandler = (
   overrideResponse?:
-    | Jettison200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<Jettison200> | Jettison200),
+      ) => Jettison200 | Promise<Jettison200>)
+    | Jettison200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1647,7 +1613,7 @@ export const getJettisonMockHandler = (
               : overrideResponse
             : getJettisonResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1656,10 +1622,10 @@ export const getJettisonMockHandler = (
 
 export const getJettisonMockHandler200 = (
   overrideResponse?:
-    | Jettison200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<Jettison200> | Jettison200),
+      ) => Jettison200 | Promise<Jettison200>)
+    | Jettison200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1673,7 +1639,7 @@ export const getJettisonMockHandler200 = (
               : overrideResponse
             : getJettisonResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1682,10 +1648,10 @@ export const getJettisonMockHandler200 = (
 
 export const getJumpShipMockHandler = (
   overrideResponse?:
-    | JumpShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<JumpShip200> | JumpShip200),
+      ) => JumpShip200 | Promise<JumpShip200>)
+    | JumpShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1699,7 +1665,7 @@ export const getJumpShipMockHandler = (
               : overrideResponse
             : getJumpShipResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1708,10 +1674,10 @@ export const getJumpShipMockHandler = (
 
 export const getJumpShipMockHandler200 = (
   overrideResponse?:
-    | JumpShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<JumpShip200> | JumpShip200),
+      ) => JumpShip200 | Promise<JumpShip200>)
+    | JumpShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1725,7 +1691,7 @@ export const getJumpShipMockHandler200 = (
               : overrideResponse
             : getJumpShipResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1734,10 +1700,10 @@ export const getJumpShipMockHandler200 = (
 
 export const getNavigateShipMockHandler = (
   overrideResponse?:
-    | NavigateShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<NavigateShip200> | NavigateShip200),
+      ) => NavigateShip200 | Promise<NavigateShip200>)
+    | NavigateShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1751,7 +1717,7 @@ export const getNavigateShipMockHandler = (
               : overrideResponse
             : getNavigateShipResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1760,10 +1726,10 @@ export const getNavigateShipMockHandler = (
 
 export const getNavigateShipMockHandler200 = (
   overrideResponse?:
-    | NavigateShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<NavigateShip200> | NavigateShip200),
+      ) => NavigateShip200 | Promise<NavigateShip200>)
+    | NavigateShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1777,7 +1743,7 @@ export const getNavigateShipMockHandler200 = (
               : overrideResponse
             : getNavigateShipResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1786,10 +1752,10 @@ export const getNavigateShipMockHandler200 = (
 
 export const getPatchShipNavMockHandler = (
   overrideResponse?:
-    | PatchShipNav200
     | ((
         info: Parameters<Parameters<typeof http.patch>[1]>[0],
-      ) => Promise<PatchShipNav200> | PatchShipNav200),
+      ) => PatchShipNav200 | Promise<PatchShipNav200>)
+    | PatchShipNav200,
   options?: RequestHandlerOptions,
 ) => {
   return http.patch(
@@ -1803,7 +1769,7 @@ export const getPatchShipNavMockHandler = (
               : overrideResponse
             : getPatchShipNavResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1812,10 +1778,10 @@ export const getPatchShipNavMockHandler = (
 
 export const getPatchShipNavMockHandler200 = (
   overrideResponse?:
-    | PatchShipNav200
     | ((
         info: Parameters<Parameters<typeof http.patch>[1]>[0],
-      ) => Promise<PatchShipNav200> | PatchShipNav200),
+      ) => PatchShipNav200 | Promise<PatchShipNav200>)
+    | PatchShipNav200,
   options?: RequestHandlerOptions,
 ) => {
   return http.patch(
@@ -1829,7 +1795,7 @@ export const getPatchShipNavMockHandler200 = (
               : overrideResponse
             : getPatchShipNavResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1838,10 +1804,10 @@ export const getPatchShipNavMockHandler200 = (
 
 export const getGetShipNavMockHandler = (
   overrideResponse?:
-    | GetShipNav200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetShipNav200> | GetShipNav200),
+      ) => GetShipNav200 | Promise<GetShipNav200>)
+    | GetShipNav200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -1855,7 +1821,7 @@ export const getGetShipNavMockHandler = (
               : overrideResponse
             : getGetShipNavResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1864,10 +1830,10 @@ export const getGetShipNavMockHandler = (
 
 export const getGetShipNavMockHandler200 = (
   overrideResponse?:
-    | GetShipNav200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetShipNav200> | GetShipNav200),
+      ) => GetShipNav200 | Promise<GetShipNav200>)
+    | GetShipNav200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -1881,7 +1847,7 @@ export const getGetShipNavMockHandler200 = (
               : overrideResponse
             : getGetShipNavResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1890,10 +1856,10 @@ export const getGetShipNavMockHandler200 = (
 
 export const getWarpShipMockHandler = (
   overrideResponse?:
-    | WarpShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<WarpShip200> | WarpShip200),
+      ) => Promise<WarpShip200> | WarpShip200)
+    | WarpShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1907,7 +1873,7 @@ export const getWarpShipMockHandler = (
               : overrideResponse
             : getWarpShipResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1916,10 +1882,10 @@ export const getWarpShipMockHandler = (
 
 export const getWarpShipMockHandler200 = (
   overrideResponse?:
-    | WarpShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<WarpShip200> | WarpShip200),
+      ) => Promise<WarpShip200> | WarpShip200)
+    | WarpShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1933,7 +1899,7 @@ export const getWarpShipMockHandler200 = (
               : overrideResponse
             : getWarpShipResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -1942,10 +1908,10 @@ export const getWarpShipMockHandler200 = (
 
 export const getSellCargoMockHandler = (
   overrideResponse?:
-    | SellCargo201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<SellCargo201> | SellCargo201),
+      ) => Promise<SellCargo201> | SellCargo201)
+    | SellCargo201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1959,7 +1925,7 @@ export const getSellCargoMockHandler = (
               : overrideResponse
             : getSellCargoResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1968,10 +1934,10 @@ export const getSellCargoMockHandler = (
 
 export const getSellCargoMockHandler201 = (
   overrideResponse?:
-    | SellCargo201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<SellCargo201> | SellCargo201),
+      ) => Promise<SellCargo201> | SellCargo201)
+    | SellCargo201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -1985,7 +1951,7 @@ export const getSellCargoMockHandler201 = (
               : overrideResponse
             : getSellCargoResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -1994,10 +1960,10 @@ export const getSellCargoMockHandler201 = (
 
 export const getCreateShipSystemScanMockHandler = (
   overrideResponse?:
-    | CreateShipSystemScan201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<CreateShipSystemScan201> | CreateShipSystemScan201),
+      ) => CreateShipSystemScan201 | Promise<CreateShipSystemScan201>)
+    | CreateShipSystemScan201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2011,7 +1977,7 @@ export const getCreateShipSystemScanMockHandler = (
               : overrideResponse
             : getCreateShipSystemScanResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2020,10 +1986,10 @@ export const getCreateShipSystemScanMockHandler = (
 
 export const getCreateShipSystemScanMockHandler201 = (
   overrideResponse?:
-    | CreateShipSystemScan201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<CreateShipSystemScan201> | CreateShipSystemScan201),
+      ) => CreateShipSystemScan201 | Promise<CreateShipSystemScan201>)
+    | CreateShipSystemScan201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2037,7 +2003,7 @@ export const getCreateShipSystemScanMockHandler201 = (
               : overrideResponse
             : getCreateShipSystemScanResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2046,10 +2012,10 @@ export const getCreateShipSystemScanMockHandler201 = (
 
 export const getCreateShipWaypointScanMockHandler = (
   overrideResponse?:
-    | CreateShipWaypointScan201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<CreateShipWaypointScan201> | CreateShipWaypointScan201),
+      ) => CreateShipWaypointScan201 | Promise<CreateShipWaypointScan201>)
+    | CreateShipWaypointScan201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2063,7 +2029,7 @@ export const getCreateShipWaypointScanMockHandler = (
               : overrideResponse
             : getCreateShipWaypointScanResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2072,10 +2038,10 @@ export const getCreateShipWaypointScanMockHandler = (
 
 export const getCreateShipWaypointScanMockHandler201 = (
   overrideResponse?:
-    | CreateShipWaypointScan201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<CreateShipWaypointScan201> | CreateShipWaypointScan201),
+      ) => CreateShipWaypointScan201 | Promise<CreateShipWaypointScan201>)
+    | CreateShipWaypointScan201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2089,7 +2055,7 @@ export const getCreateShipWaypointScanMockHandler201 = (
               : overrideResponse
             : getCreateShipWaypointScanResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2098,10 +2064,10 @@ export const getCreateShipWaypointScanMockHandler201 = (
 
 export const getCreateShipShipScanMockHandler = (
   overrideResponse?:
-    | CreateShipShipScan201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<CreateShipShipScan201> | CreateShipShipScan201),
+      ) => CreateShipShipScan201 | Promise<CreateShipShipScan201>)
+    | CreateShipShipScan201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2115,7 +2081,7 @@ export const getCreateShipShipScanMockHandler = (
               : overrideResponse
             : getCreateShipShipScanResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2124,10 +2090,10 @@ export const getCreateShipShipScanMockHandler = (
 
 export const getCreateShipShipScanMockHandler201 = (
   overrideResponse?:
-    | CreateShipShipScan201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<CreateShipShipScan201> | CreateShipShipScan201),
+      ) => CreateShipShipScan201 | Promise<CreateShipShipScan201>)
+    | CreateShipShipScan201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2141,7 +2107,7 @@ export const getCreateShipShipScanMockHandler201 = (
               : overrideResponse
             : getCreateShipShipScanResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2150,10 +2116,10 @@ export const getCreateShipShipScanMockHandler201 = (
 
 export const getRefuelShipMockHandler = (
   overrideResponse?:
-    | RefuelShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<RefuelShip200> | RefuelShip200),
+      ) => Promise<RefuelShip200> | RefuelShip200)
+    | RefuelShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2167,7 +2133,7 @@ export const getRefuelShipMockHandler = (
               : overrideResponse
             : getRefuelShipResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2176,10 +2142,10 @@ export const getRefuelShipMockHandler = (
 
 export const getRefuelShipMockHandler200 = (
   overrideResponse?:
-    | RefuelShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<RefuelShip200> | RefuelShip200),
+      ) => Promise<RefuelShip200> | RefuelShip200)
+    | RefuelShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2193,7 +2159,7 @@ export const getRefuelShipMockHandler200 = (
               : overrideResponse
             : getRefuelShipResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2202,10 +2168,10 @@ export const getRefuelShipMockHandler200 = (
 
 export const getPurchaseCargoMockHandler = (
   overrideResponse?:
-    | PurchaseCargo201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<PurchaseCargo201> | PurchaseCargo201),
+      ) => Promise<PurchaseCargo201> | PurchaseCargo201)
+    | PurchaseCargo201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2219,7 +2185,7 @@ export const getPurchaseCargoMockHandler = (
               : overrideResponse
             : getPurchaseCargoResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2228,10 +2194,10 @@ export const getPurchaseCargoMockHandler = (
 
 export const getPurchaseCargoMockHandler201 = (
   overrideResponse?:
-    | PurchaseCargo201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<PurchaseCargo201> | PurchaseCargo201),
+      ) => Promise<PurchaseCargo201> | PurchaseCargo201)
+    | PurchaseCargo201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2245,7 +2211,7 @@ export const getPurchaseCargoMockHandler201 = (
               : overrideResponse
             : getPurchaseCargoResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2254,10 +2220,10 @@ export const getPurchaseCargoMockHandler201 = (
 
 export const getTransferCargoMockHandler = (
   overrideResponse?:
-    | TransferCargo200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<TransferCargo200> | TransferCargo200),
+      ) => Promise<TransferCargo200> | TransferCargo200)
+    | TransferCargo200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2271,7 +2237,7 @@ export const getTransferCargoMockHandler = (
               : overrideResponse
             : getTransferCargoResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2280,10 +2246,10 @@ export const getTransferCargoMockHandler = (
 
 export const getTransferCargoMockHandler200 = (
   overrideResponse?:
-    | TransferCargo200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<TransferCargo200> | TransferCargo200),
+      ) => Promise<TransferCargo200> | TransferCargo200)
+    | TransferCargo200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2297,7 +2263,7 @@ export const getTransferCargoMockHandler200 = (
               : overrideResponse
             : getTransferCargoResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2306,10 +2272,10 @@ export const getTransferCargoMockHandler200 = (
 
 export const getNegotiateContractMockHandler = (
   overrideResponse?:
-    | NegotiateContract201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<NegotiateContract201> | NegotiateContract201),
+      ) => NegotiateContract201 | Promise<NegotiateContract201>)
+    | NegotiateContract201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2323,7 +2289,7 @@ export const getNegotiateContractMockHandler = (
               : overrideResponse
             : getNegotiateContractResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2332,10 +2298,10 @@ export const getNegotiateContractMockHandler = (
 
 export const getNegotiateContractMockHandler201 = (
   overrideResponse?:
-    | NegotiateContract201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<NegotiateContract201> | NegotiateContract201),
+      ) => NegotiateContract201 | Promise<NegotiateContract201>)
+    | NegotiateContract201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2349,7 +2315,7 @@ export const getNegotiateContractMockHandler201 = (
               : overrideResponse
             : getNegotiateContractResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2358,10 +2324,10 @@ export const getNegotiateContractMockHandler201 = (
 
 export const getGetMountsMockHandler = (
   overrideResponse?:
-    | GetMounts200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetMounts200> | GetMounts200),
+      ) => GetMounts200 | Promise<GetMounts200>)
+    | GetMounts200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -2375,7 +2341,7 @@ export const getGetMountsMockHandler = (
               : overrideResponse
             : getGetMountsResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2384,10 +2350,10 @@ export const getGetMountsMockHandler = (
 
 export const getGetMountsMockHandler200 = (
   overrideResponse?:
-    | GetMounts200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetMounts200> | GetMounts200),
+      ) => GetMounts200 | Promise<GetMounts200>)
+    | GetMounts200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -2401,7 +2367,7 @@ export const getGetMountsMockHandler200 = (
               : overrideResponse
             : getGetMountsResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2410,10 +2376,10 @@ export const getGetMountsMockHandler200 = (
 
 export const getInstallMountMockHandler = (
   overrideResponse?:
-    | InstallMount201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<InstallMount201> | InstallMount201),
+      ) => InstallMount201 | Promise<InstallMount201>)
+    | InstallMount201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2427,7 +2393,7 @@ export const getInstallMountMockHandler = (
               : overrideResponse
             : getInstallMountResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2436,10 +2402,10 @@ export const getInstallMountMockHandler = (
 
 export const getInstallMountMockHandler201 = (
   overrideResponse?:
-    | InstallMount201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<InstallMount201> | InstallMount201),
+      ) => InstallMount201 | Promise<InstallMount201>)
+    | InstallMount201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2453,7 +2419,7 @@ export const getInstallMountMockHandler201 = (
               : overrideResponse
             : getInstallMountResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2462,10 +2428,10 @@ export const getInstallMountMockHandler201 = (
 
 export const getRemoveMountMockHandler = (
   overrideResponse?:
-    | RemoveMount201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<RemoveMount201> | RemoveMount201),
+      ) => Promise<RemoveMount201> | RemoveMount201)
+    | RemoveMount201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2479,7 +2445,7 @@ export const getRemoveMountMockHandler = (
               : overrideResponse
             : getRemoveMountResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2488,10 +2454,10 @@ export const getRemoveMountMockHandler = (
 
 export const getRemoveMountMockHandler201 = (
   overrideResponse?:
-    | RemoveMount201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<RemoveMount201> | RemoveMount201),
+      ) => Promise<RemoveMount201> | RemoveMount201)
+    | RemoveMount201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2505,7 +2471,7 @@ export const getRemoveMountMockHandler201 = (
               : overrideResponse
             : getRemoveMountResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2514,10 +2480,10 @@ export const getRemoveMountMockHandler201 = (
 
 export const getGetScrapShipMockHandler = (
   overrideResponse?:
-    | GetScrapShip200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetScrapShip200> | GetScrapShip200),
+      ) => GetScrapShip200 | Promise<GetScrapShip200>)
+    | GetScrapShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -2531,7 +2497,7 @@ export const getGetScrapShipMockHandler = (
               : overrideResponse
             : getGetScrapShipResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2540,10 +2506,10 @@ export const getGetScrapShipMockHandler = (
 
 export const getGetScrapShipMockHandler200 = (
   overrideResponse?:
-    | GetScrapShip200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetScrapShip200> | GetScrapShip200),
+      ) => GetScrapShip200 | Promise<GetScrapShip200>)
+    | GetScrapShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -2557,7 +2523,7 @@ export const getGetScrapShipMockHandler200 = (
               : overrideResponse
             : getGetScrapShipResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2566,10 +2532,10 @@ export const getGetScrapShipMockHandler200 = (
 
 export const getScrapShipMockHandler = (
   overrideResponse?:
-    | ScrapShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<ScrapShip200> | ScrapShip200),
+      ) => Promise<ScrapShip200> | ScrapShip200)
+    | ScrapShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2583,7 +2549,7 @@ export const getScrapShipMockHandler = (
               : overrideResponse
             : getScrapShipResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2592,10 +2558,10 @@ export const getScrapShipMockHandler = (
 
 export const getScrapShipMockHandler200 = (
   overrideResponse?:
-    | ScrapShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<ScrapShip200> | ScrapShip200),
+      ) => Promise<ScrapShip200> | ScrapShip200)
+    | ScrapShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2609,7 +2575,7 @@ export const getScrapShipMockHandler200 = (
               : overrideResponse
             : getScrapShipResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2618,10 +2584,10 @@ export const getScrapShipMockHandler200 = (
 
 export const getGetRepairShipMockHandler = (
   overrideResponse?:
-    | GetRepairShip200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetRepairShip200> | GetRepairShip200),
+      ) => GetRepairShip200 | Promise<GetRepairShip200>)
+    | GetRepairShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -2635,7 +2601,7 @@ export const getGetRepairShipMockHandler = (
               : overrideResponse
             : getGetRepairShipResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2644,10 +2610,10 @@ export const getGetRepairShipMockHandler = (
 
 export const getGetRepairShipMockHandler200 = (
   overrideResponse?:
-    | GetRepairShip200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetRepairShip200> | GetRepairShip200),
+      ) => GetRepairShip200 | Promise<GetRepairShip200>)
+    | GetRepairShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -2661,7 +2627,7 @@ export const getGetRepairShipMockHandler200 = (
               : overrideResponse
             : getGetRepairShipResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2670,10 +2636,10 @@ export const getGetRepairShipMockHandler200 = (
 
 export const getRepairShipMockHandler = (
   overrideResponse?:
-    | RepairShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<RepairShip200> | RepairShip200),
+      ) => Promise<RepairShip200> | RepairShip200)
+    | RepairShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2687,7 +2653,7 @@ export const getRepairShipMockHandler = (
               : overrideResponse
             : getRepairShipResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2696,10 +2662,10 @@ export const getRepairShipMockHandler = (
 
 export const getRepairShipMockHandler200 = (
   overrideResponse?:
-    | RepairShip200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<RepairShip200> | RepairShip200),
+      ) => Promise<RepairShip200> | RepairShip200)
+    | RepairShip200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2713,7 +2679,7 @@ export const getRepairShipMockHandler200 = (
               : overrideResponse
             : getRepairShipResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2722,10 +2688,10 @@ export const getRepairShipMockHandler200 = (
 
 export const getGetShipModulesMockHandler = (
   overrideResponse?:
-    | GetShipModules200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetShipModules200> | GetShipModules200),
+      ) => GetShipModules200 | Promise<GetShipModules200>)
+    | GetShipModules200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -2739,7 +2705,7 @@ export const getGetShipModulesMockHandler = (
               : overrideResponse
             : getGetShipModulesResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2748,10 +2714,10 @@ export const getGetShipModulesMockHandler = (
 
 export const getGetShipModulesMockHandler200 = (
   overrideResponse?:
-    | GetShipModules200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetShipModules200> | GetShipModules200),
+      ) => GetShipModules200 | Promise<GetShipModules200>)
+    | GetShipModules200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -2765,7 +2731,7 @@ export const getGetShipModulesMockHandler200 = (
               : overrideResponse
             : getGetShipModulesResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -2774,10 +2740,10 @@ export const getGetShipModulesMockHandler200 = (
 
 export const getInstallShipModuleMockHandler = (
   overrideResponse?:
-    | InstallShipModule201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<InstallShipModule201> | InstallShipModule201),
+      ) => InstallShipModule201 | Promise<InstallShipModule201>)
+    | InstallShipModule201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2791,7 +2757,7 @@ export const getInstallShipModuleMockHandler = (
               : overrideResponse
             : getInstallShipModuleResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2800,10 +2766,10 @@ export const getInstallShipModuleMockHandler = (
 
 export const getInstallShipModuleMockHandler201 = (
   overrideResponse?:
-    | InstallShipModule201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<InstallShipModule201> | InstallShipModule201),
+      ) => InstallShipModule201 | Promise<InstallShipModule201>)
+    | InstallShipModule201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2817,7 +2783,7 @@ export const getInstallShipModuleMockHandler201 = (
               : overrideResponse
             : getInstallShipModuleResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2826,10 +2792,10 @@ export const getInstallShipModuleMockHandler201 = (
 
 export const getRemoveShipModuleMockHandler = (
   overrideResponse?:
-    | RemoveShipModule201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<RemoveShipModule201> | RemoveShipModule201),
+      ) => Promise<RemoveShipModule201> | RemoveShipModule201)
+    | RemoveShipModule201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2843,7 +2809,7 @@ export const getRemoveShipModuleMockHandler = (
               : overrideResponse
             : getRemoveShipModuleResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -2852,10 +2818,10 @@ export const getRemoveShipModuleMockHandler = (
 
 export const getRemoveShipModuleMockHandler201 = (
   overrideResponse?:
-    | RemoveShipModule201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<RemoveShipModule201> | RemoveShipModule201),
+      ) => Promise<RemoveShipModule201> | RemoveShipModule201)
+    | RemoveShipModule201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -2869,7 +2835,7 @@ export const getRemoveShipModuleMockHandler201 = (
               : overrideResponse
             : getRemoveShipModuleResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,

@@ -30,9 +30,9 @@ export type WaypointModifierSymbol =
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const WaypointModifierSymbol = {
+  CIVIL_UNREST: 'CIVIL_UNREST',
+  CRITICAL_LIMIT: 'CRITICAL_LIMIT',
+  RADIATION_LEAK: 'RADIATION_LEAK',
   STRIPPED: 'STRIPPED',
   UNSTABLE: 'UNSTABLE',
-  RADIATION_LEAK: 'RADIATION_LEAK',
-  CRITICAL_LIMIT: 'CRITICAL_LIMIT',
-  CIVIL_UNREST: 'CIVIL_UNREST',
 } as const;

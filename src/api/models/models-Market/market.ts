@@ -21,9 +21,9 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import type { TradeGood } from '../models-TradeGood/tradeGood';
 import type { MarketTradeGood } from '../models-MarketTradeGood/marketTradeGood';
 import type { MarketTransaction } from '../models-MarketTransaction/marketTransaction';
+import type { TradeGood } from '../models-TradeGood/tradeGood';
 
 /**
  * Market details.

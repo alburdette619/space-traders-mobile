@@ -1,11 +1,7 @@
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useGetFactions } from '../../api/models/factions/factions';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Faction } from '../../api/models/models-Faction/faction';
+import BottomSheet from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
-import { setItemAsync, deleteItemAsync } from 'expo-secure-store';
-import { agentKey } from '../../constants/storageKeys';
-import { useRegister } from '../../api/models/global/global';
+import { deleteItemAsync, setItemAsync } from 'expo-secure-store';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import {
   Button,
@@ -16,21 +12,29 @@ import {
   TextInput,
   useTheme,
 } from 'react-native-paper';
-import { flexStyles, gapStyles } from '../../theme/globalStyles';
-import BottomSheet from '@gorhom/bottom-sheet';
-import { getFactionImageUrl } from '../../constants/urls';
-import { FactionsBottomSheet } from './components/FactionsBottomSheet';
-import { Register201 } from '@/src/api/models/register201';
-import { SpaceTradersErrorResponse } from '@/src/types/spaceTraders';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { useGetMyAgent } from '@/src/api/models/agents/agents';
-import { useServerResetCountdown } from '@/src/hooks/useServerResetCountdown';
+import { Register201 } from '@/src/api/models/register201';
 import { CountdownContainer } from '@/src/components/CountdownContainer';
+import { useServerResetCountdown } from '@/src/hooks/useServerResetCountdown';
+import { useUserStore } from '@/src/stores/userStore';
+import { SpaceTradersErrorResponse } from '@/src/types/spaceTraders';
+
+import { useGetFactions } from '../../api/models/factions/factions';
+import { useRegister } from '../../api/models/global/global';
+import { Faction } from '../../api/models/models-Faction/faction';
+import { agentKey } from '../../constants/storageKeys';
+import { getFactionImageUrl } from '../../constants/urls';
+import { flexStyles, gapStyles } from '../../theme/globalStyles';
+import { FactionsBottomSheet } from './components/FactionsBottomSheet';
 
 export const NewAgentScreen = () => {
   const { navigate } = useNavigation();
   const { colors } = useTheme();
 
-  // TODO: handle loading/error states
+  const { setIsAuthenticated } = useUserStore();
+
   const { data: factions, isFetching: isFetchingFactions } = useGetFactions();
   const { humanReadableResetDate } = useServerResetCountdown();
 
@@ -55,6 +59,11 @@ export const NewAgentScreen = () => {
 
   const bottomSheetRef = useRef<BottomSheet>(null);
 
+  const handleAuthSuccess = useCallback(() => {
+    setIsAuthenticated(true);
+    navigate('MainAppTabs');
+  }, [navigate, setIsAuthenticated]);
+
   // Handle side effects of user-supplied agent fetch.
   useEffect(() => {
     const deleteTokenIfInvalid = async () => {
@@ -64,7 +73,7 @@ export const NewAgentScreen = () => {
     if (isFetchingUserSuppliedAgent) return;
 
     if (userSuppliedAgent) {
-      // TODO: Navigate to main app.
+      handleAuthSuccess();
     } else if (isErrorUserSuppliedAgent && errorUserSuppliedAgent) {
       // Unset invalid token.
       deleteTokenIfInvalid();
@@ -73,6 +82,7 @@ export const NewAgentScreen = () => {
   }, [
     agentToken,
     errorUserSuppliedAgent,
+    handleAuthSuccess,
     isErrorUserSuppliedAgent,
     isFetchingUserSuppliedAgent,
     userSuppliedAgent,
@@ -87,8 +97,6 @@ export const NewAgentScreen = () => {
     // The token will be picked up and used by the api client when set.
     await setItemAsync(agentKey, agentToken);
     setShouldAttemptAgentLogin(true);
-
-    // TODO: validate token, fetch agent data, navigate to the main app.
   }, [agentToken]);
 
   const handleGuestRegistrationSuccess = useCallback(
@@ -104,10 +112,9 @@ export const NewAgentScreen = () => {
       // TODO: There's initial data for agent, ships, the first contract, etc.
       // We should use this as initial data for the specific initial queries after auth.
       await setItemAsync(agentKey, data.token);
-
-      // TODO: Navigate to the main app.
+      handleAuthSuccess();
     },
-    [],
+    [handleAuthSuccess],
   );
 
   const handleGuestRegistrationError = useCallback(
@@ -117,10 +124,10 @@ export const NewAgentScreen = () => {
     [],
   );
 
-  const { mutate: register, isPending: isRegisteringAgent } = useRegister({
+  const { isPending: isRegisteringAgent, mutate: register } = useRegister({
     mutation: {
-      onSuccess: handleGuestRegistrationSuccess,
       onError: handleGuestRegistrationError,
+      onSuccess: handleGuestRegistrationSuccess,
     },
   });
 
@@ -129,8 +136,8 @@ export const NewAgentScreen = () => {
 
     register({
       data: {
-        symbol: guestAgentName,
         faction: selectedFaction.symbol,
+        symbol: guestAgentName,
       },
     });
   }, [guestAgentName, register, selectedFaction]);
@@ -166,14 +173,14 @@ export const NewAgentScreen = () => {
               <View style={gapStyles.gapLarge}>
                 <View style={gapStyles.gapMedium}>
                   <Pressable
+                    onPress={handleAgentCreationInfo}
                     style={[
                       gapStyles.gapMedium,
                       styles.agentCreationInstructionsContainer,
                       { borderColor: colors.primary },
                     ]}
-                    onPress={handleAgentCreationInfo}
                   >
-                    <Icon source="help-circle" size={16} />
+                    <Icon size={16} source="help-circle" />
                     <Text variant="labelSmall">Help</Text>
                   </Pressable>
                   <TextInput
@@ -217,6 +224,7 @@ export const NewAgentScreen = () => {
                   />
                   <Pressable
                     disabled={isFetchingFactions}
+                    onPress={handleChangeFaction}
                     style={[
                       styles.selectFactionButton,
                       !selectedFaction && styles.selectFactionButtonEmpty,
@@ -224,7 +232,6 @@ export const NewAgentScreen = () => {
                         borderColor: colors.primary,
                       },
                     ]}
-                    onPress={handleChangeFaction}
                   >
                     {selectedFaction ? (
                       <View style={[gapStyles.gapSmall, flexStyles.flexRow]}>
@@ -244,8 +251,8 @@ export const NewAgentScreen = () => {
                     // Min length 3 to match API validation
                     disabled={guestAgentName.length < 3 || !selectedFaction}
                     loading={isRegisteringAgent}
-                    onPress={handleCreateGuestAgent}
                     mode="contained"
+                    onPress={handleCreateGuestAgent}
                   >
                     Create Agent
                   </Button>
@@ -261,9 +268,9 @@ export const NewAgentScreen = () => {
         setSelectedFaction={setSelectedFaction}
       />
       <Snackbar
-        visible={!!errorMessage}
         duration={3000}
         onDismiss={handleSnackbarDismiss}
+        visible={!!errorMessage}
       >
         {errorMessage}
       </Snackbar>
@@ -292,9 +299,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   factionImage: {
-    width: 40,
-    height: 40,
     borderRadius: 20,
+    height: 40,
+    width: 40,
   },
   innerContainer: {
     flex: 1,
@@ -304,12 +311,12 @@ const styles = StyleSheet.create({
   selectFactionButton: {
     borderRadius: 4,
     borderWidth: 1,
+    height: 48,
     justifyContent: 'center',
     padding: 12,
-    height: 48,
   },
   selectFactionButtonEmpty: {
-    borderStyle: 'dashed',
     alignItems: 'center',
+    borderStyle: 'dashed',
   },
 });

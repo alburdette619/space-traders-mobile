@@ -30,13 +30,13 @@ export type ShipRefineBodyProduce =
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ShipRefineBodyProduce = {
-  IRON: 'IRON',
-  COPPER: 'COPPER',
-  SILVER: 'SILVER',
-  GOLD: 'GOLD',
   ALUMINUM: 'ALUMINUM',
-  PLATINUM: 'PLATINUM',
-  URANITE: 'URANITE',
-  MERITIUM: 'MERITIUM',
+  COPPER: 'COPPER',
   FUEL: 'FUEL',
+  GOLD: 'GOLD',
+  IRON: 'IRON',
+  MERITIUM: 'MERITIUM',
+  PLATINUM: 'PLATINUM',
+  SILVER: 'SILVER',
+  URANITE: 'URANITE',
 } as const;

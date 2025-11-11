@@ -1,14 +1,14 @@
 import { StyleSheet } from 'react-native';
 
 export const gapStyles = StyleSheet.create({
-  gapSmall: {
-    gap: 4,
+  gapLarge: {
+    gap: 16,
   },
   gapMedium: {
     gap: 8,
   },
-  gapLarge: {
-    gap: 16,
+  gapSmall: {
+    gap: 4,
   },
   gapXLarge: {
     gap: 24,

@@ -21,14 +21,14 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { faker } from '@faker-js/faker';
-
-import { HttpResponse, http } from 'msw';
 import type { RequestHandlerOptions } from 'msw';
 
-import type { GetStatus200 } from '../getStatus200';
+import { faker } from '@faker-js/faker';
+import { http, HttpResponse } from 'msw';
 
+import type { GetStatus200 } from '../getStatus200';
 import type { Register201 } from '../register201';
+
 import { Agent } from '../models-Agent/agent';
 import { Contract } from '../models-Contract/contract';
 import { Faction } from '../models-Faction/faction';
@@ -38,53 +38,53 @@ export const getGetStatusResponseMock = (
   overrideResponse: Partial<GetStatus200> = {},
 ): GetStatus200 => ({
   announcements: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({
-    body: faker.string.alpha({ length: { min: 10, max: 20 } }),
-    title: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    body: faker.string.alpha({ length: { max: 20, min: 10 } }),
+    title: faker.string.alpha({ length: { max: 20, min: 10 } }),
   })),
-  description: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  description: faker.string.alpha({ length: { max: 20, min: 10 } }),
   leaderboards: {
     mostCredits: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({
-      agentSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      credits: faker.number.int({ min: undefined, max: undefined }),
+      agentSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      credits: faker.number.int({ max: undefined, min: undefined }),
     })),
     mostSubmittedCharts: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({
-      agentSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      chartCount: faker.number.int({ min: undefined, max: undefined }),
+      agentSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      chartCount: faker.number.int({ max: undefined, min: undefined }),
     })),
   },
   links: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({
-    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-    url: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    name: faker.string.alpha({ length: { max: 20, min: 10 } }),
+    url: faker.string.alpha({ length: { max: 20, min: 10 } }),
   })),
-  resetDate: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  resetDate: faker.string.alpha({ length: { max: 20, min: 10 } }),
   serverResets: {
-    frequency: faker.string.alpha({ length: { min: 10, max: 20 } }),
-    next: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    frequency: faker.string.alpha({ length: { max: 20, min: 10 } }),
+    next: faker.string.alpha({ length: { max: 20, min: 10 } }),
   },
   stats: {
     accounts: faker.helpers.arrayElement([
-      faker.number.int({ min: undefined, max: undefined }),
+      faker.number.int({ max: undefined, min: undefined }),
       undefined,
     ]),
-    agents: faker.number.int({ min: undefined, max: undefined }),
-    ships: faker.number.int({ min: undefined, max: undefined }),
-    systems: faker.number.int({ min: undefined, max: undefined }),
-    waypoints: faker.number.int({ min: undefined, max: undefined }),
+    agents: faker.number.int({ max: undefined, min: undefined }),
+    ships: faker.number.int({ max: undefined, min: undefined }),
+    systems: faker.number.int({ max: undefined, min: undefined }),
+    waypoints: faker.number.int({ max: undefined, min: undefined }),
   },
-  status: faker.string.alpha({ length: { min: 10, max: 20 } }),
-  version: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  status: faker.string.alpha({ length: { max: 20, min: 10 } }),
+  version: faker.string.alpha({ length: { max: 20, min: 10 } }),
   ...overrideResponse,
 });
 
@@ -92,53 +92,53 @@ export const getGetStatusResponseMock200 = (
   overrideResponse: Partial<GetStatus200> = {},
 ): GetStatus200 => ({
   announcements: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({
-    body: faker.string.alpha({ length: { min: 10, max: 20 } }),
-    title: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    body: faker.string.alpha({ length: { max: 20, min: 10 } }),
+    title: faker.string.alpha({ length: { max: 20, min: 10 } }),
   })),
-  description: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  description: faker.string.alpha({ length: { max: 20, min: 10 } }),
   leaderboards: {
     mostCredits: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({
-      agentSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      credits: faker.number.int({ min: undefined, max: undefined }),
+      agentSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      credits: faker.number.int({ max: undefined, min: undefined }),
     })),
     mostSubmittedCharts: Array.from(
-      { length: faker.number.int({ min: 1, max: 10 }) },
+      { length: faker.number.int({ max: 10, min: 1 }) },
       (_, i) => i + 1,
     ).map(() => ({
-      agentSymbol: faker.string.alpha({ length: { min: 10, max: 20 } }),
-      chartCount: faker.number.int({ min: undefined, max: undefined }),
+      agentSymbol: faker.string.alpha({ length: { max: 20, min: 10 } }),
+      chartCount: faker.number.int({ max: undefined, min: undefined }),
     })),
   },
   links: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({
-    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-    url: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    name: faker.string.alpha({ length: { max: 20, min: 10 } }),
+    url: faker.string.alpha({ length: { max: 20, min: 10 } }),
   })),
-  resetDate: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  resetDate: faker.string.alpha({ length: { max: 20, min: 10 } }),
   serverResets: {
-    frequency: faker.string.alpha({ length: { min: 10, max: 20 } }),
-    next: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    frequency: faker.string.alpha({ length: { max: 20, min: 10 } }),
+    next: faker.string.alpha({ length: { max: 20, min: 10 } }),
   },
   stats: {
     accounts: faker.helpers.arrayElement([
-      faker.number.int({ min: undefined, max: undefined }),
+      faker.number.int({ max: undefined, min: undefined }),
       undefined,
     ]),
-    agents: faker.number.int({ min: undefined, max: undefined }),
-    ships: faker.number.int({ min: undefined, max: undefined }),
-    systems: faker.number.int({ min: undefined, max: undefined }),
-    waypoints: faker.number.int({ min: undefined, max: undefined }),
+    agents: faker.number.int({ max: undefined, min: undefined }),
+    ships: faker.number.int({ max: undefined, min: undefined }),
+    systems: faker.number.int({ max: undefined, min: undefined }),
+    waypoints: faker.number.int({ max: undefined, min: undefined }),
   },
-  status: faker.string.alpha({ length: { min: 10, max: 20 } }),
-  version: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  status: faker.string.alpha({ length: { max: 20, min: 10 } }),
+  version: faker.string.alpha({ length: { max: 20, min: 10 } }),
   ...overrideResponse,
 });
 
@@ -151,12 +151,12 @@ export const getRegisterResponseMock = (
     faction: {} as Faction,
     ships: faker.helpers.arrayElement([
       Array.from(
-        { length: faker.number.int({ min: 1, max: 10 }) },
+        { length: faker.number.int({ max: 10, min: 1 }) },
         (_, i) => i + 1,
       ).map(() => ({}) as Ship),
       undefined,
     ]),
-    token: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    token: faker.string.alpha({ length: { max: 20, min: 10 } }),
   },
   ...overrideResponse,
 });
@@ -170,22 +170,22 @@ export const getRegisterResponseMock201 = (
     faction: {} as Faction,
     ships: faker.helpers.arrayElement([
       Array.from(
-        { length: faker.number.int({ min: 1, max: 10 }) },
+        { length: faker.number.int({ max: 10, min: 1 }) },
         (_, i) => i + 1,
       ).map(() => ({}) as Ship),
       undefined,
     ]),
-    token: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    token: faker.string.alpha({ length: { max: 20, min: 10 } }),
   },
   ...overrideResponse,
 });
 
 export const getGetStatusMockHandler = (
   overrideResponse?:
-    | GetStatus200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetStatus200> | GetStatus200),
+      ) => GetStatus200 | Promise<GetStatus200>)
+    | GetStatus200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -199,7 +199,7 @@ export const getGetStatusMockHandler = (
               : overrideResponse
             : getGetStatusResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -208,10 +208,10 @@ export const getGetStatusMockHandler = (
 
 export const getGetStatusMockHandler200 = (
   overrideResponse?:
-    | GetStatus200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetStatus200> | GetStatus200),
+      ) => GetStatus200 | Promise<GetStatus200>)
+    | GetStatus200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -225,7 +225,7 @@ export const getGetStatusMockHandler200 = (
               : overrideResponse
             : getGetStatusResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -234,10 +234,10 @@ export const getGetStatusMockHandler200 = (
 
 export const getRegisterMockHandler = (
   overrideResponse?:
-    | Register201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<Register201> | Register201),
+      ) => Promise<Register201> | Register201)
+    | Register201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -251,7 +251,7 @@ export const getRegisterMockHandler = (
               : overrideResponse
             : getRegisterResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -260,10 +260,10 @@ export const getRegisterMockHandler = (
 
 export const getRegisterMockHandler201 = (
   overrideResponse?:
-    | Register201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<Register201> | Register201),
+      ) => Promise<Register201> | Register201)
+    | Register201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -277,7 +277,7 @@ export const getRegisterMockHandler201 = (
               : overrideResponse
             : getRegisterResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,

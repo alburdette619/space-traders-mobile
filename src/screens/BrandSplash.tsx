@@ -1,13 +1,15 @@
-import { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, useWindowDimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import {
   Canvas,
-  Image as SkImage,
-  useImage,
   FilterMode,
   MipmapMode,
+  Image as SkImage,
+  useImage,
 } from '@shopify/react-native-skia';
-import { useLoadFonts } from '../hooks/useLoadFonts';
+import * as SecureStore from 'expo-secure-store';
+import { useEffect, useMemo, useState } from 'react';
+import { StyleSheet, useWindowDimensions } from 'react-native';
+import { Text, useTheme } from 'react-native-paper';
 import {
   Easing,
   useDerivedValue,
@@ -15,10 +17,10 @@ import {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
+
 import { agentKey } from '../constants/storageKeys';
-import * as SecureStore from 'expo-secure-store';
-import { useNavigation } from '@react-navigation/native';
-import { Text, useTheme } from 'react-native-paper';
+import { useLoadFonts } from '../hooks/useLoadFonts';
+import { useUserStore } from '../stores/userStore';
 
 const DRIFT_X_PX = 4; // background horizontal drift amplitude (±px)
 const DRIFT_Y_PX = 4; // background vertical drift amplitude (±px)
@@ -29,8 +31,10 @@ const NEAREST = { filter: FilterMode.Nearest, mipmap: MipmapMode.None };
 
 export const BrandSplashScreen = () => {
   const { navigate } = useNavigation();
-  const { width, height } = useWindowDimensions();
+  const { height, width } = useWindowDimensions();
   const { colors } = useTheme();
+
+  const { setIsAuthenticated } = useUserStore();
 
   const imgBg = useImage(
     require('../../assets/images/splash-background-x8.png'),
@@ -42,7 +46,7 @@ export const BrandSplashScreen = () => {
   // Choose bg image based on aspect ratio
 
   // load custom fonts
-  const { fontsLoaded, error: fontLoadingError } = useLoadFonts();
+  const { error: fontLoadingError, fontsLoaded } = useLoadFonts();
 
   // Check for existing agent
   const [hasAgent, setHasAgent] = useState<boolean | null>(null);
@@ -98,20 +102,21 @@ export const BrandSplashScreen = () => {
     const t = setTimeout(() => {
       console.log('BrandSplash: done');
       if (hasAgent) {
-        // navigate to main app
+        setIsAuthenticated(true);
+        navigate('MainAppTabs');
       } else {
         navigate('NewAgent');
       }
-      // Navigate away from splash screen based on auth state
     }, left);
     return () => clearTimeout(t);
   }, [
-    fontsLoaded,
     fontLoadingError,
+    fontsLoaded,
     hasAgent,
     imgBg,
     imgPlanet,
     navigate,
+    setIsAuthenticated,
     start,
   ]);
 
@@ -141,12 +146,12 @@ export const BrandSplashScreen = () => {
     return {
       baseBgX,
       baseBgY,
-      bgW,
-      bgH,
       basePlanetX,
       basePlanetY,
-      planetW,
+      bgH,
+      bgW,
       planetH,
+      planetW,
     };
   }, [imgBg, imgPlanet, width, height]);
 
@@ -187,20 +192,20 @@ export const BrandSplashScreen = () => {
         }}
       >
         <SkImage
+          height={imageLayout.bgH}
           image={imgBg}
+          sampling={NEAREST}
+          width={imageLayout.bgW}
           x={bgX}
           y={bgY}
-          width={imageLayout.bgW}
-          height={imageLayout.bgH}
-          sampling={NEAREST}
         />
         <SkImage
+          height={imageLayout.planetH}
           image={imgPlanet}
+          sampling={NEAREST}
+          width={imageLayout.planetW}
           x={planetX}
           y={planetY}
-          width={imageLayout.planetW}
-          height={imageLayout.planetH}
-          sampling={NEAREST}
         />
       </Canvas>
       <Text style={styles.appNameText} variant="displayLarge">
@@ -212,8 +217,8 @@ export const BrandSplashScreen = () => {
 
 const styles = StyleSheet.create({
   appNameText: {
-    position: 'absolute',
     bottom: 50,
     left: 20,
+    position: 'absolute',
   },
 });

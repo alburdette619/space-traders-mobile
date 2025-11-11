@@ -22,8 +22,8 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
  * OpenAPI spec version: 2.3.0
  */
 import type { ShipyardShip } from '../models-ShipyardShip/shipyardShip';
-import type { ShipyardShipTypesItem } from './shipyardShipTypesItem';
 import type { ShipyardTransaction } from '../models-ShipyardTransaction/shipyardTransaction';
+import type { ShipyardShipTypesItem } from './shipyardShipTypesItem';
 
 /**
  * Shipyard details.

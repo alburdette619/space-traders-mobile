@@ -23,8 +23,8 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
  */
 import type { Agent } from './models-Agent/agent';
 import type { Cooldown } from './models-Cooldown/cooldown';
-import type { ShipNav } from './models-ShipNav/shipNav';
 import type { MarketTransaction } from './models-MarketTransaction/marketTransaction';
+import type { ShipNav } from './models-ShipNav/shipNav';
 
 export type JumpShip200Data = {
   agent: Agent;

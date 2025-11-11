@@ -21,7 +21,6 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { useQuery } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -34,14 +33,14 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 
+import { useQuery } from '@tanstack/react-query';
+
+import type { ErrorType } from '../../client';
 import type { GetFaction200 } from '../getFaction200';
-
 import type { GetFactions200 } from '../getFactions200';
-
 import type { GetFactionsParams } from '../getFactionsParams';
 
 import { clientInstance } from '../../client';
-import type { ErrorType } from '../../client';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -55,7 +54,7 @@ export const getFactions = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetFactions200>(
-    { url: `/factions`, method: 'GET', params, signal },
+    { method: 'GET', params, signal, url: `/factions` },
     options,
   );
 };
@@ -84,23 +83,23 @@ export const getGetFactionsQueryOptions = <
     signal,
   }) => getFactions(params, requestOptions, signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+  return { queryFn, queryKey, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getFactions>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetFactionsQueryError = ErrorType<unknown>;
 export type GetFactionsQueryResult = NonNullable<
   Awaited<ReturnType<typeof getFactions>>
 >;
-export type GetFactionsQueryError = ErrorType<unknown>;
 
 export function useGetFactions<
   TData = Awaited<ReturnType<typeof getFactions>>,
   TError = ErrorType<unknown>,
 >(
-  params: undefined | GetFactionsParams,
+  params: GetFactionsParams | undefined,
   options: {
     query: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getFactions>>, TError, TData>
@@ -199,9 +198,9 @@ export const getFaction = (
 ) => {
   return clientInstance<GetFaction200>(
     {
-      url: `/factions/${encodeURIComponent(String(factionSymbol))}`,
       method: 'GET',
       signal,
+      url: `/factions/${encodeURIComponent(String(factionSymbol))}`,
     },
     options,
   );
@@ -233,9 +232,9 @@ export const getGetFactionQueryOptions = <
   }) => getFaction(factionSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!factionSymbol,
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof getFaction>>,
@@ -244,10 +243,10 @@ export const getGetFactionQueryOptions = <
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetFactionQueryError = ErrorType<unknown>;
 export type GetFactionQueryResult = NonNullable<
   Awaited<ReturnType<typeof getFaction>>
 >;
-export type GetFactionQueryError = ErrorType<unknown>;
 
 export function useGetFaction<
   TData = Awaited<ReturnType<typeof getFaction>>,

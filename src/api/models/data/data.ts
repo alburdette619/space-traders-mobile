@@ -21,7 +21,6 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { useQuery } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -34,10 +33,12 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 
+import { useQuery } from '@tanstack/react-query';
+
+import type { ErrorType } from '../../client';
 import type { GetSupplyChain200 } from '../getSupplyChain200';
 
 import { clientInstance } from '../../client';
-import type { ErrorType } from '../../client';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -50,7 +51,7 @@ export const getSupplyChain = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetSupplyChain200>(
-    { url: `/market/supply-chain`, method: 'GET', signal },
+    { method: 'GET', signal, url: `/market/supply-chain` },
     options,
   );
 };
@@ -76,17 +77,17 @@ export const getGetSupplyChainQueryOptions = <
     signal,
   }) => getSupplyChain(requestOptions, signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+  return { queryFn, queryKey, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getSupplyChain>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetSupplyChainQueryError = ErrorType<unknown>;
 export type GetSupplyChainQueryResult = NonNullable<
   Awaited<ReturnType<typeof getSupplyChain>>
 >;
-export type GetSupplyChainQueryError = ErrorType<unknown>;
 
 export function useGetSupplyChain<
   TData = Awaited<ReturnType<typeof getSupplyChain>>,

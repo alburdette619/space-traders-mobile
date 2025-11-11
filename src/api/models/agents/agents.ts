@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { useQuery } from '@tanstack/react-query';
+
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -34,16 +34,15 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 
+import { useQuery } from '@tanstack/react-query';
+
+import type { ErrorType } from '../../client';
 import type { GetAgent200 } from '../getAgent200';
-
 import type { GetAgents200 } from '../getAgents200';
-
 import type { GetAgentsParams } from '../getAgentsParams';
-
 import type { GetMyAgent200 } from '../getMyAgent200';
 
 import { clientInstance } from '../../client';
-import type { ErrorType } from '../../client';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -56,7 +55,7 @@ export const getMyAgent = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetMyAgent200>(
-    { url: `/my/agent`, method: 'GET', signal },
+    { method: 'GET', signal, url: `/my/agent` },
     options,
   );
 };
@@ -82,17 +81,17 @@ export const getGetMyAgentQueryOptions = <
     signal,
   }) => getMyAgent(requestOptions, signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+  return { queryFn, queryKey, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getMyAgent>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetMyAgentQueryError = ErrorType<unknown>;
 export type GetMyAgentQueryResult = NonNullable<
   Awaited<ReturnType<typeof getMyAgent>>
 >;
-export type GetMyAgentQueryError = ErrorType<unknown>;
 
 export function useGetMyAgent<
   TData = Awaited<ReturnType<typeof getMyAgent>>,
@@ -192,7 +191,7 @@ export const getAgents = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetAgents200>(
-    { url: `/agents`, method: 'GET', params, signal },
+    { method: 'GET', params, signal, url: `/agents` },
     options,
   );
 };
@@ -221,23 +220,23 @@ export const getGetAgentsQueryOptions = <
     signal,
   }) => getAgents(params, requestOptions, signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+  return { queryFn, queryKey, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getAgents>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetAgentsQueryError = ErrorType<unknown>;
 export type GetAgentsQueryResult = NonNullable<
   Awaited<ReturnType<typeof getAgents>>
 >;
-export type GetAgentsQueryError = ErrorType<unknown>;
 
 export function useGetAgents<
   TData = Awaited<ReturnType<typeof getAgents>>,
   TError = ErrorType<unknown>,
 >(
-  params: undefined | GetAgentsParams,
+  params: GetAgentsParams | undefined,
   options: {
     query: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getAgents>>, TError, TData>
@@ -336,9 +335,9 @@ export const getAgent = (
 ) => {
   return clientInstance<GetAgent200>(
     {
-      url: `/agents/${encodeURIComponent(String(agentSymbol))}`,
       method: 'GET',
       signal,
+      url: `/agents/${encodeURIComponent(String(agentSymbol))}`,
     },
     options,
   );
@@ -369,25 +368,25 @@ export const getGetAgentQueryOptions = <
   }) => getAgent(agentSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!agentSymbol,
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData> & {
     queryKey: DataTag<QueryKey, TData, TError>;
   };
 };
 
+export type GetAgentQueryError = ErrorType<unknown>;
 export type GetAgentQueryResult = NonNullable<
   Awaited<ReturnType<typeof getAgent>>
 >;
-export type GetAgentQueryError = ErrorType<unknown>;
 
 export function useGetAgent<
   TData = Awaited<ReturnType<typeof getAgent>>,
   TError = ErrorType<unknown>,
 >(
-  agentSymbol: undefined | string,
+  agentSymbol: string | undefined,
   options: {
     query: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getAgent>>, TError, TData>

@@ -21,20 +21,17 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { faker } from '@faker-js/faker';
-
-import { HttpResponse, http } from 'msw';
 import type { RequestHandlerOptions } from 'msw';
 
+import { faker } from '@faker-js/faker';
+import { http, HttpResponse } from 'msw';
+
 import type { AcceptContract200 } from '../acceptContract200';
-
 import type { DeliverContract200 } from '../deliverContract200';
-
 import type { FulfillContract200 } from '../fulfillContract200';
-
 import type { GetContract200 } from '../getContract200';
-
 import type { GetContracts200 } from '../getContracts200';
+
 import { Agent } from '../models-Agent/agent';
 import { Contract } from '../models-Contract/contract';
 import { Meta } from '../models-Meta/meta';
@@ -44,7 +41,7 @@ export const getGetContractsResponseMock = (
   overrideResponse: Partial<GetContracts200> = {},
 ): GetContracts200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as Contract),
   meta: {} as Meta,
@@ -55,7 +52,7 @@ export const getGetContractsResponseMock200 = (
   overrideResponse: Partial<GetContracts200> = {},
 ): GetContracts200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as Contract),
   meta: {} as Meta,
@@ -114,10 +111,10 @@ export const getFulfillContractResponseMock200 = (
 
 export const getGetContractsMockHandler = (
   overrideResponse?:
-    | GetContracts200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetContracts200> | GetContracts200),
+      ) => GetContracts200 | Promise<GetContracts200>)
+    | GetContracts200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -131,7 +128,7 @@ export const getGetContractsMockHandler = (
               : overrideResponse
             : getGetContractsResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -140,10 +137,10 @@ export const getGetContractsMockHandler = (
 
 export const getGetContractsMockHandler200 = (
   overrideResponse?:
-    | GetContracts200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetContracts200> | GetContracts200),
+      ) => GetContracts200 | Promise<GetContracts200>)
+    | GetContracts200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -157,7 +154,7 @@ export const getGetContractsMockHandler200 = (
               : overrideResponse
             : getGetContractsResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -166,10 +163,10 @@ export const getGetContractsMockHandler200 = (
 
 export const getGetContractMockHandler = (
   overrideResponse?:
-    | GetContract200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetContract200> | GetContract200),
+      ) => GetContract200 | Promise<GetContract200>)
+    | GetContract200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -183,7 +180,7 @@ export const getGetContractMockHandler = (
               : overrideResponse
             : getGetContractResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -192,10 +189,10 @@ export const getGetContractMockHandler = (
 
 export const getGetContractMockHandler200 = (
   overrideResponse?:
-    | GetContract200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetContract200> | GetContract200),
+      ) => GetContract200 | Promise<GetContract200>)
+    | GetContract200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -209,7 +206,7 @@ export const getGetContractMockHandler200 = (
               : overrideResponse
             : getGetContractResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -218,10 +215,10 @@ export const getGetContractMockHandler200 = (
 
 export const getAcceptContractMockHandler = (
   overrideResponse?:
-    | AcceptContract200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<AcceptContract200> | AcceptContract200),
+      ) => AcceptContract200 | Promise<AcceptContract200>)
+    | AcceptContract200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -235,7 +232,7 @@ export const getAcceptContractMockHandler = (
               : overrideResponse
             : getAcceptContractResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -244,10 +241,10 @@ export const getAcceptContractMockHandler = (
 
 export const getAcceptContractMockHandler200 = (
   overrideResponse?:
-    | AcceptContract200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<AcceptContract200> | AcceptContract200),
+      ) => AcceptContract200 | Promise<AcceptContract200>)
+    | AcceptContract200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -261,7 +258,7 @@ export const getAcceptContractMockHandler200 = (
               : overrideResponse
             : getAcceptContractResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -270,10 +267,10 @@ export const getAcceptContractMockHandler200 = (
 
 export const getDeliverContractMockHandler = (
   overrideResponse?:
-    | DeliverContract200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<DeliverContract200> | DeliverContract200),
+      ) => DeliverContract200 | Promise<DeliverContract200>)
+    | DeliverContract200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -287,7 +284,7 @@ export const getDeliverContractMockHandler = (
               : overrideResponse
             : getDeliverContractResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -296,10 +293,10 @@ export const getDeliverContractMockHandler = (
 
 export const getDeliverContractMockHandler200 = (
   overrideResponse?:
-    | DeliverContract200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<DeliverContract200> | DeliverContract200),
+      ) => DeliverContract200 | Promise<DeliverContract200>)
+    | DeliverContract200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -313,7 +310,7 @@ export const getDeliverContractMockHandler200 = (
               : overrideResponse
             : getDeliverContractResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -322,10 +319,10 @@ export const getDeliverContractMockHandler200 = (
 
 export const getFulfillContractMockHandler = (
   overrideResponse?:
-    | FulfillContract200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<FulfillContract200> | FulfillContract200),
+      ) => FulfillContract200 | Promise<FulfillContract200>)
+    | FulfillContract200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -339,7 +336,7 @@ export const getFulfillContractMockHandler = (
               : overrideResponse
             : getFulfillContractResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -348,10 +345,10 @@ export const getFulfillContractMockHandler = (
 
 export const getFulfillContractMockHandler200 = (
   overrideResponse?:
-    | FulfillContract200
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<FulfillContract200> | FulfillContract200),
+      ) => FulfillContract200 | Promise<FulfillContract200>)
+    | FulfillContract200,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -365,7 +362,7 @@ export const getFulfillContractMockHandler200 = (
               : overrideResponse
             : getFulfillContractResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,

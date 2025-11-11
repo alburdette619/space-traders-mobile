@@ -21,9 +21,9 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
+import type { Cooldown } from './models-Cooldown/cooldown';
 import type { ShipCargo } from './models-ShipCargo/shipCargo';
 import type { ShipRefine201DataConsumedItem } from './shipRefine201DataConsumedItem';
-import type { Cooldown } from './models-Cooldown/cooldown';
 import type { ShipRefine201DataProducedItem } from './shipRefine201DataProducedItem';
 
 export type ShipRefine201Data = {

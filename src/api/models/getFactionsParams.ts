@@ -24,14 +24,14 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
 export type GetFactionsParams = {
   /**
-   * What entry offset to request
-   * @minimum 1
-   */
-  page?: number;
-  /**
    * How many entries to return per page
    * @minimum 1
    * @maximum 20
    */
   limit?: number;
+  /**
+   * What entry offset to request
+   * @minimum 1
+   */
+  page?: number;
 };

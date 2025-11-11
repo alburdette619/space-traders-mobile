@@ -1,6 +1,7 @@
-import { Text, useTheme } from 'react-native-paper';
-import { PolygonalView, PolygonalViewProps } from './PolygonalView';
 import { StyleSheet, View } from 'react-native';
+import { Text, useTheme } from 'react-native-paper';
+
+import { PolygonalView, PolygonalViewProps } from './PolygonalView';
 
 interface CountdownContainerProps extends Omit<PolygonalViewProps, 'children'> {
   countdownString: string;

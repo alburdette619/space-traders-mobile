@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, isCancel } from 'axios';
+
 import { SpaceTradersErrorResponse } from '../types/spaceTraders';
 
 // By default, use the Supabase base URL.

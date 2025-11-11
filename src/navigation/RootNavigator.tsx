@@ -1,23 +1,36 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NewAgentScreen } from '../screens/NewAgent';
-import { BrandSplashScreen } from '../screens/BrandSplash';
-import { RootNavigatorParams } from './navigationParams';
+
 import { AgentCreationInstructionsScreen } from '../screens/AgentCreationInstructions';
+import { BrandSplashScreen } from '../screens/BrandSplash';
+import { NewAgentScreen } from '../screens/NewAgent';
+// import { useUserStore } from '../stores/userStore';
+import { MainAppTabs } from './MainAppTabs';
+import { RootNavigatorParams } from './navigationParams';
 
 const Stack = createNativeStackNavigator<RootNavigatorParams>();
 
 export const RootStack = () => {
+  // const { isAuthenticated } = useUserStore();
+
   return (
     <Stack.Navigator
-      screenOptions={{ contentStyle: [styles.container], headerShown: false }}
       initialRouteName="BrandSplash"
+      screenOptions={{ contentStyle: [styles.container], headerShown: false }}
     >
-      <Stack.Screen
-        name="AgentCreationInstructions"
-        component={AgentCreationInstructionsScreen}
-      />
-      <Stack.Screen name="BrandSplash" component={BrandSplashScreen} />
-      <Stack.Screen name="NewAgent" component={NewAgentScreen} />
+      {/* {isAuthenticated ? ( */}
+      <Stack.Group>
+        <Stack.Screen component={MainAppTabs} name="MainAppTabs" />
+      </Stack.Group>
+      {/* ) : ( */}
+      <Stack.Group>
+        <Stack.Screen
+          component={AgentCreationInstructionsScreen}
+          name="AgentCreationInstructions"
+        />
+        <Stack.Screen component={BrandSplashScreen} name="BrandSplash" />
+        <Stack.Screen component={NewAgentScreen} name="NewAgent" />
+      </Stack.Group>
+      {/* )} */}
     </Stack.Navigator>
   );
 };

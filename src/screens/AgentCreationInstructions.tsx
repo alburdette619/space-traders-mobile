@@ -1,10 +1,11 @@
+import { useNavigation } from '@react-navigation/native';
+import { useCallback } from 'react';
 import { Linking, ScrollView, StyleSheet, View } from 'react-native';
 import { Divider, IconButton, List, Text, useTheme } from 'react-native-paper';
-import { flexStyles, miscStyles } from '../theme/globalStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useCallback } from 'react';
+
 import { spaceTradersLogin } from '../constants/urls';
-import { useNavigation } from '@react-navigation/native';
+import { flexStyles, miscStyles } from '../theme/globalStyles';
 
 export const AgentCreationInstructionsScreen = () => {
   const theme = useTheme();
@@ -19,7 +20,7 @@ export const AgentCreationInstructionsScreen = () => {
       style={[flexStyles.flex, { backgroundColor: theme.colors.background }]}
     >
       <SafeAreaView style={flexStyles.flex}>
-        <IconButton icon="chevron-left" size={32} onPress={goBack} />
+        <IconButton icon="chevron-left" onPress={goBack} size={32} />
         <ScrollView
           alwaysBounceVertical={false}
           contentContainerStyle={styles.container}
@@ -45,17 +46,17 @@ export const AgentCreationInstructionsScreen = () => {
             title="Why?"
             titleStyle={{ color: theme.colors.onPrimaryContainer }}
           >
-            <Text variant="bodySmall" style={styles.whyText}>
+            <Text style={styles.whyText} variant="bodySmall">
               Guest agents all share the same rate limit, so heavy use by others
               can slow you down. Creating your own agent gives you a dedicated
               rate limit and smoother performance.
             </Text>
             <Divider bold />
           </List.Accordion>
-          <Text variant="titleMedium" style={styles.stepTitles}>
+          <Text style={styles.stepTitles} variant="titleMedium">
             Step 1: Create an account
           </Text>
-          <Text variant="bodyMedium" style={styles.stepBody}>
+          <Text style={styles.stepBody} variant="bodyMedium">
             <Text>Visit&nbsp;</Text>
             <Text
               onPress={handleOpenSpaceTradersSignup}
@@ -69,14 +70,14 @@ export const AgentCreationInstructionsScreen = () => {
           </Text>
           <Divider bold style={styles.divider} />
           <Text variant="titleMedium">Step 2: Create your agent</Text>
-          <Text variant="bodyMedium" style={styles.stepBody}>
+          <Text style={styles.stepBody} variant="bodyMedium">
             Navigate to the &quot;Agents&quot; tab in the Space Traders web
             application and create a new agent. Choose your agent name and
             faction, then submit the form.
           </Text>
           <Divider bold style={styles.divider} />
           <Text variant="titleMedium">Step 3: Retrieve your agent token</Text>
-          <Text variant="bodyMedium" style={styles.stepBody}>
+          <Text style={styles.stepBody} variant="bodyMedium">
             After creating your agent, it will be listed on the &quot;Current
             Agents&quot; on the same page. Click the &quot;Generate Token&quot;
             button to reveal your agent token.
@@ -85,7 +86,7 @@ export const AgentCreationInstructionsScreen = () => {
           <Text variant="titleMedium">
             Step 4: Enter your agent token in the app
           </Text>
-          <Text variant="bodyMedium" style={styles.stepBody}>
+          <Text style={styles.stepBody} variant="bodyMedium">
             Copy the agent token from the web application and paste it into the
             agent token field on the previous screen to complete the setup
             process. This gives the app access to your agent&apos;s data, but
@@ -99,8 +100,8 @@ export const AgentCreationInstructionsScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 24,
     paddingBottom: 32,
+    paddingHorizontal: 24,
   },
   divider: {
     marginVertical: 16,
@@ -113,8 +114,8 @@ const styles = StyleSheet.create({
   },
   whyAccordion: {
     borderRadius: 32,
-    paddingVertical: 0,
     marginVertical: 16,
+    paddingVertical: 0,
   },
-  whyText: { paddingLeft: 0, marginHorizontal: 8, marginBottom: 8 },
+  whyText: { marginBottom: 8, marginHorizontal: 8, paddingLeft: 0 },
 });

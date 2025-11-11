@@ -1,3 +1,5 @@
+ignoreRegExpList:
+  - /snackbar(s)?/
 words:
   - orbitron
   - pressable

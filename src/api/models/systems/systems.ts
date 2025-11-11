@@ -21,7 +21,7 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query';
+
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -37,32 +37,23 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 
+import { useMutation, useQuery } from '@tanstack/react-query';
+
+import type { ErrorType } from '../../client';
 import type { GetConstruction200 } from '../getConstruction200';
-
 import type { GetJumpGate200 } from '../getJumpGate200';
-
 import type { GetMarket200 } from '../getMarket200';
-
 import type { GetShipyard200 } from '../getShipyard200';
-
 import type { GetSystem200 } from '../getSystem200';
-
-import type { GetSystemWaypoints200 } from '../getSystemWaypoints200';
-
-import type { GetSystemWaypointsParams } from '../getSystemWaypointsParams';
-
 import type { GetSystems200 } from '../getSystems200';
-
 import type { GetSystemsParams } from '../getSystemsParams';
-
+import type { GetSystemWaypoints200 } from '../getSystemWaypoints200';
+import type { GetSystemWaypointsParams } from '../getSystemWaypointsParams';
 import type { GetWaypoint200 } from '../getWaypoint200';
-
 import type { SupplyConstruction201 } from '../supplyConstruction201';
-
 import type { SupplyConstructionBody } from '../supplyConstructionBody';
 
 import { clientInstance } from '../../client';
-import type { ErrorType } from '../../client';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -76,7 +67,7 @@ export const getSystems = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetSystems200>(
-    { url: `/systems`, method: 'GET', params, signal },
+    { method: 'GET', params, signal, url: `/systems` },
     options,
   );
 };
@@ -105,23 +96,23 @@ export const getGetSystemsQueryOptions = <
     signal,
   }) => getSystems(params, requestOptions, signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+  return { queryFn, queryKey, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getSystems>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetSystemsQueryError = ErrorType<unknown>;
 export type GetSystemsQueryResult = NonNullable<
   Awaited<ReturnType<typeof getSystems>>
 >;
-export type GetSystemsQueryError = ErrorType<unknown>;
 
 export function useGetSystems<
   TData = Awaited<ReturnType<typeof getSystems>>,
   TError = ErrorType<unknown>,
 >(
-  params: undefined | GetSystemsParams,
+  params: GetSystemsParams | undefined,
   options: {
     query: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getSystems>>, TError, TData>
@@ -220,9 +211,9 @@ export const getSystem = (
 ) => {
   return clientInstance<GetSystem200>(
     {
-      url: `/systems/${encodeURIComponent(String(systemSymbol))}`,
       method: 'GET',
       signal,
+      url: `/systems/${encodeURIComponent(String(systemSymbol))}`,
     },
     options,
   );
@@ -253,25 +244,25 @@ export const getGetSystemQueryOptions = <
   }) => getSystem(systemSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!systemSymbol,
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<Awaited<ReturnType<typeof getSystem>>, TError, TData> & {
     queryKey: DataTag<QueryKey, TData, TError>;
   };
 };
 
+export type GetSystemQueryError = ErrorType<unknown>;
 export type GetSystemQueryResult = NonNullable<
   Awaited<ReturnType<typeof getSystem>>
 >;
-export type GetSystemQueryError = ErrorType<unknown>;
 
 export function useGetSystem<
   TData = Awaited<ReturnType<typeof getSystem>>,
   TError = ErrorType<unknown>,
 >(
-  systemSymbol: undefined | string,
+  systemSymbol: string | undefined,
   options: {
     query: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getSystem>>, TError, TData>
@@ -373,10 +364,10 @@ export const getSystemWaypoints = (
 ) => {
   return clientInstance<GetSystemWaypoints200>(
     {
-      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints`,
       method: 'GET',
       params,
       signal,
+      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints`,
     },
     options,
   );
@@ -421,9 +412,9 @@ export const getGetSystemWaypointsQueryOptions = <
     getSystemWaypoints(systemSymbol, params, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!systemSymbol,
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof getSystemWaypoints>>,
@@ -432,17 +423,17 @@ export const getGetSystemWaypointsQueryOptions = <
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetSystemWaypointsQueryError = ErrorType<unknown>;
 export type GetSystemWaypointsQueryResult = NonNullable<
   Awaited<ReturnType<typeof getSystemWaypoints>>
 >;
-export type GetSystemWaypointsQueryError = ErrorType<unknown>;
 
 export function useGetSystemWaypoints<
   TData = Awaited<ReturnType<typeof getSystemWaypoints>>,
   TError = ErrorType<unknown>,
 >(
   systemSymbol: string,
-  params: undefined | GetSystemWaypointsParams,
+  params: GetSystemWaypointsParams | undefined,
   options: {
     query: Partial<
       UseQueryOptions<
@@ -567,9 +558,9 @@ export const getWaypoint = (
 ) => {
   return clientInstance<GetWaypoint200>(
     {
-      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints/${encodeURIComponent(String(waypointSymbol))}`,
       method: 'GET',
       signal,
+      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints/${encodeURIComponent(String(waypointSymbol))}`,
     },
     options,
   );
@@ -606,9 +597,9 @@ export const getGetWaypointQueryOptions = <
   }) => getWaypoint(systemSymbol, waypointSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!(systemSymbol && waypointSymbol),
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof getWaypoint>>,
@@ -617,10 +608,10 @@ export const getGetWaypointQueryOptions = <
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetWaypointQueryError = ErrorType<unknown>;
 export type GetWaypointQueryResult = NonNullable<
   Awaited<ReturnType<typeof getWaypoint>>
 >;
-export type GetWaypointQueryError = ErrorType<unknown>;
 
 export function useGetWaypoint<
   TData = Awaited<ReturnType<typeof getWaypoint>>,
@@ -736,9 +727,9 @@ export const getMarket = (
 ) => {
   return clientInstance<GetMarket200>(
     {
-      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints/${encodeURIComponent(String(waypointSymbol))}/market`,
       method: 'GET',
       signal,
+      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints/${encodeURIComponent(String(waypointSymbol))}/market`,
     },
     options,
   );
@@ -777,19 +768,19 @@ export const getGetMarketQueryOptions = <
   }) => getMarket(systemSymbol, waypointSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!(systemSymbol && waypointSymbol),
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<Awaited<ReturnType<typeof getMarket>>, TError, TData> & {
     queryKey: DataTag<QueryKey, TData, TError>;
   };
 };
 
+export type GetMarketQueryError = ErrorType<unknown>;
 export type GetMarketQueryResult = NonNullable<
   Awaited<ReturnType<typeof getMarket>>
 >;
-export type GetMarketQueryError = ErrorType<unknown>;
 
 export function useGetMarket<
   TData = Awaited<ReturnType<typeof getMarket>>,
@@ -903,9 +894,9 @@ export const getShipyard = (
 ) => {
   return clientInstance<GetShipyard200>(
     {
-      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints/${encodeURIComponent(String(waypointSymbol))}/shipyard`,
       method: 'GET',
       signal,
+      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints/${encodeURIComponent(String(waypointSymbol))}/shipyard`,
     },
     options,
   );
@@ -944,9 +935,9 @@ export const getGetShipyardQueryOptions = <
   }) => getShipyard(systemSymbol, waypointSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!(systemSymbol && waypointSymbol),
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof getShipyard>>,
@@ -955,10 +946,10 @@ export const getGetShipyardQueryOptions = <
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetShipyardQueryError = ErrorType<unknown>;
 export type GetShipyardQueryResult = NonNullable<
   Awaited<ReturnType<typeof getShipyard>>
 >;
-export type GetShipyardQueryError = ErrorType<unknown>;
 
 export function useGetShipyard<
   TData = Awaited<ReturnType<typeof getShipyard>>,
@@ -1074,9 +1065,9 @@ export const getJumpGate = (
 ) => {
   return clientInstance<GetJumpGate200>(
     {
-      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints/${encodeURIComponent(String(waypointSymbol))}/jump-gate`,
       method: 'GET',
       signal,
+      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints/${encodeURIComponent(String(waypointSymbol))}/jump-gate`,
     },
     options,
   );
@@ -1115,9 +1106,9 @@ export const getGetJumpGateQueryOptions = <
   }) => getJumpGate(systemSymbol, waypointSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!(systemSymbol && waypointSymbol),
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof getJumpGate>>,
@@ -1126,10 +1117,10 @@ export const getGetJumpGateQueryOptions = <
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetJumpGateQueryError = ErrorType<unknown>;
 export type GetJumpGateQueryResult = NonNullable<
   Awaited<ReturnType<typeof getJumpGate>>
 >;
-export type GetJumpGateQueryError = ErrorType<unknown>;
 
 export function useGetJumpGate<
   TData = Awaited<ReturnType<typeof getJumpGate>>,
@@ -1243,9 +1234,9 @@ export const getConstruction = (
 ) => {
   return clientInstance<GetConstruction200>(
     {
-      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints/${encodeURIComponent(String(waypointSymbol))}/construction`,
       method: 'GET',
       signal,
+      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints/${encodeURIComponent(String(waypointSymbol))}/construction`,
     },
     options,
   );
@@ -1288,9 +1279,9 @@ export const getGetConstructionQueryOptions = <
   }) => getConstruction(systemSymbol, waypointSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!(systemSymbol && waypointSymbol),
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof getConstruction>>,
@@ -1299,10 +1290,10 @@ export const getGetConstructionQueryOptions = <
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetConstructionQueryError = ErrorType<unknown>;
 export type GetConstructionQueryResult = NonNullable<
   Awaited<ReturnType<typeof getConstruction>>
 >;
-export type GetConstructionQueryError = ErrorType<unknown>;
 
 export function useGetConstruction<
   TData = Awaited<ReturnType<typeof getConstruction>>,
@@ -1435,11 +1426,11 @@ export const supplyConstruction = (
 ) => {
   return clientInstance<SupplyConstruction201>(
     {
-      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints/${encodeURIComponent(String(waypointSymbol))}/construction/supply`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: supplyConstructionBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/systems/${encodeURIComponent(String(systemSymbol))}/waypoints/${encodeURIComponent(String(waypointSymbol))}/construction/supply`,
     },
     options,
   );
@@ -1453,9 +1444,9 @@ export const getSupplyConstructionMutationOptions = <
     Awaited<ReturnType<typeof supplyConstruction>>,
     TError,
     {
+      data: SupplyConstructionBody;
       systemSymbol: string;
       waypointSymbol: string;
-      data: SupplyConstructionBody;
     },
     TContext
   >;
@@ -1464,9 +1455,9 @@ export const getSupplyConstructionMutationOptions = <
   Awaited<ReturnType<typeof supplyConstruction>>,
   TError,
   {
+    data: SupplyConstructionBody;
     systemSymbol: string;
     waypointSymbol: string;
-    data: SupplyConstructionBody;
   },
   TContext
 > => {
@@ -1482,12 +1473,12 @@ export const getSupplyConstructionMutationOptions = <
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof supplyConstruction>>,
     {
+      data: SupplyConstructionBody;
       systemSymbol: string;
       waypointSymbol: string;
-      data: SupplyConstructionBody;
     }
   > = (props) => {
-    const { systemSymbol, waypointSymbol, data } = props ?? {};
+    const { data, systemSymbol, waypointSymbol } = props ?? {};
 
     return supplyConstruction(
       systemSymbol,
@@ -1500,11 +1491,11 @@ export const getSupplyConstructionMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type SupplyConstructionMutationBody = SupplyConstructionBody;
+export type SupplyConstructionMutationError = ErrorType<unknown>;
 export type SupplyConstructionMutationResult = NonNullable<
   Awaited<ReturnType<typeof supplyConstruction>>
 >;
-export type SupplyConstructionMutationBody = SupplyConstructionBody;
-export type SupplyConstructionMutationError = ErrorType<unknown>;
 
 /**
  * @summary Supply Construction Site
@@ -1518,9 +1509,9 @@ export const useSupplyConstruction = <
       Awaited<ReturnType<typeof supplyConstruction>>,
       TError,
       {
+        data: SupplyConstructionBody;
         systemSymbol: string;
         waypointSymbol: string;
-        data: SupplyConstructionBody;
       },
       TContext
     >;
@@ -1531,9 +1522,9 @@ export const useSupplyConstruction = <
   Awaited<ReturnType<typeof supplyConstruction>>,
   TError,
   {
+    data: SupplyConstructionBody;
     systemSymbol: string;
     waypointSymbol: string;
-    data: SupplyConstructionBody;
   },
   TContext
 > => {

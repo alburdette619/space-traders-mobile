@@ -18,5 +18,5 @@ export const useLoadFonts = () => {
     Orbitron_900Black,
   });
 
-  return { fontsLoaded, error };
+  return { error, fontsLoaded };
 };

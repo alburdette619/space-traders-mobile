@@ -1,7 +1,8 @@
-import { StyleSheet, View, ViewProps } from 'react-native';
-import { flexStyles } from '../theme/globalStyles';
-import { useTheme } from 'react-native-paper';
 import { useLayout } from '@react-native-community/hooks';
+import { StyleSheet, View, ViewProps } from 'react-native';
+import { useTheme } from 'react-native-paper';
+
+import { flexStyles } from '../theme/globalStyles';
 
 export interface PolygonalViewProps
   extends Omit<ViewProps, 'height' | 'style' | 'width'> {
@@ -24,8 +25,8 @@ export const PolygonalView = ({
         <View
           style={[
             {
-              borderTopColor: colors.onBackground,
               borderRightWidth: triangleSize,
+              borderTopColor: colors.onBackground,
               borderTopWidth: triangleSize,
             },
             styles.triangleCorner,
@@ -46,8 +47,8 @@ export const PolygonalView = ({
         <View
           style={[
             {
-              borderTopColor: colors.onBackground,
               borderRightWidth: triangleSize,
+              borderTopColor: colors.onBackground,
               borderTopWidth: triangleSize,
             },
             styles.triangleCorner,
@@ -63,11 +64,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
   triangleCorner: {
-    width: 0,
-    height: 0,
     backgroundColor: 'transparent',
-    borderStyle: 'solid',
     borderRightColor: 'transparent',
+    borderStyle: 'solid',
+    height: 0,
+    width: 0,
   },
   triangleCornerLeft: {
     transform: [{ rotate: '90deg' }],

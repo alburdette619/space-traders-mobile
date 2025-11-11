@@ -1,7 +1,8 @@
+import { AxiosHeaders } from 'axios';
 import { getItemAsync } from 'expo-secure-store';
+
 import { agentKey } from '../constants/storageKeys';
 import { client } from './client';
-import { AxiosHeaders } from 'axios';
 
 client.interceptors.request.use(async (config) => {
   // Get agent key from secure storage and use it if available. Most traffic,

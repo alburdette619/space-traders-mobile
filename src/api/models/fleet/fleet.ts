@@ -21,7 +21,6 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { useMutation, useQuery } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
@@ -37,118 +36,66 @@ import type {
   UseQueryResult,
 } from '@tanstack/react-query';
 
+import { useMutation, useQuery } from '@tanstack/react-query';
+
+import type { ErrorType } from '../../client';
 import type { CreateChart201 } from '../createChart201';
-
 import type { CreateShipShipScan201 } from '../createShipShipScan201';
-
 import type { CreateShipSystemScan201 } from '../createShipSystemScan201';
-
 import type { CreateShipWaypointScan201 } from '../createShipWaypointScan201';
-
 import type { CreateSurvey201 } from '../createSurvey201';
-
 import type { DockShip200 } from '../dockShip200';
-
 import type { ExtractResources201 } from '../extractResources201';
-
 import type { ExtractResourcesBody } from '../extractResourcesBody';
-
 import type { ExtractResourcesWithSurvey201 } from '../extractResourcesWithSurvey201';
-
 import type { GetMounts200 } from '../getMounts200';
-
 import type { GetMyShip200 } from '../getMyShip200';
-
 import type { GetMyShipCargo200 } from '../getMyShipCargo200';
-
 import type { GetMyShips200 } from '../getMyShips200';
-
 import type { GetMyShipsParams } from '../getMyShipsParams';
-
 import type { GetRepairShip200 } from '../getRepairShip200';
-
 import type { GetScrapShip200 } from '../getScrapShip200';
-
 import type { GetShipCooldown200 } from '../getShipCooldown200';
-
 import type { GetShipModules200 } from '../getShipModules200';
-
 import type { GetShipNav200 } from '../getShipNav200';
-
 import type { InstallMount201 } from '../installMount201';
-
 import type { InstallMountBody } from '../installMountBody';
-
 import type { InstallShipModule201 } from '../installShipModule201';
-
 import type { InstallShipModuleBody } from '../installShipModuleBody';
-
 import type { Jettison200 } from '../jettison200';
-
 import type { JettisonBody } from '../jettisonBody';
-
 import type { JumpShip200 } from '../jumpShip200';
-
 import type { JumpShipBody } from '../jumpShipBody';
-
-import type { NavigateShip200 } from '../navigateShip200';
-
-import type { NavigateShipBody } from '../navigateShipBody';
-
-import type { NegotiateContract201 } from '../negotiateContract201';
-
-import type { OrbitShip200 } from '../orbitShip200';
-
-import type { PatchShipNav200 } from '../patchShipNav200';
-
-import type { PatchShipNavBody } from '../patchShipNavBody';
-
-import type { PurchaseCargo201 } from '../purchaseCargo201';
-
-import type { PurchaseCargoBody } from '../purchaseCargoBody';
-
-import type { PurchaseShip201 } from '../purchaseShip201';
-
-import type { PurchaseShipBody } from '../purchaseShipBody';
-
-import type { RefuelShip200 } from '../refuelShip200';
-
-import type { RefuelShipBody } from '../refuelShipBody';
-
-import type { RemoveMount201 } from '../removeMount201';
-
-import type { RemoveMountBody } from '../removeMountBody';
-
-import type { RemoveShipModule201 } from '../removeShipModule201';
-
-import type { RemoveShipModuleBody } from '../removeShipModuleBody';
-
-import type { RepairShip200 } from '../repairShip200';
-
-import type { ScrapShip200 } from '../scrapShip200';
-
-import type { SellCargo201 } from '../sellCargo201';
-
-import type { SellCargoBody } from '../sellCargoBody';
-
-import type { ShipRefine201 } from '../shipRefine201';
-
-import type { ShipRefineBody } from '../shipRefineBody';
-
-import type { SiphonResources201 } from '../siphonResources201';
-
 import type { Survey } from '../models-Survey/survey';
-
+import type { NavigateShip200 } from '../navigateShip200';
+import type { NavigateShipBody } from '../navigateShipBody';
+import type { NegotiateContract201 } from '../negotiateContract201';
+import type { OrbitShip200 } from '../orbitShip200';
+import type { PatchShipNav200 } from '../patchShipNav200';
+import type { PatchShipNavBody } from '../patchShipNavBody';
+import type { PurchaseCargo201 } from '../purchaseCargo201';
+import type { PurchaseCargoBody } from '../purchaseCargoBody';
+import type { PurchaseShip201 } from '../purchaseShip201';
+import type { PurchaseShipBody } from '../purchaseShipBody';
+import type { RefuelShip200 } from '../refuelShip200';
+import type { RefuelShipBody } from '../refuelShipBody';
+import type { RemoveMount201 } from '../removeMount201';
+import type { RemoveMountBody } from '../removeMountBody';
+import type { RemoveShipModule201 } from '../removeShipModule201';
+import type { RemoveShipModuleBody } from '../removeShipModuleBody';
+import type { RepairShip200 } from '../repairShip200';
+import type { ScrapShip200 } from '../scrapShip200';
+import type { SellCargo201 } from '../sellCargo201';
+import type { SellCargoBody } from '../sellCargoBody';
+import type { ShipRefine201 } from '../shipRefine201';
+import type { ShipRefineBody } from '../shipRefineBody';
+import type { SiphonResources201 } from '../siphonResources201';
 import type { TransferCargo200 } from '../transferCargo200';
-
 import type { TransferCargoBody } from '../transferCargoBody';
-
 import type { WarpShip200 } from '../warpShip200';
-
 import type { WarpShipBody } from '../warpShipBody';
 
 import { clientInstance } from '../../client';
-import type { ErrorType } from '../../client';
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
@@ -162,7 +109,7 @@ export const getMyShips = (
   signal?: AbortSignal,
 ) => {
   return clientInstance<GetMyShips200>(
-    { url: `/my/ships`, method: 'GET', params, signal },
+    { method: 'GET', params, signal, url: `/my/ships` },
     options,
   );
 };
@@ -191,23 +138,23 @@ export const getGetMyShipsQueryOptions = <
     signal,
   }) => getMyShips(params, requestOptions, signal);
 
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+  return { queryFn, queryKey, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof getMyShips>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetMyShipsQueryError = ErrorType<unknown>;
 export type GetMyShipsQueryResult = NonNullable<
   Awaited<ReturnType<typeof getMyShips>>
 >;
-export type GetMyShipsQueryError = ErrorType<unknown>;
 
 export function useGetMyShips<
   TData = Awaited<ReturnType<typeof getMyShips>>,
   TError = ErrorType<unknown>,
 >(
-  params: undefined | GetMyShipsParams,
+  params: GetMyShipsParams | undefined,
   options: {
     query: Partial<
       UseQueryOptions<Awaited<ReturnType<typeof getMyShips>>, TError, TData>
@@ -308,11 +255,11 @@ export const purchaseShip = (
 ) => {
   return clientInstance<PurchaseShip201>(
     {
-      url: `/my/ships`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: purchaseShipBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships`,
     },
     options,
   );
@@ -356,11 +303,11 @@ export const getPurchaseShipMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type PurchaseShipMutationBody = PurchaseShipBody;
+export type PurchaseShipMutationError = ErrorType<unknown>;
 export type PurchaseShipMutationResult = NonNullable<
   Awaited<ReturnType<typeof purchaseShip>>
 >;
-export type PurchaseShipMutationBody = PurchaseShipBody;
-export type PurchaseShipMutationError = ErrorType<unknown>;
 
 /**
  * @summary Purchase Ship
@@ -400,9 +347,9 @@ export const getMyShip = (
 ) => {
   return clientInstance<GetMyShip200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}`,
       method: 'GET',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}`,
     },
     options,
   );
@@ -433,19 +380,19 @@ export const getGetMyShipQueryOptions = <
   }) => getMyShip(shipSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<Awaited<ReturnType<typeof getMyShip>>, TError, TData> & {
     queryKey: DataTag<QueryKey, TData, TError>;
   };
 };
 
+export type GetMyShipQueryError = ErrorType<unknown>;
 export type GetMyShipQueryResult = NonNullable<
   Awaited<ReturnType<typeof getMyShip>>
 >;
-export type GetMyShipQueryError = ErrorType<unknown>;
 
 export function useGetMyShip<
   TData = Awaited<ReturnType<typeof getMyShip>>,
@@ -550,9 +497,9 @@ export const getMyShipCargo = (
 ) => {
   return clientInstance<GetMyShipCargo200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/cargo`,
       method: 'GET',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/cargo`,
     },
     options,
   );
@@ -584,9 +531,9 @@ export const getGetMyShipCargoQueryOptions = <
   }) => getMyShipCargo(shipSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof getMyShipCargo>>,
@@ -595,10 +542,10 @@ export const getGetMyShipCargoQueryOptions = <
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetMyShipCargoQueryError = ErrorType<unknown>;
 export type GetMyShipCargoQueryResult = NonNullable<
   Awaited<ReturnType<typeof getMyShipCargo>>
 >;
-export type GetMyShipCargoQueryError = ErrorType<unknown>;
 
 export function useGetMyShipCargo<
   TData = Awaited<ReturnType<typeof getMyShipCargo>>,
@@ -707,9 +654,9 @@ export const orbitShip = (
 ) => {
   return clientInstance<OrbitShip200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/orbit`,
       method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/orbit`,
     },
     options,
   );
@@ -753,11 +700,11 @@ export const getOrbitShipMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type OrbitShipMutationError = ErrorType<unknown>;
+
 export type OrbitShipMutationResult = NonNullable<
   Awaited<ReturnType<typeof orbitShip>>
 >;
-
-export type OrbitShipMutationError = ErrorType<unknown>;
 
 /**
  * @summary Orbit Ship
@@ -797,11 +744,11 @@ export const shipRefine = (
 ) => {
   return clientInstance<ShipRefine201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/refine`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: shipRefineBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/refine`,
     },
     options,
   );
@@ -814,14 +761,14 @@ export const getShipRefineMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof shipRefine>>,
     TError,
-    { shipSymbol: string; data: ShipRefineBody },
+    { data: ShipRefineBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof shipRefine>>,
   TError,
-  { shipSymbol: string; data: ShipRefineBody },
+  { data: ShipRefineBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['shipRefine'];
@@ -835,9 +782,9 @@ export const getShipRefineMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof shipRefine>>,
-    { shipSymbol: string; data: ShipRefineBody }
+    { data: ShipRefineBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return shipRefine(shipSymbol, data, requestOptions);
   };
@@ -845,11 +792,11 @@ export const getShipRefineMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type ShipRefineMutationBody = ShipRefineBody;
+export type ShipRefineMutationError = ErrorType<unknown>;
 export type ShipRefineMutationResult = NonNullable<
   Awaited<ReturnType<typeof shipRefine>>
 >;
-export type ShipRefineMutationBody = ShipRefineBody;
-export type ShipRefineMutationError = ErrorType<unknown>;
 
 /**
  * @summary Ship Refine
@@ -859,7 +806,7 @@ export const useShipRefine = <TError = ErrorType<unknown>, TContext = unknown>(
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof shipRefine>>,
       TError,
-      { shipSymbol: string; data: ShipRefineBody },
+      { data: ShipRefineBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -868,7 +815,7 @@ export const useShipRefine = <TError = ErrorType<unknown>, TContext = unknown>(
 ): UseMutationResult<
   Awaited<ReturnType<typeof shipRefine>>,
   TError,
-  { shipSymbol: string; data: ShipRefineBody },
+  { data: ShipRefineBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getShipRefineMutationOptions(options);
@@ -890,9 +837,9 @@ export const createChart = (
 ) => {
   return clientInstance<CreateChart201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/chart`,
       method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/chart`,
     },
     options,
   );
@@ -936,11 +883,11 @@ export const getCreateChartMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type CreateChartMutationError = ErrorType<unknown>;
+
 export type CreateChartMutationResult = NonNullable<
   Awaited<ReturnType<typeof createChart>>
 >;
-
-export type CreateChartMutationError = ErrorType<unknown>;
 
 /**
  * @summary Create Chart
@@ -981,9 +928,9 @@ export const getShipCooldown = (
 ) => {
   return clientInstance<GetShipCooldown200 | void>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/cooldown`,
       method: 'GET',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/cooldown`,
     },
     options,
   );
@@ -1019,9 +966,9 @@ export const getGetShipCooldownQueryOptions = <
   }) => getShipCooldown(shipSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof getShipCooldown>>,
@@ -1030,10 +977,10 @@ export const getGetShipCooldownQueryOptions = <
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetShipCooldownQueryError = ErrorType<unknown>;
 export type GetShipCooldownQueryResult = NonNullable<
   Awaited<ReturnType<typeof getShipCooldown>>
 >;
-export type GetShipCooldownQueryError = ErrorType<unknown>;
 
 export function useGetShipCooldown<
   TData = Awaited<ReturnType<typeof getShipCooldown>>,
@@ -1158,9 +1105,9 @@ export const dockShip = (
 ) => {
   return clientInstance<DockShip200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/dock`,
       method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/dock`,
     },
     options,
   );
@@ -1204,11 +1151,11 @@ export const getDockShipMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type DockShipMutationError = ErrorType<unknown>;
+
 export type DockShipMutationResult = NonNullable<
   Awaited<ReturnType<typeof dockShip>>
 >;
-
-export type DockShipMutationError = ErrorType<unknown>;
 
 /**
  * @summary Dock Ship
@@ -1253,9 +1200,9 @@ export const createSurvey = (
 ) => {
   return clientInstance<CreateSurvey201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/survey`,
       method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/survey`,
     },
     options,
   );
@@ -1299,11 +1246,11 @@ export const getCreateSurveyMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type CreateSurveyMutationError = ErrorType<unknown>;
+
 export type CreateSurveyMutationResult = NonNullable<
   Awaited<ReturnType<typeof createSurvey>>
 >;
-
-export type CreateSurveyMutationError = ErrorType<unknown>;
 
 /**
  * @summary Create Survey
@@ -1348,11 +1295,11 @@ export const extractResources = (
 ) => {
   return clientInstance<ExtractResources201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/extract`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: extractResourcesBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/extract`,
     },
     options,
   );
@@ -1365,14 +1312,14 @@ export const getExtractResourcesMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof extractResources>>,
     TError,
-    { shipSymbol: string; data: ExtractResourcesBody },
+    { data: ExtractResourcesBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof extractResources>>,
   TError,
-  { shipSymbol: string; data: ExtractResourcesBody },
+  { data: ExtractResourcesBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['extractResources'];
@@ -1386,9 +1333,9 @@ export const getExtractResourcesMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof extractResources>>,
-    { shipSymbol: string; data: ExtractResourcesBody }
+    { data: ExtractResourcesBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return extractResources(shipSymbol, data, requestOptions);
   };
@@ -1396,11 +1343,11 @@ export const getExtractResourcesMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type ExtractResourcesMutationBody = ExtractResourcesBody;
+export type ExtractResourcesMutationError = ErrorType<unknown>;
 export type ExtractResourcesMutationResult = NonNullable<
   Awaited<ReturnType<typeof extractResources>>
 >;
-export type ExtractResourcesMutationBody = ExtractResourcesBody;
-export type ExtractResourcesMutationError = ErrorType<unknown>;
 
 /**
  * @summary Extract Resources
@@ -1413,7 +1360,7 @@ export const useExtractResources = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof extractResources>>,
       TError,
-      { shipSymbol: string; data: ExtractResourcesBody },
+      { data: ExtractResourcesBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -1422,7 +1369,7 @@ export const useExtractResources = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof extractResources>>,
   TError,
-  { shipSymbol: string; data: ExtractResourcesBody },
+  { data: ExtractResourcesBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getExtractResourcesMutationOptions(options);
@@ -1442,9 +1389,9 @@ export const siphonResources = (
 ) => {
   return clientInstance<SiphonResources201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/siphon`,
       method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/siphon`,
     },
     options,
   );
@@ -1488,11 +1435,11 @@ export const getSiphonResourcesMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type SiphonResourcesMutationError = ErrorType<unknown>;
+
 export type SiphonResourcesMutationResult = NonNullable<
   Awaited<ReturnType<typeof siphonResources>>
 >;
-
-export type SiphonResourcesMutationError = ErrorType<unknown>;
 
 /**
  * @summary Siphon Resources
@@ -1535,11 +1482,11 @@ export const extractResourcesWithSurvey = (
 ) => {
   return clientInstance<ExtractResourcesWithSurvey201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/extract/survey`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: survey,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/extract/survey`,
     },
     options,
   );
@@ -1552,14 +1499,14 @@ export const getExtractResourcesWithSurveyMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof extractResourcesWithSurvey>>,
     TError,
-    { shipSymbol: string; data: Survey },
+    { data: Survey; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof extractResourcesWithSurvey>>,
   TError,
-  { shipSymbol: string; data: Survey },
+  { data: Survey; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['extractResourcesWithSurvey'];
@@ -1573,9 +1520,9 @@ export const getExtractResourcesWithSurveyMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof extractResourcesWithSurvey>>,
-    { shipSymbol: string; data: Survey }
+    { data: Survey; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return extractResourcesWithSurvey(shipSymbol, data, requestOptions);
   };
@@ -1583,11 +1530,11 @@ export const getExtractResourcesWithSurveyMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type ExtractResourcesWithSurveyMutationBody = Survey;
+export type ExtractResourcesWithSurveyMutationError = ErrorType<unknown>;
 export type ExtractResourcesWithSurveyMutationResult = NonNullable<
   Awaited<ReturnType<typeof extractResourcesWithSurvey>>
 >;
-export type ExtractResourcesWithSurveyMutationBody = Survey;
-export type ExtractResourcesWithSurveyMutationError = ErrorType<unknown>;
 
 /**
  * @summary Extract Resources with Survey
@@ -1600,7 +1547,7 @@ export const useExtractResourcesWithSurvey = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof extractResourcesWithSurvey>>,
       TError,
-      { shipSymbol: string; data: Survey },
+      { data: Survey; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -1609,7 +1556,7 @@ export const useExtractResourcesWithSurvey = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof extractResourcesWithSurvey>>,
   TError,
-  { shipSymbol: string; data: Survey },
+  { data: Survey; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getExtractResourcesWithSurveyMutationOptions(options);
@@ -1628,11 +1575,11 @@ export const jettison = (
 ) => {
   return clientInstance<Jettison200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/jettison`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: jettisonBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/jettison`,
     },
     options,
   );
@@ -1645,14 +1592,14 @@ export const getJettisonMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof jettison>>,
     TError,
-    { shipSymbol: string; data: JettisonBody },
+    { data: JettisonBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof jettison>>,
   TError,
-  { shipSymbol: string; data: JettisonBody },
+  { data: JettisonBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['jettison'];
@@ -1666,9 +1613,9 @@ export const getJettisonMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof jettison>>,
-    { shipSymbol: string; data: JettisonBody }
+    { data: JettisonBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return jettison(shipSymbol, data, requestOptions);
   };
@@ -1676,11 +1623,11 @@ export const getJettisonMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type JettisonMutationBody = JettisonBody;
+export type JettisonMutationError = ErrorType<unknown>;
 export type JettisonMutationResult = NonNullable<
   Awaited<ReturnType<typeof jettison>>
 >;
-export type JettisonMutationBody = JettisonBody;
-export type JettisonMutationError = ErrorType<unknown>;
 
 /**
  * @summary Jettison Cargo
@@ -1690,7 +1637,7 @@ export const useJettison = <TError = ErrorType<unknown>, TContext = unknown>(
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof jettison>>,
       TError,
-      { shipSymbol: string; data: JettisonBody },
+      { data: JettisonBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -1699,7 +1646,7 @@ export const useJettison = <TError = ErrorType<unknown>, TContext = unknown>(
 ): UseMutationResult<
   Awaited<ReturnType<typeof jettison>>,
   TError,
-  { shipSymbol: string; data: JettisonBody },
+  { data: JettisonBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getJettisonMutationOptions(options);
@@ -1720,11 +1667,11 @@ export const jumpShip = (
 ) => {
   return clientInstance<JumpShip200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/jump`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: jumpShipBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/jump`,
     },
     options,
   );
@@ -1737,14 +1684,14 @@ export const getJumpShipMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof jumpShip>>,
     TError,
-    { shipSymbol: string; data: JumpShipBody },
+    { data: JumpShipBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof jumpShip>>,
   TError,
-  { shipSymbol: string; data: JumpShipBody },
+  { data: JumpShipBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['jumpShip'];
@@ -1758,9 +1705,9 @@ export const getJumpShipMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof jumpShip>>,
-    { shipSymbol: string; data: JumpShipBody }
+    { data: JumpShipBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return jumpShip(shipSymbol, data, requestOptions);
   };
@@ -1768,11 +1715,11 @@ export const getJumpShipMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type JumpShipMutationBody = JumpShipBody;
+export type JumpShipMutationError = ErrorType<unknown>;
 export type JumpShipMutationResult = NonNullable<
   Awaited<ReturnType<typeof jumpShip>>
 >;
-export type JumpShipMutationBody = JumpShipBody;
-export type JumpShipMutationError = ErrorType<unknown>;
 
 /**
  * @summary Jump Ship
@@ -1782,7 +1729,7 @@ export const useJumpShip = <TError = ErrorType<unknown>, TContext = unknown>(
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof jumpShip>>,
       TError,
-      { shipSymbol: string; data: JumpShipBody },
+      { data: JumpShipBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -1791,7 +1738,7 @@ export const useJumpShip = <TError = ErrorType<unknown>, TContext = unknown>(
 ): UseMutationResult<
   Awaited<ReturnType<typeof jumpShip>>,
   TError,
-  { shipSymbol: string; data: JumpShipBody },
+  { data: JumpShipBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getJumpShipMutationOptions(options);
@@ -1814,11 +1761,11 @@ export const navigateShip = (
 ) => {
   return clientInstance<NavigateShip200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/navigate`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: navigateShipBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/navigate`,
     },
     options,
   );
@@ -1831,14 +1778,14 @@ export const getNavigateShipMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof navigateShip>>,
     TError,
-    { shipSymbol: string; data: NavigateShipBody },
+    { data: NavigateShipBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof navigateShip>>,
   TError,
-  { shipSymbol: string; data: NavigateShipBody },
+  { data: NavigateShipBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['navigateShip'];
@@ -1852,9 +1799,9 @@ export const getNavigateShipMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof navigateShip>>,
-    { shipSymbol: string; data: NavigateShipBody }
+    { data: NavigateShipBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return navigateShip(shipSymbol, data, requestOptions);
   };
@@ -1862,11 +1809,11 @@ export const getNavigateShipMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type NavigateShipMutationBody = NavigateShipBody;
+export type NavigateShipMutationError = ErrorType<unknown>;
 export type NavigateShipMutationResult = NonNullable<
   Awaited<ReturnType<typeof navigateShip>>
 >;
-export type NavigateShipMutationBody = NavigateShipBody;
-export type NavigateShipMutationError = ErrorType<unknown>;
 
 /**
  * @summary Navigate Ship
@@ -1879,7 +1826,7 @@ export const useNavigateShip = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof navigateShip>>,
       TError,
-      { shipSymbol: string; data: NavigateShipBody },
+      { data: NavigateShipBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -1888,7 +1835,7 @@ export const useNavigateShip = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof navigateShip>>,
   TError,
-  { shipSymbol: string; data: NavigateShipBody },
+  { data: NavigateShipBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getNavigateShipMutationOptions(options);
@@ -1908,10 +1855,10 @@ export const patchShipNav = (
 ) => {
   return clientInstance<PatchShipNav200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/nav`,
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
       data: patchShipNavBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'PATCH',
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/nav`,
     },
     options,
   );
@@ -1924,14 +1871,14 @@ export const getPatchShipNavMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof patchShipNav>>,
     TError,
-    { shipSymbol: string; data: PatchShipNavBody },
+    { data: PatchShipNavBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof patchShipNav>>,
   TError,
-  { shipSymbol: string; data: PatchShipNavBody },
+  { data: PatchShipNavBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['patchShipNav'];
@@ -1945,9 +1892,9 @@ export const getPatchShipNavMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof patchShipNav>>,
-    { shipSymbol: string; data: PatchShipNavBody }
+    { data: PatchShipNavBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return patchShipNav(shipSymbol, data, requestOptions);
   };
@@ -1955,11 +1902,11 @@ export const getPatchShipNavMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type PatchShipNavMutationBody = PatchShipNavBody;
+export type PatchShipNavMutationError = ErrorType<unknown>;
 export type PatchShipNavMutationResult = NonNullable<
   Awaited<ReturnType<typeof patchShipNav>>
 >;
-export type PatchShipNavMutationBody = PatchShipNavBody;
-export type PatchShipNavMutationError = ErrorType<unknown>;
 
 /**
  * @summary Patch Ship Nav
@@ -1972,7 +1919,7 @@ export const usePatchShipNav = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof patchShipNav>>,
       TError,
-      { shipSymbol: string; data: PatchShipNavBody },
+      { data: PatchShipNavBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -1981,7 +1928,7 @@ export const usePatchShipNav = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof patchShipNav>>,
   TError,
-  { shipSymbol: string; data: PatchShipNavBody },
+  { data: PatchShipNavBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getPatchShipNavMutationOptions(options);
@@ -1999,9 +1946,9 @@ export const getShipNav = (
 ) => {
   return clientInstance<GetShipNav200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/nav`,
       method: 'GET',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/nav`,
     },
     options,
   );
@@ -2032,9 +1979,9 @@ export const getGetShipNavQueryOptions = <
   }) => getShipNav(shipSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof getShipNav>>,
@@ -2043,10 +1990,10 @@ export const getGetShipNavQueryOptions = <
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetShipNavQueryError = ErrorType<unknown>;
 export type GetShipNavQueryResult = NonNullable<
   Awaited<ReturnType<typeof getShipNav>>
 >;
-export type GetShipNavQueryError = ErrorType<unknown>;
 
 export function useGetShipNav<
   TData = Awaited<ReturnType<typeof getShipNav>>,
@@ -2154,11 +2101,11 @@ export const warpShip = (
 ) => {
   return clientInstance<WarpShip200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/warp`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: warpShipBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/warp`,
     },
     options,
   );
@@ -2171,14 +2118,14 @@ export const getWarpShipMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof warpShip>>,
     TError,
-    { shipSymbol: string; data: WarpShipBody },
+    { data: WarpShipBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof warpShip>>,
   TError,
-  { shipSymbol: string; data: WarpShipBody },
+  { data: WarpShipBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['warpShip'];
@@ -2192,9 +2139,9 @@ export const getWarpShipMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof warpShip>>,
-    { shipSymbol: string; data: WarpShipBody }
+    { data: WarpShipBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return warpShip(shipSymbol, data, requestOptions);
   };
@@ -2202,11 +2149,11 @@ export const getWarpShipMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type WarpShipMutationBody = WarpShipBody;
+export type WarpShipMutationError = ErrorType<unknown>;
 export type WarpShipMutationResult = NonNullable<
   Awaited<ReturnType<typeof warpShip>>
 >;
-export type WarpShipMutationBody = WarpShipBody;
-export type WarpShipMutationError = ErrorType<unknown>;
 
 /**
  * @summary Warp Ship
@@ -2216,7 +2163,7 @@ export const useWarpShip = <TError = ErrorType<unknown>, TContext = unknown>(
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof warpShip>>,
       TError,
-      { shipSymbol: string; data: WarpShipBody },
+      { data: WarpShipBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -2225,7 +2172,7 @@ export const useWarpShip = <TError = ErrorType<unknown>, TContext = unknown>(
 ): UseMutationResult<
   Awaited<ReturnType<typeof warpShip>>,
   TError,
-  { shipSymbol: string; data: WarpShipBody },
+  { data: WarpShipBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getWarpShipMutationOptions(options);
@@ -2244,11 +2191,11 @@ export const sellCargo = (
 ) => {
   return clientInstance<SellCargo201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/sell`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: sellCargoBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/sell`,
     },
     options,
   );
@@ -2261,14 +2208,14 @@ export const getSellCargoMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof sellCargo>>,
     TError,
-    { shipSymbol: string; data: SellCargoBody },
+    { data: SellCargoBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof sellCargo>>,
   TError,
-  { shipSymbol: string; data: SellCargoBody },
+  { data: SellCargoBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['sellCargo'];
@@ -2282,9 +2229,9 @@ export const getSellCargoMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof sellCargo>>,
-    { shipSymbol: string; data: SellCargoBody }
+    { data: SellCargoBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return sellCargo(shipSymbol, data, requestOptions);
   };
@@ -2292,11 +2239,11 @@ export const getSellCargoMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type SellCargoMutationBody = SellCargoBody;
+export type SellCargoMutationError = ErrorType<unknown>;
 export type SellCargoMutationResult = NonNullable<
   Awaited<ReturnType<typeof sellCargo>>
 >;
-export type SellCargoMutationBody = SellCargoBody;
-export type SellCargoMutationError = ErrorType<unknown>;
 
 /**
  * @summary Sell Cargo
@@ -2306,7 +2253,7 @@ export const useSellCargo = <TError = ErrorType<unknown>, TContext = unknown>(
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof sellCargo>>,
       TError,
-      { shipSymbol: string; data: SellCargoBody },
+      { data: SellCargoBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -2315,7 +2262,7 @@ export const useSellCargo = <TError = ErrorType<unknown>, TContext = unknown>(
 ): UseMutationResult<
   Awaited<ReturnType<typeof sellCargo>>,
   TError,
-  { shipSymbol: string; data: SellCargoBody },
+  { data: SellCargoBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getSellCargoMutationOptions(options);
@@ -2335,9 +2282,9 @@ export const createShipSystemScan = (
 ) => {
   return clientInstance<CreateShipSystemScan201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scan/systems`,
       method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scan/systems`,
     },
     options,
   );
@@ -2381,11 +2328,11 @@ export const getCreateShipSystemScanMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type CreateShipSystemScanMutationError = ErrorType<unknown>;
+
 export type CreateShipSystemScanMutationResult = NonNullable<
   Awaited<ReturnType<typeof createShipSystemScan>>
 >;
-
-export type CreateShipSystemScanMutationError = ErrorType<unknown>;
 
 /**
  * @summary Scan Systems
@@ -2429,9 +2376,9 @@ export const createShipWaypointScan = (
 ) => {
   return clientInstance<CreateShipWaypointScan201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scan/waypoints`,
       method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scan/waypoints`,
     },
     options,
   );
@@ -2475,11 +2422,11 @@ export const getCreateShipWaypointScanMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type CreateShipWaypointScanMutationError = ErrorType<unknown>;
+
 export type CreateShipWaypointScanMutationResult = NonNullable<
   Awaited<ReturnType<typeof createShipWaypointScan>>
 >;
-
-export type CreateShipWaypointScanMutationError = ErrorType<unknown>;
 
 /**
  * @summary Scan Waypoints
@@ -2523,9 +2470,9 @@ export const createShipShipScan = (
 ) => {
   return clientInstance<CreateShipShipScan201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scan/ships`,
       method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scan/ships`,
     },
     options,
   );
@@ -2569,11 +2516,11 @@ export const getCreateShipShipScanMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type CreateShipShipScanMutationError = ErrorType<unknown>;
+
 export type CreateShipShipScanMutationResult = NonNullable<
   Awaited<ReturnType<typeof createShipShipScan>>
 >;
-
-export type CreateShipShipScanMutationError = ErrorType<unknown>;
 
 /**
  * @summary Scan Ships
@@ -2620,11 +2567,11 @@ export const refuelShip = (
 ) => {
   return clientInstance<RefuelShip200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/refuel`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: refuelShipBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/refuel`,
     },
     options,
   );
@@ -2637,14 +2584,14 @@ export const getRefuelShipMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof refuelShip>>,
     TError,
-    { shipSymbol: string; data: RefuelShipBody },
+    { data: RefuelShipBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof refuelShip>>,
   TError,
-  { shipSymbol: string; data: RefuelShipBody },
+  { data: RefuelShipBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['refuelShip'];
@@ -2658,9 +2605,9 @@ export const getRefuelShipMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof refuelShip>>,
-    { shipSymbol: string; data: RefuelShipBody }
+    { data: RefuelShipBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return refuelShip(shipSymbol, data, requestOptions);
   };
@@ -2668,11 +2615,11 @@ export const getRefuelShipMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type RefuelShipMutationBody = RefuelShipBody;
+export type RefuelShipMutationError = ErrorType<unknown>;
 export type RefuelShipMutationResult = NonNullable<
   Awaited<ReturnType<typeof refuelShip>>
 >;
-export type RefuelShipMutationBody = RefuelShipBody;
-export type RefuelShipMutationError = ErrorType<unknown>;
 
 /**
  * @summary Refuel Ship
@@ -2682,7 +2629,7 @@ export const useRefuelShip = <TError = ErrorType<unknown>, TContext = unknown>(
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof refuelShip>>,
       TError,
-      { shipSymbol: string; data: RefuelShipBody },
+      { data: RefuelShipBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -2691,7 +2638,7 @@ export const useRefuelShip = <TError = ErrorType<unknown>, TContext = unknown>(
 ): UseMutationResult<
   Awaited<ReturnType<typeof refuelShip>>,
   TError,
-  { shipSymbol: string; data: RefuelShipBody },
+  { data: RefuelShipBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getRefuelShipMutationOptions(options);
@@ -2716,11 +2663,11 @@ export const purchaseCargo = (
 ) => {
   return clientInstance<PurchaseCargo201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/purchase`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: purchaseCargoBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/purchase`,
     },
     options,
   );
@@ -2733,14 +2680,14 @@ export const getPurchaseCargoMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof purchaseCargo>>,
     TError,
-    { shipSymbol: string; data: PurchaseCargoBody },
+    { data: PurchaseCargoBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof purchaseCargo>>,
   TError,
-  { shipSymbol: string; data: PurchaseCargoBody },
+  { data: PurchaseCargoBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['purchaseCargo'];
@@ -2754,9 +2701,9 @@ export const getPurchaseCargoMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof purchaseCargo>>,
-    { shipSymbol: string; data: PurchaseCargoBody }
+    { data: PurchaseCargoBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return purchaseCargo(shipSymbol, data, requestOptions);
   };
@@ -2764,11 +2711,11 @@ export const getPurchaseCargoMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type PurchaseCargoMutationBody = PurchaseCargoBody;
+export type PurchaseCargoMutationError = ErrorType<unknown>;
 export type PurchaseCargoMutationResult = NonNullable<
   Awaited<ReturnType<typeof purchaseCargo>>
 >;
-export type PurchaseCargoMutationBody = PurchaseCargoBody;
-export type PurchaseCargoMutationError = ErrorType<unknown>;
 
 /**
  * @summary Purchase Cargo
@@ -2781,7 +2728,7 @@ export const usePurchaseCargo = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof purchaseCargo>>,
       TError,
-      { shipSymbol: string; data: PurchaseCargoBody },
+      { data: PurchaseCargoBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -2790,7 +2737,7 @@ export const usePurchaseCargo = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof purchaseCargo>>,
   TError,
-  { shipSymbol: string; data: PurchaseCargoBody },
+  { data: PurchaseCargoBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getPurchaseCargoMutationOptions(options);
@@ -2813,11 +2760,11 @@ export const transferCargo = (
 ) => {
   return clientInstance<TransferCargo200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/transfer`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: transferCargoBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/transfer`,
     },
     options,
   );
@@ -2830,14 +2777,14 @@ export const getTransferCargoMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof transferCargo>>,
     TError,
-    { shipSymbol: string; data: TransferCargoBody },
+    { data: TransferCargoBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof transferCargo>>,
   TError,
-  { shipSymbol: string; data: TransferCargoBody },
+  { data: TransferCargoBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['transferCargo'];
@@ -2851,9 +2798,9 @@ export const getTransferCargoMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof transferCargo>>,
-    { shipSymbol: string; data: TransferCargoBody }
+    { data: TransferCargoBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return transferCargo(shipSymbol, data, requestOptions);
   };
@@ -2861,11 +2808,11 @@ export const getTransferCargoMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type TransferCargoMutationBody = TransferCargoBody;
+export type TransferCargoMutationError = ErrorType<unknown>;
 export type TransferCargoMutationResult = NonNullable<
   Awaited<ReturnType<typeof transferCargo>>
 >;
-export type TransferCargoMutationBody = TransferCargoBody;
-export type TransferCargoMutationError = ErrorType<unknown>;
 
 /**
  * @summary Transfer Cargo
@@ -2878,7 +2825,7 @@ export const useTransferCargo = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof transferCargo>>,
       TError,
-      { shipSymbol: string; data: TransferCargoBody },
+      { data: TransferCargoBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -2887,7 +2834,7 @@ export const useTransferCargo = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof transferCargo>>,
   TError,
-  { shipSymbol: string; data: TransferCargoBody },
+  { data: TransferCargoBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getTransferCargoMutationOptions(options);
@@ -2911,9 +2858,9 @@ export const negotiateContract = (
 ) => {
   return clientInstance<NegotiateContract201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/negotiate/contract`,
       method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/negotiate/contract`,
     },
     options,
   );
@@ -2957,11 +2904,11 @@ export const getNegotiateContractMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type NegotiateContractMutationError = ErrorType<unknown>;
+
 export type NegotiateContractMutationResult = NonNullable<
   Awaited<ReturnType<typeof negotiateContract>>
 >;
-
-export type NegotiateContractMutationError = ErrorType<unknown>;
 
 /**
  * @summary Negotiate Contract
@@ -3001,9 +2948,9 @@ export const getMounts = (
 ) => {
   return clientInstance<GetMounts200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/mounts`,
       method: 'GET',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/mounts`,
     },
     options,
   );
@@ -3034,19 +2981,19 @@ export const getGetMountsQueryOptions = <
   }) => getMounts(shipSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<Awaited<ReturnType<typeof getMounts>>, TError, TData> & {
     queryKey: DataTag<QueryKey, TData, TError>;
   };
 };
 
+export type GetMountsQueryError = ErrorType<unknown>;
 export type GetMountsQueryResult = NonNullable<
   Awaited<ReturnType<typeof getMounts>>
 >;
-export type GetMountsQueryError = ErrorType<unknown>;
 
 export function useGetMounts<
   TData = Awaited<ReturnType<typeof getMounts>>,
@@ -3156,11 +3103,11 @@ export const installMount = (
 ) => {
   return clientInstance<InstallMount201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/mounts/install`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: installMountBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/mounts/install`,
     },
     options,
   );
@@ -3173,14 +3120,14 @@ export const getInstallMountMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof installMount>>,
     TError,
-    { shipSymbol: string; data: InstallMountBody },
+    { data: InstallMountBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof installMount>>,
   TError,
-  { shipSymbol: string; data: InstallMountBody },
+  { data: InstallMountBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['installMount'];
@@ -3194,9 +3141,9 @@ export const getInstallMountMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof installMount>>,
-    { shipSymbol: string; data: InstallMountBody }
+    { data: InstallMountBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return installMount(shipSymbol, data, requestOptions);
   };
@@ -3204,11 +3151,11 @@ export const getInstallMountMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type InstallMountMutationBody = InstallMountBody;
+export type InstallMountMutationError = ErrorType<unknown>;
 export type InstallMountMutationResult = NonNullable<
   Awaited<ReturnType<typeof installMount>>
 >;
-export type InstallMountMutationBody = InstallMountBody;
-export type InstallMountMutationError = ErrorType<unknown>;
 
 /**
  * @summary Install Mount
@@ -3221,7 +3168,7 @@ export const useInstallMount = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof installMount>>,
       TError,
-      { shipSymbol: string; data: InstallMountBody },
+      { data: InstallMountBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -3230,7 +3177,7 @@ export const useInstallMount = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof installMount>>,
   TError,
-  { shipSymbol: string; data: InstallMountBody },
+  { data: InstallMountBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getInstallMountMutationOptions(options);
@@ -3253,11 +3200,11 @@ export const removeMount = (
 ) => {
   return clientInstance<RemoveMount201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/mounts/remove`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: removeMountBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/mounts/remove`,
     },
     options,
   );
@@ -3270,14 +3217,14 @@ export const getRemoveMountMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof removeMount>>,
     TError,
-    { shipSymbol: string; data: RemoveMountBody },
+    { data: RemoveMountBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof removeMount>>,
   TError,
-  { shipSymbol: string; data: RemoveMountBody },
+  { data: RemoveMountBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['removeMount'];
@@ -3291,9 +3238,9 @@ export const getRemoveMountMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof removeMount>>,
-    { shipSymbol: string; data: RemoveMountBody }
+    { data: RemoveMountBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return removeMount(shipSymbol, data, requestOptions);
   };
@@ -3301,11 +3248,11 @@ export const getRemoveMountMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type RemoveMountMutationBody = RemoveMountBody;
+export type RemoveMountMutationError = ErrorType<unknown>;
 export type RemoveMountMutationResult = NonNullable<
   Awaited<ReturnType<typeof removeMount>>
 >;
-export type RemoveMountMutationBody = RemoveMountBody;
-export type RemoveMountMutationError = ErrorType<unknown>;
 
 /**
  * @summary Remove Mount
@@ -3315,7 +3262,7 @@ export const useRemoveMount = <TError = ErrorType<unknown>, TContext = unknown>(
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof removeMount>>,
       TError,
-      { shipSymbol: string; data: RemoveMountBody },
+      { data: RemoveMountBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -3324,7 +3271,7 @@ export const useRemoveMount = <TError = ErrorType<unknown>, TContext = unknown>(
 ): UseMutationResult<
   Awaited<ReturnType<typeof removeMount>>,
   TError,
-  { shipSymbol: string; data: RemoveMountBody },
+  { data: RemoveMountBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getRemoveMountMutationOptions(options);
@@ -3342,9 +3289,9 @@ export const getScrapShip = (
 ) => {
   return clientInstance<GetScrapShip200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scrap`,
       method: 'GET',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scrap`,
     },
     options,
   );
@@ -3376,9 +3323,9 @@ export const getGetScrapShipQueryOptions = <
   }) => getScrapShip(shipSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof getScrapShip>>,
@@ -3387,10 +3334,10 @@ export const getGetScrapShipQueryOptions = <
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetScrapShipQueryError = ErrorType<unknown>;
 export type GetScrapShipQueryResult = NonNullable<
   Awaited<ReturnType<typeof getScrapShip>>
 >;
-export type GetScrapShipQueryError = ErrorType<unknown>;
 
 export function useGetScrapShip<
   TData = Awaited<ReturnType<typeof getScrapShip>>,
@@ -3495,9 +3442,9 @@ export const scrapShip = (
 ) => {
   return clientInstance<ScrapShip200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scrap`,
       method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/scrap`,
     },
     options,
   );
@@ -3541,11 +3488,11 @@ export const getScrapShipMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type ScrapShipMutationError = ErrorType<unknown>;
+
 export type ScrapShipMutationResult = NonNullable<
   Awaited<ReturnType<typeof scrapShip>>
 >;
-
-export type ScrapShipMutationError = ErrorType<unknown>;
 
 /**
  * @summary Scrap Ship
@@ -3582,9 +3529,9 @@ export const getRepairShip = (
 ) => {
   return clientInstance<GetRepairShip200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/repair`,
       method: 'GET',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/repair`,
     },
     options,
   );
@@ -3616,9 +3563,9 @@ export const getGetRepairShipQueryOptions = <
   }) => getRepairShip(shipSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof getRepairShip>>,
@@ -3627,10 +3574,10 @@ export const getGetRepairShipQueryOptions = <
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetRepairShipQueryError = ErrorType<unknown>;
 export type GetRepairShipQueryResult = NonNullable<
   Awaited<ReturnType<typeof getRepairShip>>
 >;
-export type GetRepairShipQueryError = ErrorType<unknown>;
 
 export function useGetRepairShip<
   TData = Awaited<ReturnType<typeof getRepairShip>>,
@@ -3735,9 +3682,9 @@ export const repairShip = (
 ) => {
   return clientInstance<RepairShip200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/repair`,
       method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/repair`,
     },
     options,
   );
@@ -3781,11 +3728,11 @@ export const getRepairShipMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type RepairShipMutationError = ErrorType<unknown>;
+
 export type RepairShipMutationResult = NonNullable<
   Awaited<ReturnType<typeof repairShip>>
 >;
-
-export type RepairShipMutationError = ErrorType<unknown>;
 
 /**
  * @summary Repair Ship
@@ -3822,9 +3769,9 @@ export const getShipModules = (
 ) => {
   return clientInstance<GetShipModules200>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/modules`,
       method: 'GET',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/modules`,
     },
     options,
   );
@@ -3856,9 +3803,9 @@ export const getGetShipModulesQueryOptions = <
   }) => getShipModules(shipSymbol, requestOptions, signal);
 
   return {
-    queryKey,
-    queryFn,
     enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
     ...queryOptions,
   } as UseQueryOptions<
     Awaited<ReturnType<typeof getShipModules>>,
@@ -3867,10 +3814,10 @@ export const getGetShipModulesQueryOptions = <
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
+export type GetShipModulesQueryError = ErrorType<unknown>;
 export type GetShipModulesQueryResult = NonNullable<
   Awaited<ReturnType<typeof getShipModules>>
 >;
-export type GetShipModulesQueryError = ErrorType<unknown>;
 
 export function useGetShipModules<
   TData = Awaited<ReturnType<typeof getShipModules>>,
@@ -3976,11 +3923,11 @@ export const installShipModule = (
 ) => {
   return clientInstance<InstallShipModule201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/modules/install`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: installShipModuleBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/modules/install`,
     },
     options,
   );
@@ -3993,14 +3940,14 @@ export const getInstallShipModuleMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof installShipModule>>,
     TError,
-    { shipSymbol: string; data: InstallShipModuleBody },
+    { data: InstallShipModuleBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof installShipModule>>,
   TError,
-  { shipSymbol: string; data: InstallShipModuleBody },
+  { data: InstallShipModuleBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['installShipModule'];
@@ -4014,9 +3961,9 @@ export const getInstallShipModuleMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof installShipModule>>,
-    { shipSymbol: string; data: InstallShipModuleBody }
+    { data: InstallShipModuleBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return installShipModule(shipSymbol, data, requestOptions);
   };
@@ -4024,11 +3971,11 @@ export const getInstallShipModuleMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type InstallShipModuleMutationBody = InstallShipModuleBody;
+export type InstallShipModuleMutationError = ErrorType<unknown>;
 export type InstallShipModuleMutationResult = NonNullable<
   Awaited<ReturnType<typeof installShipModule>>
 >;
-export type InstallShipModuleMutationBody = InstallShipModuleBody;
-export type InstallShipModuleMutationError = ErrorType<unknown>;
 
 /**
  * @summary Install Ship Module
@@ -4041,7 +3988,7 @@ export const useInstallShipModule = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof installShipModule>>,
       TError,
-      { shipSymbol: string; data: InstallShipModuleBody },
+      { data: InstallShipModuleBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -4050,7 +3997,7 @@ export const useInstallShipModule = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof installShipModule>>,
   TError,
-  { shipSymbol: string; data: InstallShipModuleBody },
+  { data: InstallShipModuleBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getInstallShipModuleMutationOptions(options);
@@ -4069,11 +4016,11 @@ export const removeShipModule = (
 ) => {
   return clientInstance<RemoveShipModule201>(
     {
-      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/modules/remove`,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       data: removeShipModuleBody,
+      headers: { 'Content-Type': 'application/json' },
+      method: 'POST',
       signal,
+      url: `/my/ships/${encodeURIComponent(String(shipSymbol))}/modules/remove`,
     },
     options,
   );
@@ -4086,14 +4033,14 @@ export const getRemoveShipModuleMutationOptions = <
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof removeShipModule>>,
     TError,
-    { shipSymbol: string; data: RemoveShipModuleBody },
+    { data: RemoveShipModuleBody; shipSymbol: string },
     TContext
   >;
   request?: SecondParameter<typeof clientInstance>;
 }): UseMutationOptions<
   Awaited<ReturnType<typeof removeShipModule>>,
   TError,
-  { shipSymbol: string; data: RemoveShipModuleBody },
+  { data: RemoveShipModuleBody; shipSymbol: string },
   TContext
 > => {
   const mutationKey = ['removeShipModule'];
@@ -4107,9 +4054,9 @@ export const getRemoveShipModuleMutationOptions = <
 
   const mutationFn: MutationFunction<
     Awaited<ReturnType<typeof removeShipModule>>,
-    { shipSymbol: string; data: RemoveShipModuleBody }
+    { data: RemoveShipModuleBody; shipSymbol: string }
   > = (props) => {
-    const { shipSymbol, data } = props ?? {};
+    const { data, shipSymbol } = props ?? {};
 
     return removeShipModule(shipSymbol, data, requestOptions);
   };
@@ -4117,11 +4064,11 @@ export const getRemoveShipModuleMutationOptions = <
   return { mutationFn, ...mutationOptions };
 };
 
+export type RemoveShipModuleMutationBody = RemoveShipModuleBody;
+export type RemoveShipModuleMutationError = ErrorType<unknown>;
 export type RemoveShipModuleMutationResult = NonNullable<
   Awaited<ReturnType<typeof removeShipModule>>
 >;
-export type RemoveShipModuleMutationBody = RemoveShipModuleBody;
-export type RemoveShipModuleMutationError = ErrorType<unknown>;
 
 /**
  * @summary Remove Ship Module
@@ -4134,7 +4081,7 @@ export const useRemoveShipModule = <
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof removeShipModule>>,
       TError,
-      { shipSymbol: string; data: RemoveShipModuleBody },
+      { data: RemoveShipModuleBody; shipSymbol: string },
       TContext
     >;
     request?: SecondParameter<typeof clientInstance>;
@@ -4143,7 +4090,7 @@ export const useRemoveShipModule = <
 ): UseMutationResult<
   Awaited<ReturnType<typeof removeShipModule>>,
   TError,
-  { shipSymbol: string; data: RemoveShipModuleBody },
+  { data: RemoveShipModuleBody; shipSymbol: string },
   TContext
 > => {
   const mutationOptions = getRemoveShipModuleMutationOptions(options);

@@ -1,4 +1,3 @@
-import { Faction } from '@/src/api/models/models-Faction/faction';
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
@@ -7,6 +6,9 @@ import BottomSheet, {
 import { useCallback } from 'react';
 import { StyleSheet } from 'react-native';
 import { Divider, useTheme } from 'react-native-paper';
+
+import { Faction } from '@/src/api/models/models-Faction/faction';
+
 import { FactionListItem } from './FactionListItem';
 
 interface FactionsBottomSheetProps {
@@ -54,24 +56,24 @@ export const FactionsBottomSheet = ({
         handleFactionChange={handleFactionChange}
       />
     ),
-    [],
+    [handleFactionChange],
   );
 
   return (
     <BottomSheet
-      ref={bottomSheetRef}
       backdropComponent={renderBackdrop}
+      backgroundStyle={{ backgroundColor: colors.background }}
       enableDynamicSizing={false}
       enableOverDrag={false}
       enablePanDownToClose
-      snapPoints={['75%']}
       handleStyle={{
         backgroundColor: colors.primary,
         borderTopLeftRadius: 8,
         borderTopRightRadius: 8,
       }}
       index={-1}
-      backgroundStyle={{ backgroundColor: colors.background }}
+      ref={bottomSheetRef}
+      snapPoints={['75%']}
     >
       <BottomSheetFlatList<Faction>
         alwaysBounceVertical={false}

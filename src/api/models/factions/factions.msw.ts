@@ -21,14 +21,14 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { faker } from '@faker-js/faker';
-
-import { HttpResponse, http } from 'msw';
 import type { RequestHandlerOptions } from 'msw';
 
-import type { GetFaction200 } from '../getFaction200';
+import { faker } from '@faker-js/faker';
+import { http, HttpResponse } from 'msw';
 
+import type { GetFaction200 } from '../getFaction200';
 import type { GetFactions200 } from '../getFactions200';
+
 import { Faction } from '../models-Faction/faction';
 import { Meta } from '../models-Meta/meta';
 
@@ -36,7 +36,7 @@ export const getGetFactionsResponseMock = (
   overrideResponse: Partial<GetFactions200> = {},
 ): GetFactions200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as Faction),
   meta: {} as Meta,
@@ -47,7 +47,7 @@ export const getGetFactionsResponseMock200 = (
   overrideResponse: Partial<GetFactions200> = {},
 ): GetFactions200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as Faction),
   meta: {} as Meta,
@@ -64,10 +64,10 @@ export const getGetFactionResponseMock200 = (
 
 export const getGetFactionsMockHandler = (
   overrideResponse?:
-    | GetFactions200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetFactions200> | GetFactions200),
+      ) => GetFactions200 | Promise<GetFactions200>)
+    | GetFactions200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -81,7 +81,7 @@ export const getGetFactionsMockHandler = (
               : overrideResponse
             : getGetFactionsResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -90,10 +90,10 @@ export const getGetFactionsMockHandler = (
 
 export const getGetFactionsMockHandler200 = (
   overrideResponse?:
-    | GetFactions200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetFactions200> | GetFactions200),
+      ) => GetFactions200 | Promise<GetFactions200>)
+    | GetFactions200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -107,7 +107,7 @@ export const getGetFactionsMockHandler200 = (
               : overrideResponse
             : getGetFactionsResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -116,10 +116,10 @@ export const getGetFactionsMockHandler200 = (
 
 export const getGetFactionMockHandler = (
   overrideResponse?:
-    | GetFaction200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetFaction200> | GetFaction200),
+      ) => GetFaction200 | Promise<GetFaction200>)
+    | GetFaction200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -133,7 +133,7 @@ export const getGetFactionMockHandler = (
               : overrideResponse
             : getGetFactionResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -142,10 +142,10 @@ export const getGetFactionMockHandler = (
 
 export const getGetFactionMockHandler200 = (
   overrideResponse?:
-    | GetFaction200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetFaction200> | GetFaction200),
+      ) => GetFaction200 | Promise<GetFaction200>)
+    | GetFaction200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -159,7 +159,7 @@ export const getGetFactionMockHandler200 = (
               : overrideResponse
             : getGetFactionResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,

@@ -21,42 +21,35 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { faker } from '@faker-js/faker';
-
-import { HttpResponse, http } from 'msw';
 import type { RequestHandlerOptions } from 'msw';
 
+import { faker } from '@faker-js/faker';
+import { http, HttpResponse } from 'msw';
+
 import type { GetConstruction200 } from '../getConstruction200';
-
 import type { GetJumpGate200 } from '../getJumpGate200';
-
 import type { GetMarket200 } from '../getMarket200';
-
 import type { GetShipyard200 } from '../getShipyard200';
-
 import type { GetSystem200 } from '../getSystem200';
-
-import type { GetSystemWaypoints200 } from '../getSystemWaypoints200';
-
 import type { GetSystems200 } from '../getSystems200';
-
+import type { GetSystemWaypoints200 } from '../getSystemWaypoints200';
 import type { GetWaypoint200 } from '../getWaypoint200';
-
 import type { SupplyConstruction201 } from '../supplyConstruction201';
-import { Waypoint } from '../models-Waypoint/waypoint';
-import { Market } from '../models-Market/market';
-import { Shipyard } from '../models-Shipyard/shipyard';
-import { JumpGate } from '../models-JumpGate/jumpGate';
+
 import { Construction } from '../models-Construction/construction';
-import { ShipCargo } from '../models-ShipCargo/shipCargo';
-import { System } from '../models-System/system';
+import { JumpGate } from '../models-JumpGate/jumpGate';
+import { Market } from '../models-Market/market';
 import { Meta } from '../models-Meta/meta';
+import { ShipCargo } from '../models-ShipCargo/shipCargo';
+import { Shipyard } from '../models-Shipyard/shipyard';
+import { System } from '../models-System/system';
+import { Waypoint } from '../models-Waypoint/waypoint';
 
 export const getGetSystemsResponseMock = (
   overrideResponse: Partial<GetSystems200> = {},
 ): GetSystems200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as System),
   meta: {} as Meta,
@@ -67,7 +60,7 @@ export const getGetSystemsResponseMock200 = (
   overrideResponse: Partial<GetSystems200> = {},
 ): GetSystems200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as System),
   meta: {} as Meta,
@@ -86,7 +79,7 @@ export const getGetSystemWaypointsResponseMock = (
   overrideResponse: Partial<GetSystemWaypoints200> = {},
 ): GetSystemWaypoints200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as Waypoint),
   meta: {} as Meta,
@@ -97,7 +90,7 @@ export const getGetSystemWaypointsResponseMock200 = (
   overrideResponse: Partial<GetSystemWaypoints200> = {},
 ): GetSystemWaypoints200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as Waypoint),
   meta: {} as Meta,
@@ -160,10 +153,10 @@ export const getSupplyConstructionResponseMock201 = (
 
 export const getGetSystemsMockHandler = (
   overrideResponse?:
-    | GetSystems200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetSystems200> | GetSystems200),
+      ) => GetSystems200 | Promise<GetSystems200>)
+    | GetSystems200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -177,7 +170,7 @@ export const getGetSystemsMockHandler = (
               : overrideResponse
             : getGetSystemsResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -186,10 +179,10 @@ export const getGetSystemsMockHandler = (
 
 export const getGetSystemsMockHandler200 = (
   overrideResponse?:
-    | GetSystems200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetSystems200> | GetSystems200),
+      ) => GetSystems200 | Promise<GetSystems200>)
+    | GetSystems200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -203,7 +196,7 @@ export const getGetSystemsMockHandler200 = (
               : overrideResponse
             : getGetSystemsResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -212,10 +205,10 @@ export const getGetSystemsMockHandler200 = (
 
 export const getGetSystemMockHandler = (
   overrideResponse?:
-    | GetSystem200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetSystem200> | GetSystem200),
+      ) => GetSystem200 | Promise<GetSystem200>)
+    | GetSystem200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -229,7 +222,7 @@ export const getGetSystemMockHandler = (
               : overrideResponse
             : getGetSystemResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -238,10 +231,10 @@ export const getGetSystemMockHandler = (
 
 export const getGetSystemMockHandler200 = (
   overrideResponse?:
-    | GetSystem200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetSystem200> | GetSystem200),
+      ) => GetSystem200 | Promise<GetSystem200>)
+    | GetSystem200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -255,7 +248,7 @@ export const getGetSystemMockHandler200 = (
               : overrideResponse
             : getGetSystemResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -264,10 +257,10 @@ export const getGetSystemMockHandler200 = (
 
 export const getGetSystemWaypointsMockHandler = (
   overrideResponse?:
-    | GetSystemWaypoints200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetSystemWaypoints200> | GetSystemWaypoints200),
+      ) => GetSystemWaypoints200 | Promise<GetSystemWaypoints200>)
+    | GetSystemWaypoints200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -281,7 +274,7 @@ export const getGetSystemWaypointsMockHandler = (
               : overrideResponse
             : getGetSystemWaypointsResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -290,10 +283,10 @@ export const getGetSystemWaypointsMockHandler = (
 
 export const getGetSystemWaypointsMockHandler200 = (
   overrideResponse?:
-    | GetSystemWaypoints200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetSystemWaypoints200> | GetSystemWaypoints200),
+      ) => GetSystemWaypoints200 | Promise<GetSystemWaypoints200>)
+    | GetSystemWaypoints200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -307,7 +300,7 @@ export const getGetSystemWaypointsMockHandler200 = (
               : overrideResponse
             : getGetSystemWaypointsResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -316,10 +309,10 @@ export const getGetSystemWaypointsMockHandler200 = (
 
 export const getGetWaypointMockHandler = (
   overrideResponse?:
-    | GetWaypoint200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetWaypoint200> | GetWaypoint200),
+      ) => GetWaypoint200 | Promise<GetWaypoint200>)
+    | GetWaypoint200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -333,7 +326,7 @@ export const getGetWaypointMockHandler = (
               : overrideResponse
             : getGetWaypointResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -342,10 +335,10 @@ export const getGetWaypointMockHandler = (
 
 export const getGetWaypointMockHandler200 = (
   overrideResponse?:
-    | GetWaypoint200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetWaypoint200> | GetWaypoint200),
+      ) => GetWaypoint200 | Promise<GetWaypoint200>)
+    | GetWaypoint200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -359,7 +352,7 @@ export const getGetWaypointMockHandler200 = (
               : overrideResponse
             : getGetWaypointResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -368,10 +361,10 @@ export const getGetWaypointMockHandler200 = (
 
 export const getGetMarketMockHandler = (
   overrideResponse?:
-    | GetMarket200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetMarket200> | GetMarket200),
+      ) => GetMarket200 | Promise<GetMarket200>)
+    | GetMarket200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -385,7 +378,7 @@ export const getGetMarketMockHandler = (
               : overrideResponse
             : getGetMarketResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -394,10 +387,10 @@ export const getGetMarketMockHandler = (
 
 export const getGetMarketMockHandler200 = (
   overrideResponse?:
-    | GetMarket200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetMarket200> | GetMarket200),
+      ) => GetMarket200 | Promise<GetMarket200>)
+    | GetMarket200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -411,7 +404,7 @@ export const getGetMarketMockHandler200 = (
               : overrideResponse
             : getGetMarketResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -420,10 +413,10 @@ export const getGetMarketMockHandler200 = (
 
 export const getGetShipyardMockHandler = (
   overrideResponse?:
-    | GetShipyard200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetShipyard200> | GetShipyard200),
+      ) => GetShipyard200 | Promise<GetShipyard200>)
+    | GetShipyard200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -437,7 +430,7 @@ export const getGetShipyardMockHandler = (
               : overrideResponse
             : getGetShipyardResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -446,10 +439,10 @@ export const getGetShipyardMockHandler = (
 
 export const getGetShipyardMockHandler200 = (
   overrideResponse?:
-    | GetShipyard200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetShipyard200> | GetShipyard200),
+      ) => GetShipyard200 | Promise<GetShipyard200>)
+    | GetShipyard200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -463,7 +456,7 @@ export const getGetShipyardMockHandler200 = (
               : overrideResponse
             : getGetShipyardResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -472,10 +465,10 @@ export const getGetShipyardMockHandler200 = (
 
 export const getGetJumpGateMockHandler = (
   overrideResponse?:
-    | GetJumpGate200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetJumpGate200> | GetJumpGate200),
+      ) => GetJumpGate200 | Promise<GetJumpGate200>)
+    | GetJumpGate200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -489,7 +482,7 @@ export const getGetJumpGateMockHandler = (
               : overrideResponse
             : getGetJumpGateResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -498,10 +491,10 @@ export const getGetJumpGateMockHandler = (
 
 export const getGetJumpGateMockHandler200 = (
   overrideResponse?:
-    | GetJumpGate200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetJumpGate200> | GetJumpGate200),
+      ) => GetJumpGate200 | Promise<GetJumpGate200>)
+    | GetJumpGate200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -515,7 +508,7 @@ export const getGetJumpGateMockHandler200 = (
               : overrideResponse
             : getGetJumpGateResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -524,10 +517,10 @@ export const getGetJumpGateMockHandler200 = (
 
 export const getGetConstructionMockHandler = (
   overrideResponse?:
-    | GetConstruction200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetConstruction200> | GetConstruction200),
+      ) => GetConstruction200 | Promise<GetConstruction200>)
+    | GetConstruction200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -541,7 +534,7 @@ export const getGetConstructionMockHandler = (
               : overrideResponse
             : getGetConstructionResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -550,10 +543,10 @@ export const getGetConstructionMockHandler = (
 
 export const getGetConstructionMockHandler200 = (
   overrideResponse?:
-    | GetConstruction200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetConstruction200> | GetConstruction200),
+      ) => GetConstruction200 | Promise<GetConstruction200>)
+    | GetConstruction200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -567,7 +560,7 @@ export const getGetConstructionMockHandler200 = (
               : overrideResponse
             : getGetConstructionResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -576,10 +569,10 @@ export const getGetConstructionMockHandler200 = (
 
 export const getSupplyConstructionMockHandler = (
   overrideResponse?:
-    | SupplyConstruction201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<SupplyConstruction201> | SupplyConstruction201),
+      ) => Promise<SupplyConstruction201> | SupplyConstruction201)
+    | SupplyConstruction201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -593,7 +586,7 @@ export const getSupplyConstructionMockHandler = (
               : overrideResponse
             : getSupplyConstructionResponseMock(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,
@@ -602,10 +595,10 @@ export const getSupplyConstructionMockHandler = (
 
 export const getSupplyConstructionMockHandler201 = (
   overrideResponse?:
-    | SupplyConstruction201
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<SupplyConstruction201> | SupplyConstruction201),
+      ) => Promise<SupplyConstruction201> | SupplyConstruction201)
+    | SupplyConstruction201,
   options?: RequestHandlerOptions,
 ) => {
   return http.post(
@@ -619,7 +612,7 @@ export const getSupplyConstructionMockHandler201 = (
               : overrideResponse
             : getSupplyConstructionResponseMock201(),
         ),
-        { status: 201, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 201 },
       );
     },
     options,

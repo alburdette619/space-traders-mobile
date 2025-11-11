@@ -21,16 +21,16 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
-import { faker } from '@faker-js/faker';
 
-import { HttpResponse, http } from 'msw';
 import type { RequestHandlerOptions } from 'msw';
 
+import { faker } from '@faker-js/faker';
+import { http, HttpResponse } from 'msw';
+
 import type { GetAgent200 } from '../getAgent200';
-
 import type { GetAgents200 } from '../getAgents200';
-
 import type { GetMyAgent200 } from '../getMyAgent200';
+
 import { Agent } from '../models-Agent/agent';
 import { Meta } from '../models-Meta/meta';
 
@@ -46,7 +46,7 @@ export const getGetAgentsResponseMock = (
   overrideResponse: Partial<GetAgents200> = {},
 ): GetAgents200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as Agent),
   meta: {} as Meta,
@@ -57,7 +57,7 @@ export const getGetAgentsResponseMock200 = (
   overrideResponse: Partial<GetAgents200> = {},
 ): GetAgents200 => ({
   data: Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
+    { length: faker.number.int({ max: 10, min: 1 }) },
     (_, i) => i + 1,
   ).map(() => ({}) as Agent),
   meta: {} as Meta,
@@ -74,10 +74,10 @@ export const getGetAgentResponseMock200 = (
 
 export const getGetMyAgentMockHandler = (
   overrideResponse?:
-    | GetMyAgent200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetMyAgent200> | GetMyAgent200),
+      ) => GetMyAgent200 | Promise<GetMyAgent200>)
+    | GetMyAgent200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -91,7 +91,7 @@ export const getGetMyAgentMockHandler = (
               : overrideResponse
             : getGetMyAgentResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -100,10 +100,10 @@ export const getGetMyAgentMockHandler = (
 
 export const getGetMyAgentMockHandler200 = (
   overrideResponse?:
-    | GetMyAgent200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetMyAgent200> | GetMyAgent200),
+      ) => GetMyAgent200 | Promise<GetMyAgent200>)
+    | GetMyAgent200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -117,7 +117,7 @@ export const getGetMyAgentMockHandler200 = (
               : overrideResponse
             : getGetMyAgentResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -126,10 +126,10 @@ export const getGetMyAgentMockHandler200 = (
 
 export const getGetAgentsMockHandler = (
   overrideResponse?:
-    | GetAgents200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetAgents200> | GetAgents200),
+      ) => GetAgents200 | Promise<GetAgents200>)
+    | GetAgents200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -143,7 +143,7 @@ export const getGetAgentsMockHandler = (
               : overrideResponse
             : getGetAgentsResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -152,10 +152,10 @@ export const getGetAgentsMockHandler = (
 
 export const getGetAgentsMockHandler200 = (
   overrideResponse?:
-    | GetAgents200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetAgents200> | GetAgents200),
+      ) => GetAgents200 | Promise<GetAgents200>)
+    | GetAgents200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -169,7 +169,7 @@ export const getGetAgentsMockHandler200 = (
               : overrideResponse
             : getGetAgentsResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -178,10 +178,10 @@ export const getGetAgentsMockHandler200 = (
 
 export const getGetAgentMockHandler = (
   overrideResponse?:
-    | GetAgent200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetAgent200> | GetAgent200),
+      ) => GetAgent200 | Promise<GetAgent200>)
+    | GetAgent200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -195,7 +195,7 @@ export const getGetAgentMockHandler = (
               : overrideResponse
             : getGetAgentResponseMock(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,
@@ -204,10 +204,10 @@ export const getGetAgentMockHandler = (
 
 export const getGetAgentMockHandler200 = (
   overrideResponse?:
-    | GetAgent200
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<GetAgent200> | GetAgent200),
+      ) => GetAgent200 | Promise<GetAgent200>)
+    | GetAgent200,
   options?: RequestHandlerOptions,
 ) => {
   return http.get(
@@ -221,7 +221,7 @@ export const getGetAgentMockHandler200 = (
               : overrideResponse
             : getGetAgentResponseMock200(),
         ),
-        { status: 200, headers: { 'Content-Type': 'application/json' } },
+        { headers: { 'Content-Type': 'application/json' }, status: 200 },
       );
     },
     options,

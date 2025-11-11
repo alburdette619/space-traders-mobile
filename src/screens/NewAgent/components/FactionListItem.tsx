@@ -1,8 +1,9 @@
+import { StyleSheet, View } from 'react-native';
+import { Chip, List, Text } from 'react-native-paper';
+
 import { Faction } from '@/src/api/models/models-Faction/faction';
 import { getFactionImageUrl } from '@/src/constants/urls';
 import { flexStyles, gapStyles } from '@/src/theme/globalStyles';
-import { StyleSheet, View } from 'react-native';
-import { Chip, List, Text } from 'react-native-paper';
 
 interface FactionListItemProps {
   faction: Faction;
@@ -29,7 +30,7 @@ export const FactionListItem = ({
             ]}
           >
             {sortedTraits.map((trait) => (
-              <Chip key={trait.symbol} mode="outlined" compact>
+              <Chip compact key={trait.symbol} mode="outlined">
                 <Text variant="labelSmall">{trait.name}</Text>
               </Chip>
             ))}
@@ -39,8 +40,6 @@ export const FactionListItem = ({
       )}
       descriptionNumberOfLines={10}
       disabled={!isRecruiting}
-      onPress={() => handleFactionChange(faction)}
-      title={name}
       left={(props) => (
         <List.Image
           {...props}
@@ -48,14 +47,16 @@ export const FactionListItem = ({
           style={styles.factionImage}
         />
       )}
+      onPress={() => handleFactionChange(faction)}
+      title={name}
     />
   );
 };
 
 const styles = StyleSheet.create({
   factionImage: {
-    width: 40,
-    height: 40,
     borderRadius: 20,
+    height: 40,
+    width: 40,
   },
 });
