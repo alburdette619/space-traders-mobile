@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
+
+import { colors } from './voidTheme';
 
 export const gapStyles = StyleSheet.create({
   gapLarge: {
@@ -30,4 +32,23 @@ export const miscStyles = StyleSheet.create({
   link: {
     textDecorationLine: 'underline',
   },
+  shadow: {
+    ...(Platform.OS === 'ios'
+      ? {
+          shadowColor: colors.text,
+          shadowOffset: { height: 4, width: 0 },
+          shadowOpacity: 0.15,
+          shadowRadius: 10,
+        }
+      : {
+          // Android native shadow—feel free to bump higher than MD3's 0–5
+          elevation: 12,
+        }),
+  },
+});
+
+export const roundStyleObject = (size: number) => ({
+  borderRadius: size / 2,
+  height: size,
+  width: size,
 });

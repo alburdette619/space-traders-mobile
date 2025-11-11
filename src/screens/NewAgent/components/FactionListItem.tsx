@@ -3,7 +3,11 @@ import { Chip, List, Text } from 'react-native-paper';
 
 import { Faction } from '@/src/api/models/models-Faction/faction';
 import { getFactionImageUrl } from '@/src/constants/urls';
-import { flexStyles, gapStyles } from '@/src/theme/globalStyles';
+import {
+  flexStyles,
+  gapStyles,
+  roundStyleObject,
+} from '@/src/theme/globalStyles';
 
 interface FactionListItemProps {
   faction: Faction;
@@ -55,8 +59,6 @@ export const FactionListItem = ({
 
 const styles = StyleSheet.create({
   factionImage: {
-    borderRadius: 20,
-    height: 40,
-    width: 40,
+    ...roundStyleObject(40),
   },
 });

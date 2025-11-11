@@ -107,7 +107,7 @@ const fonts = configureFonts({
   },
 });
 
-const colors = {
+export const colors = {
   accentSolid: '#1C9DA7',
   border: '#F2F4FF',
   brandHover: '#662986',
@@ -142,36 +142,37 @@ export const voidTheme: MD3Theme = {
     // Base surfaces
     background: colors.voidBg,
     inverseOnSurface: colors.text,
-    inversePrimary: colors.brandPress,
 
+    inversePrimary: colors.brandPress,
     // Inverse (snackbars, bottom sheet, etc.)
     inverseSurface: colors.voidBg2,
     onPrimary: colors.onBrand,
     onPrimaryContainer: colors.onBrand,
     onSecondary: colors.onAccent,
-    onSecondaryContainer: colors.onInfo,
 
+    onSecondaryContainer: colors.onInfo,
     // Text & borders
     onSurface: colors.text,
     onSurfaceDisabled: colors.disabledContent,
     onSurfaceVariant: colors.textMuted,
+
     onTertiary: colors.onInfo,
-
     outline: colors.border,
-    outlineVariant: colors.disabledBorder,
 
+    outlineVariant: colors.disabledBorder,
     // Primary = “brandSolid”
     primary: colors.brandSolid,
     primaryContainer: colors.brandHover,
     // Secondary = accent
     secondary: colors.accentSolid,
-    secondaryContainer: colors.infoSolid,
 
+    secondaryContainer: colors.infoSolid,
     surface: colors.surface1,
+
     // Disabled
     surfaceDisabled: colors.disabledContainer,
-
     surfaceVariant: colors.surface2,
+
     // Tertiary = info color (for badges, warnings, etc.)
     tertiary: colors.infoSolid,
   },

@@ -14,7 +14,7 @@ export const RootStack = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName="BrandSplash"
+      initialRouteName={isAuthenticated ? 'MainAppTabs' : 'BrandSplash'}
       screenOptions={{ contentStyle: [styles.container], headerShown: false }}
     >
       {isAuthenticated ? (
