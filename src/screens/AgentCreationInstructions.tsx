@@ -4,6 +4,7 @@ import { Linking, ScrollView, StyleSheet, View } from 'react-native';
 import { Divider, IconButton, List, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { voidRunnerIcons } from '../constants/icons';
 import { spaceTradersLogin } from '../constants/urls';
 import { flexStyles, miscStyles } from '../theme/globalStyles';
 
@@ -20,7 +21,11 @@ export const AgentCreationInstructionsScreen = () => {
       style={[flexStyles.flex, { backgroundColor: theme.colors.background }]}
     >
       <SafeAreaView style={flexStyles.flex}>
-        <IconButton icon="chevron-left" onPress={goBack} size={32} />
+        <IconButton
+          icon={voidRunnerIcons.backButton}
+          onPress={goBack}
+          size={32}
+        />
         <ScrollView
           alwaysBounceVertical={false}
           contentContainerStyle={styles.container}

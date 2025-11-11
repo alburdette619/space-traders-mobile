@@ -17,6 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGetMyAgent } from '@/src/api/models/agents/agents';
 import { Register201 } from '@/src/api/models/register201';
 import { CountdownContainer } from '@/src/components/CountdownContainer';
+import { voidRunnerIcons } from '@/src/constants/icons';
 import { useServerResetCountdown } from '@/src/hooks/useServerResetCountdown';
 import { useUserStore } from '@/src/stores/userStore';
 import { SpaceTradersErrorResponse } from '@/src/types/spaceTraders';
@@ -180,7 +181,7 @@ export const NewAgentScreen = () => {
                       { borderColor: colors.primary },
                     ]}
                   >
-                    <Icon size={16} source="help-circle" />
+                    <Icon size={16} source={voidRunnerIcons.help} />
                     <Text variant="labelSmall">Help</Text>
                   </Pressable>
                   <TextInput

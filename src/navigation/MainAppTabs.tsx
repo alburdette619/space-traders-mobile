@@ -5,11 +5,14 @@ import {
 import { CommonActions } from '@react-navigation/native';
 import { BottomNavigation, Icon, useTheme } from 'react-native-paper';
 
+import { voidRunnerIcons } from '../constants/icons';
 import { ContractsScreen } from '../screens/Contracts';
 import { FleetScreen } from '../screens/Fleet';
 import { GalaxyMapScreen } from '../screens/GalaxyMap';
 import { StatsScreen } from '../screens/Stats';
 import { MainAppTabsParams } from './navigationParams';
+
+const tabBarIconSize = 24;
 
 const TabBar = ({
   descriptors,
@@ -45,7 +48,7 @@ const TabBar = ({
       descriptors[route.key].options.tabBarIcon?.({
         color,
         focused,
-        size: 24,
+        size: tabBarIconSize,
       }) ?? null
     }
     safeAreaInsets={insets}
@@ -70,11 +73,14 @@ export const MainAppTabs = () => {
         component={FleetScreen}
         name="Fleet"
         options={{
+          tabBarButtonTestID: 'fleet-tab-button',
           tabBarIcon: ({ color, focused, size }) => (
             <Icon
               color={color}
               size={size}
-              source={focused ? 'rocket-launch' : 'rocket-launch-outline'}
+              source={
+                focused ? voidRunnerIcons.fleetFocused : voidRunnerIcons.fleet
+              }
             />
           ),
           tabBarLabel: 'Fleet',
@@ -84,11 +90,16 @@ export const MainAppTabs = () => {
         component={ContractsScreen}
         name="Contracts"
         options={{
+          tabBarButtonTestID: 'contracts-tab-button',
           tabBarIcon: ({ color, focused, size }) => (
             <Icon
               color={color}
               size={size}
-              source={focused ? 'handshake' : 'handshake-outline'}
+              source={
+                focused
+                  ? voidRunnerIcons.contractsFocused
+                  : voidRunnerIcons.contracts
+              }
             />
           ),
           tabBarLabel: 'Contracts',
@@ -98,11 +109,16 @@ export const MainAppTabs = () => {
         component={GalaxyMapScreen}
         name="GalaxyMap"
         options={{
+          tabBarButtonTestID: 'galaxy-map-tab-button',
           tabBarIcon: ({ color, focused, size }) => (
             <Icon
               color={color}
               size={size}
-              source={focused ? 'creation' : 'creation-outline'}
+              source={
+                focused
+                  ? voidRunnerIcons.galaxyMapFocused
+                  : voidRunnerIcons.galaxyMap
+              }
             />
           ),
           tabBarLabel: 'Map',
@@ -112,11 +128,14 @@ export const MainAppTabs = () => {
         component={StatsScreen}
         name="Stats"
         options={{
+          tabBarButtonTestID: 'stats-tab-button',
           tabBarIcon: ({ color, focused, size }) => (
             <Icon
               color={color}
               size={size}
-              source={focused ? 'chart-box' : 'chart-box-outline'}
+              source={
+                focused ? voidRunnerIcons.statsFocused : voidRunnerIcons.stats
+              }
             />
           ),
           tabBarLabel: 'Stats',
