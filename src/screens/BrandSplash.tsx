@@ -102,8 +102,8 @@ export const BrandSplashScreen = () => {
     const t = setTimeout(() => {
       console.log('BrandSplash: done');
       if (hasAgent) {
+        // This will navigate to MainAppTabs via RootStack
         setIsAuthenticated(true);
-        navigate('MainAppTabs');
       } else {
         navigate('NewAgent');
       }

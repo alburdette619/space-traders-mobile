@@ -3,7 +3,7 @@ import {
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 import { CommonActions } from '@react-navigation/native';
-import { BottomNavigation, Icon } from 'react-native-paper';
+import { BottomNavigation, Icon, useTheme } from 'react-native-paper';
 
 import { ContractsScreen } from '../screens/Contracts';
 import { FleetScreen } from '../screens/Fleet';
@@ -55,10 +55,15 @@ const TabBar = ({
 const TabsNavigator = createBottomTabNavigator<MainAppTabsParams>();
 
 export const MainAppTabs = () => {
+  const theme = useTheme();
+
   return (
     <TabsNavigator.Navigator
       initialRouteName="Fleet"
-      screenOptions={{ headerShown: false }}
+      screenOptions={{
+        headerShown: false,
+        sceneStyle: { backgroundColor: theme.colors.background },
+      }}
       tabBar={(props) => <TabBar {...props} />}
     >
       <TabsNavigator.Screen

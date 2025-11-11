@@ -60,9 +60,9 @@ export const NewAgentScreen = () => {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const handleAuthSuccess = useCallback(() => {
+    // This will navigate to MainAppTabs via RootStack
     setIsAuthenticated(true);
-    navigate('MainAppTabs');
-  }, [navigate, setIsAuthenticated]);
+  }, [setIsAuthenticated]);
 
   // Handle side effects of user-supplied agent fetch.
   useEffect(() => {
