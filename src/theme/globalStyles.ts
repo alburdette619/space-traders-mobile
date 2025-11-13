@@ -1,6 +1,6 @@
 import { Platform, StyleSheet } from 'react-native';
 
-import { colors } from './voidTheme';
+import { baseColors } from './voidTheme';
 
 export const gapStyles = StyleSheet.create({
   gapLarge: {
@@ -35,7 +35,7 @@ export const miscStyles = StyleSheet.create({
   shadow: {
     ...(Platform.OS === 'ios'
       ? {
-          shadowColor: colors.text,
+          shadowColor: baseColors.text,
           shadowOffset: { height: 4, width: 0 },
           shadowOpacity: 0.15,
           shadowRadius: 10,

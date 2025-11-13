@@ -1,42 +1,37 @@
 import { useLocales } from 'expo-localization';
 import { camelCase, countBy } from 'lodash';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
 import { Icon, Surface, Text, useTheme } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useGetMyAgent } from '../api/models/agents/agents';
-import { useGetContracts } from '../api/models/contracts/contracts';
-import { useGetMyShips } from '../api/models/fleet/fleet';
-import { voidRunnerIcons } from '../constants/icons';
-import { getFactionImageUrl } from '../constants/urls';
-import { flexStyles, gapStyles, roundStyleObject } from '../theme/globalStyles';
+import { useGetMyAgent } from '@/src/api/models/agents/agents';
+import { useGetContracts } from '@/src/api/models/contracts/contracts';
+import { useGetMyShips } from '@/src/api/models/fleet/fleet';
+import { voidRunnerIcons } from '@/src/constants/icons';
+import { getFactionImageUrl } from '@/src/constants/urls';
+import {
+  flexStyles,
+  gapStyles,
+  roundStyleObject,
+} from '@/src/theme/globalStyles';
+import { ShipStatusCounts } from '@/src/types/spaceTraders';
 
-export const FleetScreen = () => {
+import { FleetAlertsSection } from './FleetAlertsSection';
+
+export const AgentHeader = () => {
   const { colors } = useTheme();
   const [locale] = useLocales();
-  console.log(colors.shadow);
-
-  const currencyFormatter = useMemo(
-    () =>
-      new Intl.NumberFormat(locale.languageTag, {
-        currency: locale.currencyCode || 'USD',
-        maximumFractionDigits: 0,
-        minimumFractionDigits: 0,
-        style: 'currency',
-      }),
-    [locale],
-  );
 
   const { data: agent, isFetching: isFetchingAgent } = useGetMyAgent();
   const { data: ships, isFetching: isFetchingShips } = useGetMyShips();
   const { data: contracts, isFetching: isFetchingContracts } =
     useGetContracts();
 
-  const isLoading = isFetchingAgent || isFetchingShips || isFetchingContracts;
+  const shipStatusCounts: ShipStatusCounts = useMemo(() => {
+    if (isFetchingShips) {
+      return { docked: 0, inOrbit: 0, inTransit: 0 };
+    }
 
-  const shipStatusCounts = useMemo(() => {
     const statusCounts = countBy(ships?.data || [], (ship) =>
       camelCase(ship.nav.status),
     );
@@ -50,15 +45,23 @@ export const FleetScreen = () => {
       inOrbit: inOrbitCount,
       inTransit: inTransitCount,
     };
-  }, [ships]);
+  }, [isFetchingShips, ships]);
 
-  const renderHeader = useCallback(() => {
-    const formattedCredits = currencyFormatter
+  const formattedCredits = useMemo(() => {
+    const formatter = new Intl.NumberFormat(locale.languageTag, {
+      currency: locale.currencyCode || 'USD',
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+      style: 'currency',
+    });
+    return formatter
       .format(agent?.data.credits || 0)
       .replace(locale.currencySymbol || '$', '')
       .trim();
+  }, [agent, locale]);
 
-    return (
+  return (
+    <View>
       <Surface
         elevation={5}
         mode="elevated"
@@ -76,7 +79,7 @@ export const FleetScreen = () => {
               style={{ ...roundStyleObject(60) }}
             />
           )}
-          <View style={[flexStyles.flex, styles.headerInfoContainer]}>
+          <View style={[styles.headerInfoContainer]}>
             <Text style={styles.agentSymbolText} variant="titleLarge">
               {agent?.data.symbol}
             </Text>
@@ -90,43 +93,17 @@ export const FleetScreen = () => {
             </View>
             <View style={[flexStyles.flexRow, gapStyles.gapSmall]}>
               <Icon size={16} source={'space-station'} />
-              <Text variant="bodySmall">{`${shipStatusCounts.docked} | `}</Text>
+              <Text variant="bodySmall">{`${shipStatusCounts.docked || '-'} | `}</Text>
               <Icon size={16} source={'orbit'} />
-              <Text variant="bodySmall">{`${shipStatusCounts.inOrbit} | `}</Text>
+              <Text variant="bodySmall">{`${shipStatusCounts.inOrbit || '-'} | `}</Text>
               <Icon size={16} source={voidRunnerIcons.fleet} />
-              <Text variant="bodySmall">{`${shipStatusCounts.inTransit}`}</Text>
+              <Text variant="bodySmall">{`${shipStatusCounts.inTransit || '-'}`}</Text>
             </View>
           </View>
         </View>
       </Surface>
-    );
-  }, [
-    agent?.data.credits,
-    agent?.data.startingFaction,
-    agent?.data.symbol,
-    contracts?.data.length,
-    locale.currencySymbol,
-    colors.secondaryContainer,
-    currencyFormatter,
-    shipStatusCounts,
-  ]);
-
-  return (
-    <SafeAreaView
-      edges={['top', 'left', 'right']}
-      style={[flexStyles.flex, { backgroundColor: colors.secondaryContainer }]}
-    >
-      <FlatList
-        data={ships?.data}
-        ListHeaderComponent={renderHeader}
-        renderItem={() => null}
-        stickyHeaderIndices={[0]}
-        style={{
-          backgroundColor: colors.background,
-          flexGrow: 1,
-        }}
-      />
-    </SafeAreaView>
+      <FleetAlertsSection />
+    </View>
   );
 };
 

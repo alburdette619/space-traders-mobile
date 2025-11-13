@@ -6,7 +6,7 @@ import {
 
 // Make sure these font families match what you load via expo-font
 // (Orbitron_400Regular, Orbitron_500Medium, etc.)
-const orbitronVariants = {
+export const orbitronVariants = {
   // big “HUD” text
   displayLarge: {
     fontFamily: 'Orbitron_900Black',
@@ -107,7 +107,7 @@ const fonts = configureFonts({
   },
 });
 
-export const colors = {
+export const baseColors = {
   accentSolid: '#1C9DA7',
   border: '#F2F4FF',
   brandHover: '#662986',
@@ -119,19 +119,30 @@ export const colors = {
   disabledContainer: '#f2f4ff1f',
 
   disabledContent: '#f2f4ff61',
+
+  errorContainer: '#4C0018', // dark error surface
+  errorSolid: '#FF4B7D', // bright magenta-red
+
   infoSolid: '#24258A',
+
   onAccent: '#031416',
   onBrand: '#F6ECFF',
-
+  onError: '#1A0010',
+  onErrorContainer: '#FFD9E4',
   onInfo: '#EAF0FF',
+  onWarning: '#1A1200',
+  onWarningContainer: '#FFF4C7',
+
   surface1: '#0F1048',
   surface2: '#0B0B3D',
-
   text: '#F2F4FF',
   textMuted: '#C6CBF7',
 
   voidBg: '#000020',
   voidBg2: '#000025',
+
+  warningContainer: '#4A3500', // dark warning surface
+  warningSolid: '#FFC857', // warm amber
 };
 
 export const voidTheme: MD3Theme = {
@@ -139,42 +150,40 @@ export const voidTheme: MD3Theme = {
   colors: {
     ...PaperDarkTheme.colors,
 
-    // Base surfaces
-    background: colors.voidBg,
-    inverseOnSurface: colors.text,
+    background: baseColors.voidBg,
 
-    inversePrimary: colors.brandPress,
-    // Inverse (snackbars, bottom sheet, etc.)
-    inverseSurface: colors.voidBg2,
-    onPrimary: colors.onBrand,
-    onPrimaryContainer: colors.onBrand,
-    onSecondary: colors.onAccent,
+    error: baseColors.errorSolid,
+    errorContainer: baseColors.errorContainer,
 
-    onSecondaryContainer: colors.onInfo,
-    // Text & borders
-    onSurface: colors.text,
-    onSurfaceDisabled: colors.disabledContent,
-    onSurfaceVariant: colors.textMuted,
+    inverseOnSurface: baseColors.text,
+    inversePrimary: baseColors.brandPress,
+    inverseSurface: baseColors.voidBg2,
 
-    onTertiary: colors.onInfo,
-    outline: colors.border,
+    onError: baseColors.onError,
+    onErrorContainer: baseColors.onErrorContainer,
+    onPrimary: baseColors.onBrand,
+    onPrimaryContainer: baseColors.onBrand,
+    onSecondary: baseColors.onAccent,
+    onSecondaryContainer: baseColors.onInfo,
+    onSurface: baseColors.text,
+    onSurfaceDisabled: baseColors.disabledContent,
+    onSurfaceVariant: baseColors.textMuted,
+    onTertiary: baseColors.onInfo,
 
-    outlineVariant: colors.disabledBorder,
-    // Primary = “brandSolid”
-    primary: colors.brandSolid,
-    primaryContainer: colors.brandHover,
-    // Secondary = accent
-    secondary: colors.accentSolid,
+    outline: baseColors.border,
+    outlineVariant: baseColors.disabledBorder,
 
-    secondaryContainer: colors.infoSolid,
-    surface: colors.surface1,
+    primary: baseColors.brandSolid,
+    primaryContainer: baseColors.brandHover,
 
-    // Disabled
-    surfaceDisabled: colors.disabledContainer,
-    surfaceVariant: colors.surface2,
+    secondary: baseColors.accentSolid,
+    secondaryContainer: baseColors.infoSolid,
 
-    // Tertiary = info color (for badges, warnings, etc.)
-    tertiary: colors.infoSolid,
+    surface: baseColors.surface1,
+    surfaceDisabled: baseColors.disabledContainer,
+    surfaceVariant: baseColors.surface2,
+
+    tertiary: baseColors.infoSolid,
   },
   dark: true,
   fonts,

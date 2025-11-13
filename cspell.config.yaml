@@ -1,5 +1,6 @@
 ignoreRegExpList:
-  - /snackbar(s)?/
+  - /cooldown(s)?/i
+  - /snackbar(s)?/i
 words:
   - orbitron
   - pressable
@@ -9,7 +10,6 @@ words:
   - worklets
   # API specific terms
   - BIOCOMPOSITES
-  - cooldown
   - FEBA
   - HOLOGRAPHICS
   - HYPERGIANT

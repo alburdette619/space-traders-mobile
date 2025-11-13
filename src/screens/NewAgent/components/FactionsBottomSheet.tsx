@@ -38,7 +38,6 @@ export const FactionsBottomSheet = ({
 
   const handleFactionChange = useCallback(
     (faction: Faction) => {
-      console.log('Selected faction:', faction);
       setSelectedFaction(faction);
 
       // Delay closing to ensure state updates properly
