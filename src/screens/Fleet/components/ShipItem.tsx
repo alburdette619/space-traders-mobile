@@ -81,6 +81,9 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
               />
             </View>
           ) : null}
+          {!hasFuelTank && !hasCargoHold && !hasCrew ? (
+            <Text variant="labelSmall">{ship.registration.role}</Text>
+          ) : null}
         </View>
       </View>
     );
@@ -89,6 +92,7 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
     ship.fuel,
     ship.cargo,
     ship.crew,
+    ship.registration.role,
     hasFuelTank,
     hasCargoHold,
     hasCrew,
@@ -99,7 +103,11 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
     <Card style={styles.card}>
       <Card.Title
         subtitle={renderSubtitle()}
-        title={ship.registration?.name || ship.symbol}
+        title={
+          <Text variant="titleSmall">
+            {ship.registration?.name || ship.symbol}
+          </Text>
+        }
       />
       {/* <Card.Content></Card.Content> */}
     </Card>
