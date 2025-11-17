@@ -1,6 +1,7 @@
 // Mapping of icon names to their corresponding icon identifiers from material-design-icons.
 // These icons are used throughout the Void Runner application for various UI elements.
 export const voidRunnerIcons = {
+  alert: 'alert-outline',
   backButton: 'chevron-left',
   contracts: 'handshake-outline',
   contractsFocused: 'handshake',
@@ -12,4 +13,10 @@ export const voidRunnerIcons = {
   help: 'help-circle',
   stats: 'chart-box-outline',
   statsFocused: 'chart-box',
+} as const;
+
+export const shipStatusIcons = {
+  docked: 'space-station',
+  inOrbit: 'orbit',
+  inTransit: voidRunnerIcons.fleet,
 } as const;

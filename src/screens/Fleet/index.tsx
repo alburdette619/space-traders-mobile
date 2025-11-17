@@ -1,16 +1,19 @@
 import { useCallback } from 'react';
-import { StyleSheet } from 'react-native';
+import { ListRenderItemInfo, StyleSheet, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { useTheme } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useGetMyShips } from '@/src/api/models/fleet/fleet';
+import { Ship } from '@/src/api/models/models-Ship/ship';
 
 import { flexStyles } from '../../theme/globalStyles';
 import { AgentHeader } from './components/AgentHeader';
+import { ShipItem } from './components/ShipItem';
 
 export const FleetScreen = () => {
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
 
   const { data: ships, isFetching: isFetchingShips } = useGetMyShips();
 
@@ -18,24 +21,40 @@ export const FleetScreen = () => {
     return <AgentHeader />;
   }, []);
 
+  const renderItem = useCallback(({ item }: ListRenderItemInfo<Ship>) => {
+    return <ShipItem ship={item} />;
+  }, []);
+
   return (
-    <SafeAreaView
-      edges={['top', 'left', 'right']}
-      style={[flexStyles.flex, { backgroundColor: colors.secondaryContainer }]}
+    <View
+      style={[
+        flexStyles.flex,
+        {
+          backgroundColor: colors.secondaryContainer,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+          paddingTop: insets.top,
+        },
+      ]}
     >
       <FlatList
         bounces={false}
+        contentContainerStyle={styles.listContainer}
         data={ships?.data || []}
+        keyExtractor={(item) => item.symbol}
         ListHeaderComponent={renderHeader}
-        renderItem={() => null}
+        renderItem={renderItem}
         stickyHeaderIndices={[0]}
         style={{
           backgroundColor: colors.background,
-          flexGrow: 1,
         }}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  listContainer: {
+    flexGrow: 1,
+  },
+});

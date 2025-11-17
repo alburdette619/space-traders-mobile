@@ -1,18 +1,18 @@
-export interface FleetAlerts {
-  cargoCapacityCritical: number;
-  contractDeadlineCritical: number;
-  contractDeadlineWarning: number;
-  fuelLevelCritical: number;
-  fuelLevelWarning: number;
-  shipArrivingSoon: number;
-  shipConditionCritical: number;
-  shipConditionWarning: number;
-  shipCooldownExpired: number;
-  shipCrewMoraleLow: number;
-  shipIdleWarning: number;
-  shipIntegrityCritical: number;
-  shipIntegrityWarning: number;
-}
+export type AlertType =
+  | 'cargoFull'
+  | 'cooldown'
+  | 'damage'
+  | 'deadline'
+  | 'idle'
+  | 'lowFuel'
+  | 'lowMorale';
+
+export type ShipAlert = {
+  contractId?: string;
+  severity: 'crit' | 'warn';
+  shipId?: string;
+  type: AlertType;
+};
 
 export interface ShipStatusCounts {
   docked: number;

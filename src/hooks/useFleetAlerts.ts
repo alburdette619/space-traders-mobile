@@ -1,16 +1,16 @@
-import {
-  differenceInMinutes,
-  differenceInSeconds,
-  isPast,
-  max,
-} from 'date-fns';
+import { differenceInMinutes, isPast, max } from 'date-fns';
 import { merge, reduce } from 'lodash';
 import { useCallback, useMemo } from 'react';
 
 import { useGetContracts } from '../api/models/contracts/contracts';
 import { useGetMyShips } from '../api/models/fleet/fleet';
 import { Ship } from '../api/models/models-Ship/ship';
-import { FleetAlerts } from '../types/spaceTraders';
+import { ShipAlert } from '../types/spaceTraders';
+
+interface FleetAlertsResult {
+  alerts: ShipAlert[];
+  isCritical: boolean;
+}
 
 const cargoCapacityThreshold = 0.95;
 const contractDeadlineCriticalMinutes = 15;
@@ -19,62 +19,49 @@ const criticalDamageThreshold = 0.3;
 const idleMinutesThreshold = 5;
 const warningDamageThreshold = 0.6;
 
-export const fleetAlertMessages: Record<keyof FleetAlerts, string> = {
-  cargoCapacityCritical: `cargo ${cargoCapacityThreshold * 100}%`,
-  contractDeadlineCritical: `deadline <${contractDeadlineCriticalMinutes}m`,
-  contractDeadlineWarning: `deadline <${contractDeadlineWarningMinutes}m`,
-  fuelLevelCritical: `out of fuel`,
-  fuelLevelWarning: `fuel low`,
-  shipArrivingSoon: `arriving soon`,
-  shipConditionCritical: `needs repairs!`,
-  shipConditionWarning: `needs repairs`,
-  shipCooldownExpired: `cooldown ready`,
-  shipCrewMoraleLow: `low morale`,
-  shipIdleWarning: `idle >${idleMinutesThreshold}m`,
-  shipIntegrityCritical: `ship degraded!`,
-  shipIntegrityWarning: `ship degrading`,
-};
-
 // Future: This would be nice to come from a backend endpoint.
-export const useFleetAlerts = (): Partial<FleetAlerts> => {
+export const useFleetAlerts = (): FleetAlertsResult => {
   const { data: ships, isFetching: isFetchingShips } = useGetMyShips();
   const { data: contracts, isFetching: isFetchingContracts } =
     useGetContracts();
 
-  const now = new Date();
+  const getShipDamageAlerts = useCallback((ship: Ship): ShipAlert[] => {
+    const systems = {
+      engine: ship.engine,
+      frame: ship.frame,
+      reactor: ship.reactor,
+    };
 
-  const getShipDamageAlerts = useCallback(
-    (ship: Ship): Partial<FleetAlerts> => {
-      const systems = {
-        engine: ship.engine,
-        frame: ship.frame,
-        reactor: ship.reactor,
-      };
+    return reduce(
+      Object.values(systems),
+      (acc, { condition, integrity }) => {
+        if (
+          condition < criticalDamageThreshold ||
+          integrity < criticalDamageThreshold
+        ) {
+          acc.push({
+            severity: 'crit',
+            shipId: ship.symbol,
+            type: 'damage',
+          });
+        } else if (
+          condition < warningDamageThreshold ||
+          integrity < warningDamageThreshold
+        ) {
+          acc.push({
+            severity: 'warn',
+            shipId: ship.symbol,
+            type: 'damage',
+          });
+        }
 
-      return reduce(
-        Object.values(systems),
-        (acc, { condition, integrity }) => {
-          if (condition < criticalDamageThreshold) {
-            acc.shipConditionCritical = (acc.shipConditionCritical || 0) + 1;
-          } else if (condition < warningDamageThreshold) {
-            acc.shipConditionWarning = (acc.shipConditionWarning || 0) + 1;
-          }
+        return acc;
+      },
+      [] as ShipAlert[],
+    );
+  }, []);
 
-          if (integrity < criticalDamageThreshold) {
-            acc.shipIntegrityCritical = (acc.shipIntegrityCritical || 0) + 1;
-          } else if (integrity < warningDamageThreshold) {
-            acc.shipIntegrityWarning = (acc.shipIntegrityWarning || 0) + 1;
-          }
-
-          return acc;
-        },
-        {} as Partial<FleetAlerts>,
-      );
-    },
-    [],
-  );
-
-  const isShipIdle = useCallback((ship: Ship): boolean => {
+  const isShipIdle = useCallback((ship: Ship, now: Date): boolean => {
     // A ship is considered idle if it has had no significant activity for a set period.
     // Significant activity includes arriving at a destination, completing cooldowns, or consuming fuel.
     const times = [
@@ -100,7 +87,8 @@ export const useFleetAlerts = (): Partial<FleetAlerts> => {
   }, []);
 
   return useMemo(() => {
-    const alerts: Partial<FleetAlerts> = {};
+    const alerts: ShipAlert[] = [];
+    const now = new Date();
 
     if (!isFetchingShips) {
       ships?.data.forEach((ship) => {
@@ -109,10 +97,18 @@ export const useFleetAlerts = (): Partial<FleetAlerts> => {
         if (hasFuelTank) {
           if (ship.fuel.current === 0) {
             // Critical at no fuel
-            alerts.fuelLevelCritical = (alerts.fuelLevelCritical || 0) + 1;
+            alerts.push({
+              severity: 'crit',
+              shipId: ship.symbol,
+              type: 'lowFuel',
+            });
           } else if (ship.fuel.current <= ship.fuel.capacity * 0.1) {
             // Warning at 10% fuel
-            alerts.fuelLevelWarning = (alerts.fuelLevelWarning || 0) + 1;
+            alerts.push({
+              severity: 'warn',
+              shipId: ship.symbol,
+              type: 'lowFuel',
+            });
           }
         }
 
@@ -121,33 +117,40 @@ export const useFleetAlerts = (): Partial<FleetAlerts> => {
           ship.cargo.inventory.length >
           ship.cargo.capacity * cargoCapacityThreshold
         ) {
-          alerts.cargoCapacityCritical =
-            (alerts.cargoCapacityCritical || 0) + 1;
+          alerts.push({
+            severity: 'crit',
+            shipId: ship.symbol,
+            type: 'cargoFull',
+          });
         }
 
         // Check ship crew morale, warning at 60% morale
         if (ship.crew.morale <= 60) {
-          alerts.shipCrewMoraleLow = (alerts.shipCrewMoraleLow || 0) + 1;
+          alerts.push({
+            severity: 'warn',
+            shipId: ship.symbol,
+            type: 'lowMorale',
+          });
         }
 
         // Check for idle ships
-        const isIdle = isShipIdle(ship);
+        const isIdle = isShipIdle(ship, now);
         if (isIdle) {
-          alerts.shipIdleWarning = (alerts.shipIdleWarning || 0) + 1;
-        }
-
-        // Check for ships arriving within 1 minute or less
-        if (
-          ship.nav.status === 'IN_TRANSIT' &&
-          differenceInSeconds(now, new Date(ship.nav.route.arrival)) <= 60
-        ) {
-          alerts.shipArrivingSoon = (alerts.shipArrivingSoon || 0) + 1;
+          alerts.push({
+            severity: 'warn',
+            shipId: ship.symbol,
+            type: 'idle',
+          });
         }
 
         // Check for ships with cooldowns expiring within 60 seconds
         const cooldownRemaining = ship.cooldown.remainingSeconds ?? 0;
         if (cooldownRemaining > 0 && cooldownRemaining <= 60) {
-          alerts.shipCooldownExpired = (alerts.shipCooldownExpired || 0) + 1;
+          alerts.push({
+            severity: 'warn',
+            shipId: ship.symbol,
+            type: 'cooldown',
+          });
         }
 
         // Check for ship damage alerts
@@ -170,23 +173,32 @@ export const useFleetAlerts = (): Partial<FleetAlerts> => {
 
         if (minutesLeft <= contractDeadlineCriticalMinutes) {
           // Critical at less than 15 minutes
-          alerts.contractDeadlineCritical =
-            (alerts.contractDeadlineCritical || 0) + 1;
+          alerts.push({
+            contractId: contract.id,
+            severity: 'crit',
+            type: 'deadline',
+          });
         } else if (minutesLeft <= contractDeadlineWarningMinutes) {
           // Warning at less than 1 hour
-          alerts.contractDeadlineWarning =
-            (alerts.contractDeadlineWarning || 0) + 1;
+          alerts.push({
+            contractId: contract.id,
+            severity: 'warn',
+            type: 'deadline',
+          });
         }
       });
     }
-    return alerts;
+
+    return {
+      alerts,
+      isCritical: alerts.some((alert) => alert.severity === 'crit'),
+    };
   }, [
     contracts,
     getShipDamageAlerts,
     isFetchingContracts,
     isFetchingShips,
     isShipIdle,
-    now,
     ships,
   ]);
 };
