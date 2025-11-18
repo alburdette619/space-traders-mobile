@@ -9,7 +9,9 @@ import { voidTheme } from './src/theme/voidTheme';
 // Import API interceptors to set up globally
 import './src/api/interceptors';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { staleTime: 5 * 60 * 1000 } },
+});
 
 const App = () => {
   return (

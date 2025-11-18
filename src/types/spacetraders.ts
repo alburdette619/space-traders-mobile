@@ -1,3 +1,5 @@
+import { Ship } from '../api/models/models-Ship/ship';
+
 export type AlertType =
   | 'cargoFull'
   | 'cooldown'
@@ -18,6 +20,11 @@ export interface ShipStatusCounts {
   docked: number;
   inOrbit: number;
   inTransit: number;
+}
+
+export interface ShipWithAlerts extends Ship {
+  alerts: ShipAlert[];
+  isAlertCritical: boolean;
 }
 
 export interface SpaceTradersErrorResponse {

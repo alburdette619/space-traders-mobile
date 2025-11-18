@@ -1,21 +1,58 @@
-import { camelCase, isNumber } from 'lodash';
+import { camelCase, isNumber, startCase } from 'lodash';
 import { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, Icon, ProgressBar, Text } from 'react-native-paper';
 
-import { Ship } from '@/src/api/models/models-Ship/ship';
 import { shipStatusIcons } from '@/src/constants/icons';
 import { flexStyles, gapStyles } from '@/src/theme/globalStyles';
 import { baseColors } from '@/src/theme/voidTheme';
+import { ShipWithAlerts } from '@/src/types/spaceTraders';
 
 interface ShipItemProps {
-  ship: Ship;
+  ship: ShipWithAlerts;
 }
 
 export const ShipItem = ({ ship }: ShipItemProps) => {
   const hasFuelTank = ship.fuel.capacity > 0;
   const hasCargoHold = ship.cargo.capacity > 0;
   const hasCrew = ship.crew.capacity > 0;
+
+  const renderTitle = useCallback(() => {
+    return (
+      <View style={[flexStyles.flexRow, styles.subtitleContainer]}>
+        <View style={flexStyles.flexRow}>
+          <Text variant="titleSmall">
+            {ship.registration?.name || ship.symbol}
+          </Text>
+          <Text style={{ marginLeft: 8 }} variant="labelSmall">
+            ({startCase(ship.registration?.role.toLowerCase())})
+          </Text>
+        </View>
+        {ship.alerts.length > 0 && (
+          <View style={[flexStyles.flexRow, gapStyles.gapSmall]}>
+            {ship.alerts.length > 1 && (
+              <Text variant="labelSmall">{ship.alerts.length}</Text>
+            )}
+            <Icon
+              color={
+                ship.isAlertCritical
+                  ? baseColors.errorSolid
+                  : baseColors.warningSolid
+              }
+              size={16}
+              source="alert-outline"
+            />
+          </View>
+        )}
+      </View>
+    );
+  }, [
+    ship.alerts.length,
+    ship.isAlertCritical,
+    ship.registration?.name,
+    ship.registration?.role,
+    ship.symbol,
+  ]);
 
   const renderSubtitle = useCallback(() => {
     const camelStatus = camelCase(ship.nav.status);
@@ -82,7 +119,7 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
             </View>
           ) : null}
           {!hasFuelTank && !hasCargoHold && !hasCrew ? (
-            <Text variant="labelSmall">{ship.registration.role}</Text>
+            <Text variant="labelSmall">---</Text>
           ) : null}
         </View>
       </View>
@@ -92,23 +129,14 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
     ship.fuel,
     ship.cargo,
     ship.crew,
-    ship.registration.role,
     hasFuelTank,
     hasCargoHold,
     hasCrew,
   ]);
 
-  console.log(ship.fuel.capacity > 0);
   return (
-    <Card style={styles.card}>
-      <Card.Title
-        subtitle={renderSubtitle()}
-        title={
-          <Text variant="titleSmall">
-            {ship.registration?.name || ship.symbol}
-          </Text>
-        }
-      />
+    <Card style={[styles.card]}>
+      <Card.Title subtitle={renderSubtitle()} title={renderTitle()} />
       {/* <Card.Content></Card.Content> */}
     </Card>
   );
@@ -116,7 +144,8 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
 
 const styles = StyleSheet.create({
   card: {
-    marginVertical: 4,
+    marginBottom: 8,
+    marginHorizontal: 8,
   },
   progressBar: {
     transform: [{ rotate: '-90deg' }],

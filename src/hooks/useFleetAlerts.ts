@@ -7,9 +7,10 @@ import { useGetMyShips } from '../api/models/fleet/fleet';
 import { Ship } from '../api/models/models-Ship/ship';
 import { ShipAlert } from '../types/spaceTraders';
 
-interface FleetAlertsResult {
+export interface FleetAlertsResult {
   alerts: ShipAlert[];
   isCritical: boolean;
+  isFetchingAlerts: boolean;
 }
 
 const cargoCapacityThreshold = 0.95;
@@ -192,6 +193,7 @@ export const useFleetAlerts = (): FleetAlertsResult => {
     return {
       alerts,
       isCritical: alerts.some((alert) => alert.severity === 'crit'),
+      isFetchingAlerts: isFetchingShips || isFetchingContracts,
     };
   }, [
     contracts,

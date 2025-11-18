@@ -10,15 +10,23 @@ import { useGetContracts } from '@/src/api/models/contracts/contracts';
 import { useGetMyShips } from '@/src/api/models/fleet/fleet';
 import { shipStatusIcons, voidRunnerIcons } from '@/src/constants/icons';
 import { getFactionImageUrl } from '@/src/constants/urls';
-import { useFleetAlerts } from '@/src/hooks/useFleetAlerts';
 import {
   flexStyles,
   gapStyles,
+  miscStyles,
   roundStyleObject,
 } from '@/src/theme/globalStyles';
 import { ShipStatusCounts } from '@/src/types/spaceTraders';
 
-export const AgentHeader = () => {
+interface AgentHeaderProps {
+  alertCount?: number;
+  isAlertCritical?: boolean;
+}
+
+export const AgentHeader = ({
+  alertCount = 0,
+  isAlertCritical,
+}: AgentHeaderProps) => {
   const { colors } = useTheme();
   const [locale] = useLocales();
 
@@ -26,9 +34,6 @@ export const AgentHeader = () => {
   const { data: ships, isFetching: isFetchingShips } = useGetMyShips();
   const { data: contracts, isFetching: isFetchingContracts } =
     useGetContracts();
-
-  const { alerts, isCritical } = useFleetAlerts();
-  console.log('AgentHeader alerts:', alerts, isCritical);
 
   const shipStatusCounts: ShipStatusCounts = useMemo(() => {
     if (isFetchingShips) {
@@ -70,6 +75,7 @@ export const AgentHeader = () => {
       style={[
         { backgroundColor: colors.secondaryContainer },
         styles.headerContainer,
+        miscStyles.screenPadding,
       ]}
     >
       <View style={[flexStyles.flexRow, gapStyles.gapMedium]}>
@@ -104,19 +110,19 @@ export const AgentHeader = () => {
                 <Text variant="bodySmall">{`${shipStatusCounts.inTransit || '-'}`}</Text>
               </View>
             </View>
-            {alerts.length > 0 && (
+            {alertCount > 0 && (
               <Animated.View entering={StretchInY} exiting={StretchOutX}>
                 <Chip
                   mode="outlined"
                   style={{
-                    backgroundColor: isCritical
+                    backgroundColor: isAlertCritical
                       ? colors.errorContainer
                       : colors.surface,
                   }}
                 >
                   <View style={[flexStyles.flexRow, gapStyles.gapSmall]}>
                     <Icon size={16} source={voidRunnerIcons.alert} />
-                    <Text variant="bodySmall">{`${alerts.length} Alert${alerts.length !== 1 ? 's' : ''}`}</Text>
+                    <Text variant="bodySmall">{`${alertCount} Alert${alertCount !== 1 ? 's' : ''}`}</Text>
                   </View>
                 </Chip>
               </Animated.View>
@@ -138,7 +144,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     borderBottomLeftRadius: 12,
     borderBottomRightRadius: 12,
+    marginBottom: 8,
     paddingBottom: 8,
-    paddingHorizontal: 16,
   },
 });

@@ -32,6 +32,9 @@ export const miscStyles = StyleSheet.create({
   link: {
     textDecorationLine: 'underline',
   },
+  screenPadding: {
+    paddingHorizontal: 16,
+  },
   shadow: {
     ...(Platform.OS === 'ios'
       ? {
