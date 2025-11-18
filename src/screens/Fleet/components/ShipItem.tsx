@@ -1,7 +1,8 @@
+import { addSeconds, formatDistanceToNow } from 'date-fns';
 import { camelCase, isNumber, startCase } from 'lodash';
 import { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Card, Icon, ProgressBar, Text } from 'react-native-paper';
+import { Card, Icon, List, ProgressBar, Text } from 'react-native-paper';
 
 import { shipStatusIcons } from '@/src/constants/icons';
 import { flexStyles, gapStyles } from '@/src/theme/globalStyles';
@@ -19,7 +20,7 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
 
   const renderTitle = useCallback(() => {
     return (
-      <View style={[flexStyles.flexRow, styles.subtitleContainer]}>
+      <View style={[flexStyles.flexRow, styles.spaceBetweenContainer]}>
         <View style={flexStyles.flexRow}>
           <Text variant="titleSmall">
             {ship.registration?.name || ship.symbol}
@@ -56,17 +57,19 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
 
   const renderSubtitle = useCallback(() => {
     const camelStatus = camelCase(ship.nav.status);
-    const status = camelStatus.charAt(0).toUpperCase() + camelStatus.slice(1);
-    const fuelStatus = hasFuelTank
-      ? ship.fuel.current / ship.fuel.capacity
-      : null;
-    const cargoStatus = hasCargoHold
-      ? ship.cargo.units / ship.cargo.capacity
-      : null;
-    const crewStatus = hasCrew ? ship.crew.morale : null;
+    let status = startCase(ship.nav.status.toLowerCase());
+    const isInTransit = ship.nav.status === 'IN_TRANSIT';
+
+    if (ship.nav.status === 'IN_ORBIT') {
+      status += ` of ${ship.nav.waypointSymbol}`;
+    } else if (ship.nav.status === 'DOCKED') {
+      status += ` at ${ship.nav.waypointSymbol}`;
+    } else if (isInTransit) {
+      status += `${ship.nav.route.origin.symbol} → ${ship.nav.route.destination.symbol}`;
+    }
 
     return (
-      <View style={[flexStyles.flexRow, styles.subtitleContainer]}>
+      <View style={[flexStyles.flexRow]}>
         <View style={[flexStyles.flexRow, gapStyles.gapSmall]}>
           <Icon
             size={16}
@@ -76,6 +79,34 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
           />
           <Text variant="bodySmall">{status}</Text>
         </View>
+        {isInTransit && (
+          <Text variant="bodySmall">{` • Arrives in ${formatDistanceToNow(new Date(ship.nav.route.arrival))}`}</Text>
+        )}
+        {ship.cooldown.remainingSeconds && !isInTransit && (
+          <Text variant="bodySmall">{` • Cooldown in ${formatDistanceToNow(addSeconds(new Date(), ship.cooldown.remainingSeconds))}`}</Text>
+        )}
+      </View>
+    );
+  }, [
+    ship.cooldown.remainingSeconds,
+    ship.nav.route.arrival,
+    ship.nav.route.destination,
+    ship.nav.route.origin,
+    ship.nav.status,
+    ship.nav.waypointSymbol,
+  ]);
+
+  const renderStatuses = useCallback(() => {
+    const fuelStatus = hasFuelTank
+      ? ship.fuel.current / ship.fuel.capacity
+      : null;
+    const cargoStatus = hasCargoHold
+      ? ship.cargo.units / ship.cargo.capacity
+      : null;
+    const crewStatus = hasCrew ? ship.crew.morale : null;
+
+    return (
+      <View style={[styles.spaceBetweenContainer, { alignItems: 'flex-end' }]}>
         <View style={[flexStyles.flexRow]}>
           {isNumber(fuelStatus) ? (
             <View style={flexStyles.flexRow}>
@@ -124,20 +155,16 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
         </View>
       </View>
     );
-  }, [
-    ship.nav.status,
-    ship.fuel,
-    ship.cargo,
-    ship.crew,
-    hasFuelTank,
-    hasCargoHold,
-    hasCrew,
-  ]);
+  }, [ship.fuel, ship.cargo, ship.crew, hasFuelTank, hasCargoHold, hasCrew]);
 
   return (
     <Card style={[styles.card]}>
-      <Card.Title subtitle={renderSubtitle()} title={renderTitle()} />
-      {/* <Card.Content></Card.Content> */}
+      <List.Item
+        description={renderSubtitle()}
+        title={renderTitle()}
+        titleStyle={styles.titleContainer}
+      />
+      <Card.Content>{renderStatuses()}</Card.Content>
     </Card>
   );
 };
@@ -146,13 +173,18 @@ const styles = StyleSheet.create({
   card: {
     marginBottom: 8,
     marginHorizontal: 8,
+    paddingVertical: 4,
   },
   progressBar: {
     transform: [{ rotate: '-90deg' }],
-    width: 20,
+    width: 16,
   },
+  spaceBetweenContainer: { justifyContent: 'space-between', width: '100%' },
   statusText: {
     marginLeft: 4,
   },
-  subtitleContainer: { justifyContent: 'space-between', width: '100%' },
+  titleContainer: {
+    // marginBottom: 4,
+    // minHeight: undefined,
+  },
 });

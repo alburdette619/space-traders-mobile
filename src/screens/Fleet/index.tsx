@@ -91,13 +91,19 @@ export const FleetScreen = () => {
       }
 
       return (
-        <View style={[styles.sectionHeader, miscStyles.screenPadding]}>
+        <View
+          style={[
+            styles.sectionHeader,
+            miscStyles.screenPadding,
+            { backgroundColor: colors.background },
+          ]}
+        >
           <Text variant="titleMedium">{`/// ${section.title}`}</Text>
           <Divider bold />
         </View>
       );
     },
-    [],
+    [colors.background],
   );
 
   return (
@@ -113,14 +119,14 @@ export const FleetScreen = () => {
       ]}
     >
       <SectionList
-        bounces={false}
+        // bounces={false}
         contentContainerStyle={styles.listContainer}
         keyExtractor={(item) => item.symbol}
         ListHeaderComponent={renderHeader}
         renderItem={renderItem}
         renderSectionHeader={renderSectionHeader}
         sections={sectionedShipData}
-        // stickyHeaderIndices={[0]}
+        stickySectionHeadersEnabled
         style={{
           backgroundColor: colors.background,
         }}

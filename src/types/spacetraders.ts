@@ -9,12 +9,16 @@ export type AlertType =
   | 'lowFuel'
   | 'lowMorale';
 
-export type ShipAlert = {
-  contractId?: string;
+export interface ContractAlert extends Omit<ShipAlert, 'shipId'> {
+  contractId: string;
+  type: 'deadline';
+}
+
+export interface ShipAlert {
   severity: 'crit' | 'warn';
-  shipId?: string;
-  type: AlertType;
-};
+  shipId: string;
+  type: Omit<AlertType, 'deadline'>;
+}
 
 export interface ShipStatusCounts {
   docked: number;

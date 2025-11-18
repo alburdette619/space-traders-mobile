@@ -2,7 +2,6 @@ import { differenceInMinutes, isPast, max } from 'date-fns';
 import { merge, reduce } from 'lodash';
 import { useCallback, useMemo } from 'react';
 
-import { useGetContracts } from '../api/models/contracts/contracts';
 import { useGetMyShips } from '../api/models/fleet/fleet';
 import { Ship } from '../api/models/models-Ship/ship';
 import { ShipAlert } from '../types/spaceTraders';
@@ -14,8 +13,6 @@ export interface FleetAlertsResult {
 }
 
 const cargoCapacityThreshold = 0.95;
-const contractDeadlineCriticalMinutes = 15;
-const contractDeadlineWarningMinutes = 60;
 const criticalDamageThreshold = 0.3;
 const idleMinutesThreshold = 5;
 const warningDamageThreshold = 0.6;
@@ -23,8 +20,6 @@ const warningDamageThreshold = 0.6;
 // Future: This would be nice to come from a backend endpoint.
 export const useFleetAlerts = (): FleetAlertsResult => {
   const { data: ships, isFetching: isFetchingShips } = useGetMyShips();
-  const { data: contracts, isFetching: isFetchingContracts } =
-    useGetContracts();
 
   const getShipDamageAlerts = useCallback((ship: Ship): ShipAlert[] => {
     const systems = {
@@ -160,47 +155,10 @@ export const useFleetAlerts = (): FleetAlertsResult => {
       });
     }
 
-    // Check for contract deadlines
-    if (!isFetchingContracts) {
-      contracts?.data.forEach((contract) => {
-        if (!contract.terms.deadline) {
-          return false;
-        }
-
-        const minutesLeft = differenceInMinutes(
-          new Date(contract.terms.deadline),
-          now,
-        );
-
-        if (minutesLeft <= contractDeadlineCriticalMinutes) {
-          // Critical at less than 15 minutes
-          alerts.push({
-            contractId: contract.id,
-            severity: 'crit',
-            type: 'deadline',
-          });
-        } else if (minutesLeft <= contractDeadlineWarningMinutes) {
-          // Warning at less than 1 hour
-          alerts.push({
-            contractId: contract.id,
-            severity: 'warn',
-            type: 'deadline',
-          });
-        }
-      });
-    }
-
     return {
       alerts,
       isCritical: alerts.some((alert) => alert.severity === 'crit'),
-      isFetchingAlerts: isFetchingShips || isFetchingContracts,
+      isFetchingAlerts: isFetchingShips,
     };
-  }, [
-    contracts,
-    getShipDamageAlerts,
-    isFetchingContracts,
-    isFetchingShips,
-    isShipIdle,
-    ships,
-  ]);
+  }, [getShipDamageAlerts, isFetchingShips, isShipIdle, ships]);
 };
