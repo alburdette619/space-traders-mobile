@@ -10,6 +10,7 @@ export type RootNavigatorParams = {
   BrandSplash: undefined;
   MainAppTabs: undefined;
   NewAgent: undefined;
+  ShipDetail: { shipId: string };
 };
 
 /* eslint-disable @typescript-eslint/no-empty-object-type */

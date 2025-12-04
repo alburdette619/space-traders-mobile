@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AgentCreationInstructionsScreen } from '../screens/AgentCreationInstructions';
 import { BrandSplashScreen } from '../screens/BrandSplash';
 import { NewAgentScreen } from '../screens/NewAgent';
+import { ShipDetailScreen } from '../screens/ShipDetail';
 import { useUserStore } from '../stores/userStore';
 import { MainAppTabs } from './MainAppTabs';
 import { RootNavigatorParams } from './navigationParams';
@@ -20,6 +21,7 @@ export const RootStack = () => {
       {isAuthenticated ? (
         <Stack.Group>
           <Stack.Screen component={MainAppTabs} name="MainAppTabs" />
+          <Stack.Screen component={ShipDetailScreen} name="ShipDetail" />
         </Stack.Group>
       ) : (
         <Stack.Group>

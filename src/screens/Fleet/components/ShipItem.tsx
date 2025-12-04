@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { addSeconds, formatDistanceToNow } from 'date-fns';
 import { camelCase, isNumber, startCase } from 'lodash';
 import { useCallback } from 'react';
@@ -21,9 +22,15 @@ interface ShipItemProps {
 }
 
 export const ShipItem = ({ ship }: ShipItemProps) => {
+  const { navigate } = useNavigation();
+
   const hasFuelTank = ship.fuel.capacity > 0;
   const hasCargoHold = ship.cargo.capacity > 0;
   const hasCrew = ship.crew.capacity > 0;
+
+  const handlePress = useCallback(() => {
+    navigate('ShipDetail', { shipId: ship.symbol });
+  }, [navigate, ship.symbol]);
 
   const renderTitle = useCallback(() => {
     return (
@@ -199,7 +206,7 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
   }, [ship.fuel, ship.cargo, ship.crew, hasFuelTank, hasCargoHold, hasCrew]);
 
   return (
-    <Card style={[styles.card]}>
+    <Card onPress={handlePress} style={[styles.card]}>
       <List.Item description={renderSubtitle()} title={renderTitle()} />
       <Card.Content
         style={[gapStyles.gapMedium, flexStyles.flexRow, , styles.cardContent]}
