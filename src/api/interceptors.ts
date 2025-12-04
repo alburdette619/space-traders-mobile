@@ -1,10 +1,12 @@
-import { AxiosHeaders } from 'axios';
-import { getItemAsync } from 'expo-secure-store';
+import { AxiosHeaders, isAxiosError } from 'axios';
+import { deleteItemAsync, getItemAsync } from 'expo-secure-store';
 
+import { accountErrorCodes } from '../constants/errorCodes';
 import { agentKey } from '../constants/storageKeys';
+import { isSpaceTradersErrorResponse } from '../utils/typeCheckers';
 import { client } from './client';
 
-client.interceptors.request.use(async (config) => {
+client.axiosInstance.interceptors.request.use(async (config) => {
   // Get agent key from secure storage and use it if available. Most traffic,
   // should use the agent key for requests.
   const agentKeyValue = await getItemAsync(agentKey);
@@ -24,3 +26,29 @@ client.interceptors.request.use(async (config) => {
 
   return config;
 });
+
+client.axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    // Agent is unauthorized, likely due to server reset invalidating the key.
+    console.log(isAxiosError(error), error.status);
+    if (isAxiosError(error) && error.status === 401) {
+      const spaceTradersError = isSpaceTradersErrorResponse(
+        error.response?.data,
+      )
+        ? error.response?.data
+        : null;
+
+      if (
+        spaceTradersError &&
+        spaceTradersError.error.code ===
+          accountErrorCodes.tokenFailedToParseError
+      ) {
+        // The agent is from before the server reset, we should clear the stored key.
+        await deleteItemAsync(agentKey);
+      }
+    }
+  },
+);
