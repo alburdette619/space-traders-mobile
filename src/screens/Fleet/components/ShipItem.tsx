@@ -82,7 +82,7 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
         {isInTransit && (
           <Text variant="bodySmall">{` • Arrives in ${formatDistanceToNow(new Date(ship.nav.route.arrival))}`}</Text>
         )}
-        {ship.cooldown.remainingSeconds && !isInTransit && (
+        {ship.cooldown.remainingSeconds > 0 && !isInTransit && (
           <Text variant="bodySmall">{` • Cooldown in ${formatDistanceToNow(addSeconds(new Date(), ship.cooldown.remainingSeconds))}`}</Text>
         )}
       </View>
