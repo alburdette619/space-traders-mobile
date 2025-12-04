@@ -162,8 +162,7 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
                 style={[styles.statsText, styles.smallText]}
                 variant="bodySmall"
               >
-                {/* {cargoStatus * 100}% */}
-                100%
+                {cargoStatus * 100}%
               </Text>
               <ProgressBar
                 color={baseColors.brandSolid}
