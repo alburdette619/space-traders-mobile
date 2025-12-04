@@ -5,6 +5,7 @@ export const voidRunnerIcons = {
   backButton: 'chevron-left',
   contracts: 'handshake-outline',
   contractsFocused: 'handshake',
+  cooldown: 'progress-clock',
   credits: 'credit-card-chip-outline',
   fleet: 'rocket-launch-outline',
   fleetFocused: 'rocket-launch',

@@ -2,10 +2,17 @@ import { addSeconds, formatDistanceToNow } from 'date-fns';
 import { camelCase, isNumber, startCase } from 'lodash';
 import { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Card, Icon, List, ProgressBar, Text } from 'react-native-paper';
+import {
+  Card,
+  Divider,
+  Icon,
+  List,
+  ProgressBar,
+  Text,
+} from 'react-native-paper';
 
 import { shipStatusIcons } from '@/src/constants/icons';
-import { flexStyles, gapStyles } from '@/src/theme/globalStyles';
+import { flexStyles, gapStyles, miscStyles } from '@/src/theme/globalStyles';
 import { baseColors } from '@/src/theme/voidTheme';
 import { ShipWithAlerts } from '@/src/types/spaceTraders';
 
@@ -20,12 +27,12 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
 
   const renderTitle = useCallback(() => {
     return (
-      <View style={[flexStyles.flexRow, styles.spaceBetweenContainer]}>
+      <View style={[flexStyles.flexRow, styles.titleContainer]}>
         <View style={flexStyles.flexRow}>
           <Text variant="titleSmall">
             {ship.registration?.name || ship.symbol}
           </Text>
-          <Text style={{ marginLeft: 8 }} variant="labelSmall">
+          <Text style={styles.roleText} variant="labelSmall">
             ({startCase(ship.registration?.role.toLowerCase())})
           </Text>
         </View>
@@ -79,17 +86,9 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
           />
           <Text variant="bodySmall">{status}</Text>
         </View>
-        {isInTransit && (
-          <Text variant="bodySmall">{` • Arrives in ${formatDistanceToNow(new Date(ship.nav.route.arrival))}`}</Text>
-        )}
-        {ship.cooldown.remainingSeconds > 0 && !isInTransit && (
-          <Text variant="bodySmall">{` • Cooldown in ${formatDistanceToNow(addSeconds(new Date(), ship.cooldown.remainingSeconds))}`}</Text>
-        )}
       </View>
     );
   }, [
-    ship.cooldown.remainingSeconds,
-    ship.nav.route.arrival,
     ship.nav.route.destination,
     ship.nav.route.origin,
     ship.nav.status,
@@ -97,6 +96,37 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
   ]);
 
   const renderStatuses = useCallback(() => {
+    const isInTransit = ship.nav.status === 'IN_TRANSIT';
+    const isStatusVisible = isInTransit || ship.cooldown.remainingSeconds > 0;
+
+    return isStatusVisible ? (
+      <View style={[flexStyles.flexRow, gapStyles.gapMedium]}>
+        <View style={[gapStyles.gapSmall]}>
+          {isInTransit && (
+            <View style={[flexStyles.flexRow, gapStyles.gapSmall]}>
+              <Icon size={16} source="rocket-launch-outline" />
+              <Text
+                style={styles.smallText}
+                variant="bodySmall"
+              >{` ${formatDistanceToNow(new Date(ship.nav.route.arrival))}`}</Text>
+            </View>
+          )}
+          {ship.cooldown.remainingSeconds > 0 && !isInTransit && (
+            <View style={[flexStyles.flexRow, gapStyles.gapSmall]}>
+              <Icon size={16} source="progress-clock" />
+              <Text
+                style={styles.smallText}
+                variant="bodySmall"
+              >{` ${formatDistanceToNow(addSeconds(new Date(), ship.cooldown.remainingSeconds))}`}</Text>
+            </View>
+          )}
+        </View>
+        <Divider style={[miscStyles.verticalDivider, styles.contentDivider]} />
+      </View>
+    ) : null;
+  }, [ship.cooldown.remainingSeconds, ship.nav.route.arrival, ship.nav.status]);
+
+  const renderKeyStats = useCallback(() => {
     const fuelStatus = hasFuelTank
       ? ship.fuel.current / ship.fuel.capacity
       : null;
@@ -106,12 +136,15 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
     const crewStatus = hasCrew ? ship.crew.morale : null;
 
     return (
-      <View style={[styles.spaceBetweenContainer, { alignItems: 'flex-end' }]}>
+      <View style={[styles.statsContainer]}>
         <View style={[flexStyles.flexRow]}>
           {isNumber(fuelStatus) ? (
             <View style={flexStyles.flexRow}>
               <Icon size={16} source="barrel-outline" />
-              <Text style={styles.statusText} variant="bodySmall">
+              <Text
+                style={[styles.statsText, styles.smallText]}
+                variant="bodySmall"
+              >
                 {fuelStatus * 100}%
               </Text>
               <ProgressBar
@@ -125,8 +158,12 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
           {isNumber(cargoStatus) ? (
             <View style={flexStyles.flexRow}>
               <Icon size={16} source="treasure-chest-outline" />
-              <Text style={styles.statusText} variant="bodySmall">
-                {cargoStatus * 100}%
+              <Text
+                style={[styles.statsText, styles.smallText]}
+                variant="bodySmall"
+              >
+                {/* {cargoStatus * 100}% */}
+                100%
               </Text>
               <ProgressBar
                 color={baseColors.brandSolid}
@@ -139,7 +176,10 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
           {isNumber(crewStatus) ? (
             <View style={flexStyles.flexRow}>
               <Icon size={16} source="account-group-outline" />
-              <Text style={styles.statusText} variant="bodySmall">
+              <Text
+                style={[styles.statsText, styles.smallText]}
+                variant="bodySmall"
+              >
                 {crewStatus}%
               </Text>
               <ProgressBar
@@ -149,22 +189,25 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
               />
             </View>
           ) : null}
-          {!hasFuelTank && !hasCargoHold && !hasCrew ? (
-            <Text variant="labelSmall">---</Text>
-          ) : null}
         </View>
+        {!hasFuelTank && !hasCargoHold && !hasCrew ? (
+          <Text style={styles.emptyStats} variant="labelSmall">
+            ---
+          </Text>
+        ) : null}
       </View>
     );
   }, [ship.fuel, ship.cargo, ship.crew, hasFuelTank, hasCargoHold, hasCrew]);
 
   return (
     <Card style={[styles.card]}>
-      <List.Item
-        description={renderSubtitle()}
-        title={renderTitle()}
-        titleStyle={styles.titleContainer}
-      />
-      <Card.Content>{renderStatuses()}</Card.Content>
+      <List.Item description={renderSubtitle()} title={renderTitle()} />
+      <Card.Content
+        style={[gapStyles.gapMedium, flexStyles.flexRow, , styles.cardContent]}
+      >
+        {renderStatuses()}
+        {renderKeyStats()}
+      </Card.Content>
     </Card>
   );
 };
@@ -175,16 +218,27 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     paddingVertical: 4,
   },
+  cardContent: { justifyContent: 'space-between' },
+  contentDivider: {
+    height: 36,
+  },
+  emptyStats: { paddingRight: 4 },
   progressBar: {
     transform: [{ rotate: '-90deg' }],
     width: 16,
   },
-  spaceBetweenContainer: { justifyContent: 'space-between', width: '100%' },
-  statusText: {
+  roleText: {
+    marginLeft: 8,
+  },
+  smallText: {
+    fontSize: 10,
+  },
+  statsContainer: {
+    alignItems: 'flex-end',
+    width: '100%',
+  },
+  statsText: {
     marginLeft: 4,
   },
-  titleContainer: {
-    // marginBottom: 4,
-    // minHeight: undefined,
-  },
+  titleContainer: { justifyContent: 'space-between', width: '100%' },
 });

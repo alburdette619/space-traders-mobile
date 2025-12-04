@@ -48,6 +48,10 @@ export const miscStyles = StyleSheet.create({
           elevation: 12,
         }),
   },
+  verticalDivider: {
+    height: '100%',
+    width: StyleSheet.hairlineWidth,
+  },
 });
 
 export const roundStyleObject = (size: number) => ({
