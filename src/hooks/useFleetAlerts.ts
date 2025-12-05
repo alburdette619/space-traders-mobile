@@ -14,7 +14,7 @@ export interface FleetAlertsResult {
 
 const cargoCapacityThreshold = 0.95;
 const criticalDamageThreshold = 0.3;
-const idleMinutesThreshold = 5;
+const idleMinutesThreshold = 60;
 const warningDamageThreshold = 0.6;
 
 // Future: This would be nice to come from a backend endpoint.
