@@ -1,5 +1,5 @@
 ignoreRegExpList:
-  - /cooldown(s)?/i
+  - /(C|c)ooldown(s)?/
   - /snackbar(s)?/i
 words:
   - orbitron

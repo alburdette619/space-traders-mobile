@@ -7,7 +7,6 @@
     "ios": "expo run:ios",
     "lint": "expo lint",
     "lint:fix": "expo lint --fix",
-    "reset-project": "node ./scripts/reset-project.js",
     "start": "expo start",
     "types": "tsc --noEmit",
     "web": "expo start --web"
@@ -52,6 +51,7 @@
     "react-native-web": "~0.21.0",
     "react-native-worklets": "^0.5.1",
     "usehooks-ts": "^3.1.1",
+    "victory-native": "^41.20.2",
     "zustand": "^5.0.8"
   },
   "devDependencies": {

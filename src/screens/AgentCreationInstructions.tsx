@@ -1,16 +1,14 @@
-import { useNavigation } from '@react-navigation/native';
 import { useCallback } from 'react';
 import { Linking, ScrollView, StyleSheet, View } from 'react-native';
-import { Divider, IconButton, List, Text, useTheme } from 'react-native-paper';
+import { Divider, List, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { voidRunnerIcons } from '../constants/icons';
+import { BackButton } from '../components/BackButton';
 import { spaceTradersLogin } from '../constants/urls';
 import { flexStyles, miscStyles } from '../theme/globalStyles';
 
 export const AgentCreationInstructionsScreen = () => {
   const theme = useTheme();
-  const { goBack } = useNavigation();
 
   const handleOpenSpaceTradersSignup = useCallback(() => {
     Linking.openURL(spaceTradersLogin);
@@ -21,11 +19,7 @@ export const AgentCreationInstructionsScreen = () => {
       style={[flexStyles.flex, { backgroundColor: theme.colors.background }]}
     >
       <SafeAreaView style={flexStyles.flex}>
-        <IconButton
-          icon={voidRunnerIcons.backButton}
-          onPress={goBack}
-          size={32}
-        />
+        <BackButton />
         <ScrollView
           alwaysBounceVertical={false}
           contentContainerStyle={styles.container}

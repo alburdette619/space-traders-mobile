@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useCountdown } from 'usehooks-ts';
 
 import { useGetStatus } from '../api/models/global/global';
+import { getHumanReadableCountdown } from '../utils/dateTime';
 
 export const useServerResetCountdown = () => {
   const { data: status, isFetching: isFetchingStatus } = useGetStatus();
@@ -26,15 +27,7 @@ export const useServerResetCountdown = () => {
   }, [status, isFetchingStatus, resetCountdown, startCountdown]);
 
   const humanReadableResetDate = useMemo(() => {
-    const {
-      days = 0,
-      hours = 0,
-      minutes = 0,
-      seconds = 0,
-    } = intervalToDuration({ end: secondsTillReset * 1000, start: 0 });
-
-    const padDurationPart = (part: number) => part.toString().padStart(2, '0');
-    return `${days > 0 ? `${padDurationPart(days)}:` : ''}${padDurationPart(hours)}:${padDurationPart(minutes)}:${padDurationPart(seconds)}`;
+    return getHumanReadableCountdown(secondsTillReset);
   }, [secondsTillReset]);
 
   return {
