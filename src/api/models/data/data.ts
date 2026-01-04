@@ -21,19 +21,24 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
+
 import type {
   DataTag,
   DefinedInitialDataOptions,
+  DefinedUseInfiniteQueryResult,
   DefinedUseQueryResult,
+  InfiniteData,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseInfiniteQueryOptions,
+  UseInfiniteQueryResult,
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
 
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import type { ErrorType } from '../../client';
 import type { GetSupplyChain200 } from '../getSupplyChain200';
@@ -56,9 +61,153 @@ export const getSupplyChain = (
   );
 };
 
+export const getGetSupplyChainInfiniteQueryKey = () => {
+  return ['infinite', `/market/supply-chain`] as const;
+};
+
 export const getGetSupplyChainQueryKey = () => {
   return [`/market/supply-chain`] as const;
 };
+
+export const getGetSupplyChainInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getSupplyChain>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getSupplyChain>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof clientInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSupplyChainInfiniteQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSupplyChain>>> = ({
+    signal,
+  }) => getSupplyChain(requestOptions, signal);
+
+  return { queryFn, queryKey, ...queryOptions } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getSupplyChain>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetSupplyChainInfiniteQueryError = ErrorType<unknown>;
+export type GetSupplyChainInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSupplyChain>>
+>;
+
+export function useGetSupplyChainInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSupplyChain>>>,
+  TError = ErrorType<unknown>,
+>(
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSupplyChain>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSupplyChain>>,
+          TError,
+          Awaited<ReturnType<typeof getSupplyChain>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSupplyChainInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSupplyChain>>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSupplyChain>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSupplyChain>>,
+          TError,
+          Awaited<ReturnType<typeof getSupplyChain>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSupplyChainInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSupplyChain>>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSupplyChain>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Supply Chain
+ */
+
+export function useGetSupplyChainInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSupplyChain>>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSupplyChain>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetSupplyChainInfiniteQueryOptions(options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetSupplyChainQueryOptions = <
   TData = Awaited<ReturnType<typeof getSupplyChain>>,

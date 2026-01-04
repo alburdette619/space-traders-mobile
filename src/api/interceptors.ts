@@ -33,23 +33,18 @@ client.axiosInstance.interceptors.response.use(
   },
   async (error) => {
     // Agent is unauthorized, likely due to server reset invalidating the key.
-    console.log('API ERROR:', error);
     if (isAxiosError(error) && error.status === 401) {
-      console.log('Unauthorized - clearing stored agent key.');
       const spaceTradersError = isSpaceTradersErrorResponse(
         error.response?.data,
       )
         ? error.response?.data
         : null;
 
-      console.log('SpaceTradersError:', spaceTradersError, error.response);
-
       if (
         spaceTradersError &&
         spaceTradersError.error.code ===
           accountErrorCodes.tokenFailedToParseError
       ) {
-        console.log('Token failed to parse error - clearing stored agent key.');
         // The agent is from before the server reset, we should clear the stored key.
         await deleteItemAsync(agentKey);
       }

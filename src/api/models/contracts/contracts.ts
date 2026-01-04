@@ -21,22 +21,27 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
+
 import type {
   DataTag,
   DefinedInitialDataOptions,
+  DefinedUseInfiniteQueryResult,
   DefinedUseQueryResult,
+  InfiniteData,
   MutationFunction,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseInfiniteQueryOptions,
+  UseInfiniteQueryResult,
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 
 import type { ErrorType } from '../../client';
 import type { AcceptContract200 } from '../acceptContract200';
@@ -66,9 +71,162 @@ export const getContracts = (
   );
 };
 
+export const getGetContractsInfiniteQueryKey = (
+  params?: GetContractsParams,
+) => {
+  return ['infinite', `/my/contracts`, ...(params ? [params] : [])] as const;
+};
+
 export const getGetContractsQueryKey = (params?: GetContractsParams) => {
   return [`/my/contracts`, ...(params ? [params] : [])] as const;
 };
+
+export const getGetContractsInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getContracts>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetContractsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getContracts>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetContractsInfiniteQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getContracts>>> = ({
+    signal,
+  }) => getContracts(params, requestOptions, signal);
+
+  return { queryFn, queryKey, ...queryOptions } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getContracts>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetContractsInfiniteQueryError = ErrorType<unknown>;
+export type GetContractsInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getContracts>>
+>;
+
+export function useGetContractsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getContracts>>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetContractsParams | undefined,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getContracts>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getContracts>>,
+          TError,
+          Awaited<ReturnType<typeof getContracts>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetContractsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getContracts>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetContractsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getContracts>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getContracts>>,
+          TError,
+          Awaited<ReturnType<typeof getContracts>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetContractsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getContracts>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetContractsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getContracts>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary List Contracts
+ */
+
+export function useGetContractsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getContracts>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetContractsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getContracts>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetContractsInfiniteQueryOptions(params, options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetContractsQueryOptions = <
   TData = Awaited<ReturnType<typeof getContracts>>,
@@ -213,9 +371,165 @@ export const getContract = (
   );
 };
 
+export const getGetContractInfiniteQueryKey = (contractId?: string) => {
+  return ['infinite', `/my/contracts/${contractId}`] as const;
+};
+
 export const getGetContractQueryKey = (contractId?: string) => {
   return [`/my/contracts/${contractId}`] as const;
 };
+
+export const getGetContractInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getContract>>>,
+  TError = ErrorType<unknown>,
+>(
+  contractId: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getContract>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetContractInfiniteQueryKey(contractId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getContract>>> = ({
+    signal,
+  }) => getContract(contractId, requestOptions, signal);
+
+  return {
+    enabled: !!contractId,
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getContract>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetContractInfiniteQueryError = ErrorType<unknown>;
+export type GetContractInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getContract>>
+>;
+
+export function useGetContractInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getContract>>>,
+  TError = ErrorType<unknown>,
+>(
+  contractId: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getContract>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getContract>>,
+          TError,
+          Awaited<ReturnType<typeof getContract>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetContractInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getContract>>>,
+  TError = ErrorType<unknown>,
+>(
+  contractId: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getContract>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getContract>>,
+          TError,
+          Awaited<ReturnType<typeof getContract>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetContractInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getContract>>>,
+  TError = ErrorType<unknown>,
+>(
+  contractId: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getContract>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Contract
+ */
+
+export function useGetContractInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getContract>>>,
+  TError = ErrorType<unknown>,
+>(
+  contractId: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getContract>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetContractInfiniteQueryOptions(contractId, options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetContractQueryOptions = <
   TData = Awaited<ReturnType<typeof getContract>>,

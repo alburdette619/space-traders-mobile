@@ -1,11 +1,6 @@
-import { ApiResponse, create } from 'apisauce';
-import axios, {
-  AxiosError,
-  AxiosRequestConfig,
-  isAxiosError,
-  isCancel,
-} from 'axios';
-import { has, isObject } from 'lodash';
+import { create } from 'apisauce';
+import axios, { AxiosError, AxiosRequestConfig, isCancel } from 'axios';
+import { has } from 'lodash';
 
 import { SpaceTradersErrorResponse } from '../types/spaceTraders';
 

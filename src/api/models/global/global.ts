@@ -21,22 +21,27 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
+
 import type {
   DataTag,
   DefinedInitialDataOptions,
+  DefinedUseInfiniteQueryResult,
   DefinedUseQueryResult,
+  InfiniteData,
   MutationFunction,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseInfiniteQueryOptions,
+  UseInfiniteQueryResult,
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 
 import type { ErrorType } from '../../client';
 import type { GetStatus200 } from '../getStatus200';
@@ -62,9 +67,152 @@ export const getStatus = (
   );
 };
 
+export const getGetStatusInfiniteQueryKey = () => {
+  return ['infinite', `/`] as const;
+};
+
 export const getGetStatusQueryKey = () => {
   return [`/`] as const;
 };
+
+export const getGetStatusInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getStatus>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getStatus>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof clientInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetStatusInfiniteQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getStatus>>> = ({
+    signal,
+  }) => getStatus(requestOptions, signal);
+
+  return { queryFn, queryKey, ...queryOptions } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getStatus>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetStatusInfiniteQueryError = ErrorType<unknown>;
+export type GetStatusInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getStatus>>
+>;
+
+export function useGetStatusInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getStatus>>>,
+  TError = ErrorType<unknown>,
+>(
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getStatus>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getStatus>>,
+          TError,
+          Awaited<ReturnType<typeof getStatus>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetStatusInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getStatus>>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getStatus>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getStatus>>,
+          TError,
+          Awaited<ReturnType<typeof getStatus>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetStatusInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getStatus>>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getStatus>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Status
+ */
+
+export function useGetStatusInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getStatus>>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getStatus>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetStatusInfiniteQueryOptions(options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetStatusQueryOptions = <
   TData = Awaited<ReturnType<typeof getStatus>>,

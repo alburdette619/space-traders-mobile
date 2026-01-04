@@ -21,19 +21,24 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
+
 import type {
   DataTag,
   DefinedInitialDataOptions,
+  DefinedUseInfiniteQueryResult,
   DefinedUseQueryResult,
+  InfiniteData,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseInfiniteQueryOptions,
+  UseInfiniteQueryResult,
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
 
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import type { ErrorType } from '../../client';
 import type { GetFaction200 } from '../getFaction200';
@@ -59,9 +64,160 @@ export const getFactions = (
   );
 };
 
+export const getGetFactionsInfiniteQueryKey = (params?: GetFactionsParams) => {
+  return ['infinite', `/factions`, ...(params ? [params] : [])] as const;
+};
+
 export const getGetFactionsQueryKey = (params?: GetFactionsParams) => {
   return [`/factions`, ...(params ? [params] : [])] as const;
 };
+
+export const getGetFactionsInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getFactions>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetFactionsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getFactions>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetFactionsInfiniteQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getFactions>>> = ({
+    signal,
+  }) => getFactions(params, requestOptions, signal);
+
+  return { queryFn, queryKey, ...queryOptions } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getFactions>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetFactionsInfiniteQueryError = ErrorType<unknown>;
+export type GetFactionsInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getFactions>>
+>;
+
+export function useGetFactionsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getFactions>>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetFactionsParams | undefined,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getFactions>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFactions>>,
+          TError,
+          Awaited<ReturnType<typeof getFactions>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFactionsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getFactions>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetFactionsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getFactions>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFactions>>,
+          TError,
+          Awaited<ReturnType<typeof getFactions>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFactionsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getFactions>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetFactionsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getFactions>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary List Factions
+ */
+
+export function useGetFactionsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getFactions>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetFactionsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getFactions>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetFactionsInfiniteQueryOptions(params, options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetFactionsQueryOptions = <
   TData = Awaited<ReturnType<typeof getFactions>>,
@@ -206,9 +362,168 @@ export const getFaction = (
   );
 };
 
+export const getGetFactionInfiniteQueryKey = (factionSymbol?: string) => {
+  return ['infinite', `/factions/${factionSymbol}`] as const;
+};
+
 export const getGetFactionQueryKey = (factionSymbol?: string) => {
   return [`/factions/${factionSymbol}`] as const;
 };
+
+export const getGetFactionInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getFaction>>>,
+  TError = ErrorType<unknown>,
+>(
+  factionSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getFaction>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetFactionInfiniteQueryKey(factionSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getFaction>>> = ({
+    signal,
+  }) => getFaction(factionSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!factionSymbol,
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getFaction>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetFactionInfiniteQueryError = ErrorType<unknown>;
+export type GetFactionInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getFaction>>
+>;
+
+export function useGetFactionInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getFaction>>>,
+  TError = ErrorType<unknown>,
+>(
+  factionSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getFaction>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFaction>>,
+          TError,
+          Awaited<ReturnType<typeof getFaction>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFactionInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getFaction>>>,
+  TError = ErrorType<unknown>,
+>(
+  factionSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getFaction>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFaction>>,
+          TError,
+          Awaited<ReturnType<typeof getFaction>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetFactionInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getFaction>>>,
+  TError = ErrorType<unknown>,
+>(
+  factionSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getFaction>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Faction
+ */
+
+export function useGetFactionInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getFaction>>>,
+  TError = ErrorType<unknown>,
+>(
+  factionSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getFaction>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetFactionInfiniteQueryOptions(
+    factionSymbol,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetFactionQueryOptions = <
   TData = Awaited<ReturnType<typeof getFaction>>,

@@ -25,16 +25,20 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 import type {
   DataTag,
   DefinedInitialDataOptions,
+  DefinedUseInfiniteQueryResult,
   DefinedUseQueryResult,
+  InfiniteData,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseInfiniteQueryOptions,
+  UseInfiniteQueryResult,
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
 
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import type { ErrorType } from '../../client';
 import type { GetAgent200 } from '../getAgent200';
@@ -60,9 +64,152 @@ export const getMyAgent = (
   );
 };
 
+export const getGetMyAgentInfiniteQueryKey = () => {
+  return ['infinite', `/my/agent`] as const;
+};
+
 export const getGetMyAgentQueryKey = () => {
   return [`/my/agent`] as const;
 };
+
+export const getGetMyAgentInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyAgent>>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseInfiniteQueryOptions<
+      Awaited<ReturnType<typeof getMyAgent>>,
+      TError,
+      TData
+    >
+  >;
+  request?: SecondParameter<typeof clientInstance>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetMyAgentInfiniteQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyAgent>>> = ({
+    signal,
+  }) => getMyAgent(requestOptions, signal);
+
+  return { queryFn, queryKey, ...queryOptions } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getMyAgent>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMyAgentInfiniteQueryError = ErrorType<unknown>;
+export type GetMyAgentInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMyAgent>>
+>;
+
+export function useGetMyAgentInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyAgent>>>,
+  TError = ErrorType<unknown>,
+>(
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyAgent>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyAgent>>,
+          TError,
+          Awaited<ReturnType<typeof getMyAgent>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyAgentInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyAgent>>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyAgent>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyAgent>>,
+          TError,
+          Awaited<ReturnType<typeof getMyAgent>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyAgentInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyAgent>>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyAgent>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Agent
+ */
+
+export function useGetMyAgentInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyAgent>>>,
+  TError = ErrorType<unknown>,
+>(
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyAgent>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetMyAgentInfiniteQueryOptions(options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetMyAgentQueryOptions = <
   TData = Awaited<ReturnType<typeof getMyAgent>>,
@@ -196,9 +343,160 @@ export const getAgents = (
   );
 };
 
+export const getGetAgentsInfiniteQueryKey = (params?: GetAgentsParams) => {
+  return ['infinite', `/agents`, ...(params ? [params] : [])] as const;
+};
+
 export const getGetAgentsQueryKey = (params?: GetAgentsParams) => {
   return [`/agents`, ...(params ? [params] : [])] as const;
 };
+
+export const getGetAgentsInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAgents>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAgentsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAgents>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAgentsInfiniteQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAgents>>> = ({
+    signal,
+  }) => getAgents(params, requestOptions, signal);
+
+  return { queryFn, queryKey, ...queryOptions } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getAgents>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetAgentsInfiniteQueryError = ErrorType<unknown>;
+export type GetAgentsInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAgents>>
+>;
+
+export function useGetAgentsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAgents>>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetAgentsParams | undefined,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAgents>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAgents>>,
+          TError,
+          Awaited<ReturnType<typeof getAgents>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAgentsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAgents>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAgentsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAgents>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAgents>>,
+          TError,
+          Awaited<ReturnType<typeof getAgents>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAgentsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAgents>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAgentsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAgents>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary List Agents
+ */
+
+export function useGetAgentsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAgents>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetAgentsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAgents>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetAgentsInfiniteQueryOptions(params, options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetAgentsQueryOptions = <
   TData = Awaited<ReturnType<typeof getAgents>>,
@@ -343,9 +641,165 @@ export const getAgent = (
   );
 };
 
+export const getGetAgentInfiniteQueryKey = (agentSymbol: string = 'FEBA66') => {
+  return ['infinite', `/agents/${agentSymbol}`] as const;
+};
+
 export const getGetAgentQueryKey = (agentSymbol: string = 'FEBA66') => {
   return [`/agents/${agentSymbol}`] as const;
 };
+
+export const getGetAgentInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getAgent>>>,
+  TError = ErrorType<unknown>,
+>(
+  agentSymbol: string = 'FEBA66',
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAgent>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetAgentInfiniteQueryKey(agentSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getAgent>>> = ({
+    signal,
+  }) => getAgent(agentSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!agentSymbol,
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getAgent>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetAgentInfiniteQueryError = ErrorType<unknown>;
+export type GetAgentInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getAgent>>
+>;
+
+export function useGetAgentInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAgent>>>,
+  TError = ErrorType<unknown>,
+>(
+  agentSymbol: string | undefined,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAgent>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAgent>>,
+          TError,
+          Awaited<ReturnType<typeof getAgent>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAgentInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAgent>>>,
+  TError = ErrorType<unknown>,
+>(
+  agentSymbol?: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAgent>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getAgent>>,
+          TError,
+          Awaited<ReturnType<typeof getAgent>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetAgentInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAgent>>>,
+  TError = ErrorType<unknown>,
+>(
+  agentSymbol?: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAgent>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Public Agent
+ */
+
+export function useGetAgentInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getAgent>>>,
+  TError = ErrorType<unknown>,
+>(
+  agentSymbol: string = 'FEBA66',
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getAgent>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetAgentInfiniteQueryOptions(agentSymbol, options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetAgentQueryOptions = <
   TData = Awaited<ReturnType<typeof getAgent>>,

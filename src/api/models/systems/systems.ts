@@ -25,19 +25,23 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 import type {
   DataTag,
   DefinedInitialDataOptions,
+  DefinedUseInfiniteQueryResult,
   DefinedUseQueryResult,
+  InfiniteData,
   MutationFunction,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseInfiniteQueryOptions,
+  UseInfiniteQueryResult,
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 
 import type { ErrorType } from '../../client';
 import type { GetConstruction200 } from '../getConstruction200';
@@ -72,9 +76,160 @@ export const getSystems = (
   );
 };
 
+export const getGetSystemsInfiniteQueryKey = (params?: GetSystemsParams) => {
+  return ['infinite', `/systems`, ...(params ? [params] : [])] as const;
+};
+
 export const getGetSystemsQueryKey = (params?: GetSystemsParams) => {
   return [`/systems`, ...(params ? [params] : [])] as const;
 };
+
+export const getGetSystemsInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystems>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetSystemsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystems>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSystemsInfiniteQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSystems>>> = ({
+    signal,
+  }) => getSystems(params, requestOptions, signal);
+
+  return { queryFn, queryKey, ...queryOptions } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getSystems>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetSystemsInfiniteQueryError = ErrorType<unknown>;
+export type GetSystemsInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSystems>>
+>;
+
+export function useGetSystemsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystems>>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetSystemsParams | undefined,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystems>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSystems>>,
+          TError,
+          Awaited<ReturnType<typeof getSystems>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSystemsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystems>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetSystemsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystems>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSystems>>,
+          TError,
+          Awaited<ReturnType<typeof getSystems>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSystemsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystems>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetSystemsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystems>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary List Systems
+ */
+
+export function useGetSystemsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystems>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetSystemsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystems>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetSystemsInfiniteQueryOptions(params, options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetSystemsQueryOptions = <
   TData = Awaited<ReturnType<typeof getSystems>>,
@@ -219,9 +374,167 @@ export const getSystem = (
   );
 };
 
+export const getGetSystemInfiniteQueryKey = (
+  systemSymbol: string = 'X1-OE',
+) => {
+  return ['infinite', `/systems/${systemSymbol}`] as const;
+};
+
 export const getGetSystemQueryKey = (systemSymbol: string = 'X1-OE') => {
   return [`/systems/${systemSymbol}`] as const;
 };
+
+export const getGetSystemInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystem>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string = 'X1-OE',
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetSystemInfiniteQueryKey(systemSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getSystem>>> = ({
+    signal,
+  }) => getSystem(systemSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!systemSymbol,
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getSystem>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetSystemInfiniteQueryError = ErrorType<unknown>;
+export type GetSystemInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSystem>>
+>;
+
+export function useGetSystemInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystem>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string | undefined,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystem>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSystem>>,
+          TError,
+          Awaited<ReturnType<typeof getSystem>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSystemInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystem>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol?: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystem>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSystem>>,
+          TError,
+          Awaited<ReturnType<typeof getSystem>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSystemInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystem>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol?: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get System
+ */
+
+export function useGetSystemInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystem>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string = 'X1-OE',
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystem>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetSystemInfiniteQueryOptions(systemSymbol, options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetSystemQueryOptions = <
   TData = Awaited<ReturnType<typeof getSystem>>,
@@ -373,6 +686,17 @@ export const getSystemWaypoints = (
   );
 };
 
+export const getGetSystemWaypointsInfiniteQueryKey = (
+  systemSymbol?: string,
+  params?: GetSystemWaypointsParams,
+) => {
+  return [
+    'infinite',
+    `/systems/${systemSymbol}/waypoints`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
 export const getGetSystemWaypointsQueryKey = (
   systemSymbol?: string,
   params?: GetSystemWaypointsParams,
@@ -382,6 +706,169 @@ export const getGetSystemWaypointsQueryKey = (
     ...(params ? [params] : []),
   ] as const;
 };
+
+export const getGetSystemWaypointsInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystemWaypoints>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  params?: GetSystemWaypointsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystemWaypoints>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetSystemWaypointsInfiniteQueryKey(systemSymbol, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getSystemWaypoints>>
+  > = ({ signal }) =>
+    getSystemWaypoints(systemSymbol, params, requestOptions, signal);
+
+  return {
+    enabled: !!systemSymbol,
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getSystemWaypoints>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetSystemWaypointsInfiniteQueryError = ErrorType<unknown>;
+export type GetSystemWaypointsInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getSystemWaypoints>>
+>;
+
+export function useGetSystemWaypointsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystemWaypoints>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  params: GetSystemWaypointsParams | undefined,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystemWaypoints>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSystemWaypoints>>,
+          TError,
+          Awaited<ReturnType<typeof getSystemWaypoints>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSystemWaypointsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystemWaypoints>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  params?: GetSystemWaypointsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystemWaypoints>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getSystemWaypoints>>,
+          TError,
+          Awaited<ReturnType<typeof getSystemWaypoints>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetSystemWaypointsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystemWaypoints>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  params?: GetSystemWaypointsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystemWaypoints>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary List Waypoints in System
+ */
+
+export function useGetSystemWaypointsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getSystemWaypoints>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  params?: GetSystemWaypointsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getSystemWaypoints>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetSystemWaypointsInfiniteQueryOptions(
+    systemSymbol,
+    params,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetSystemWaypointsQueryOptions = <
   TData = Awaited<ReturnType<typeof getSystemWaypoints>>,
@@ -566,12 +1053,184 @@ export const getWaypoint = (
   );
 };
 
+export const getGetWaypointInfiniteQueryKey = (
+  systemSymbol?: string,
+  waypointSymbol?: string,
+) => {
+  return [
+    'infinite',
+    `/systems/${systemSymbol}/waypoints/${waypointSymbol}`,
+  ] as const;
+};
+
 export const getGetWaypointQueryKey = (
   systemSymbol?: string,
   waypointSymbol?: string,
 ) => {
   return [`/systems/${systemSymbol}/waypoints/${waypointSymbol}`] as const;
 };
+
+export const getGetWaypointInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getWaypoint>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getWaypoint>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetWaypointInfiniteQueryKey(systemSymbol, waypointSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getWaypoint>>> = ({
+    signal,
+  }) => getWaypoint(systemSymbol, waypointSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!(systemSymbol && waypointSymbol),
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getWaypoint>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetWaypointInfiniteQueryError = ErrorType<unknown>;
+export type GetWaypointInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getWaypoint>>
+>;
+
+export function useGetWaypointInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getWaypoint>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getWaypoint>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWaypoint>>,
+          TError,
+          Awaited<ReturnType<typeof getWaypoint>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetWaypointInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getWaypoint>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getWaypoint>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWaypoint>>,
+          TError,
+          Awaited<ReturnType<typeof getWaypoint>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetWaypointInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getWaypoint>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getWaypoint>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Waypoint
+ */
+
+export function useGetWaypointInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getWaypoint>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getWaypoint>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetWaypointInfiniteQueryOptions(
+    systemSymbol,
+    waypointSymbol,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetWaypointQueryOptions = <
   TData = Awaited<ReturnType<typeof getWaypoint>>,
@@ -735,6 +1394,16 @@ export const getMarket = (
   );
 };
 
+export const getGetMarketInfiniteQueryKey = (
+  systemSymbol?: string,
+  waypointSymbol?: string,
+) => {
+  return [
+    'infinite',
+    `/systems/${systemSymbol}/waypoints/${waypointSymbol}/market`,
+  ] as const;
+};
+
 export const getGetMarketQueryKey = (
   systemSymbol?: string,
   waypointSymbol?: string,
@@ -743,6 +1412,168 @@ export const getGetMarketQueryKey = (
     `/systems/${systemSymbol}/waypoints/${waypointSymbol}/market`,
   ] as const;
 };
+
+export const getGetMarketInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getMarket>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMarket>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetMarketInfiniteQueryKey(systemSymbol, waypointSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMarket>>> = ({
+    signal,
+  }) => getMarket(systemSymbol, waypointSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!(systemSymbol && waypointSymbol),
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getMarket>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMarketInfiniteQueryError = ErrorType<unknown>;
+export type GetMarketInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMarket>>
+>;
+
+export function useGetMarketInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMarket>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMarket>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMarket>>,
+          TError,
+          Awaited<ReturnType<typeof getMarket>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMarketInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMarket>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMarket>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMarket>>,
+          TError,
+          Awaited<ReturnType<typeof getMarket>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMarketInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMarket>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMarket>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Market
+ */
+
+export function useGetMarketInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMarket>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMarket>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetMarketInfiniteQueryOptions(
+    systemSymbol,
+    waypointSymbol,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetMarketQueryOptions = <
   TData = Awaited<ReturnType<typeof getMarket>>,
@@ -902,6 +1733,16 @@ export const getShipyard = (
   );
 };
 
+export const getGetShipyardInfiniteQueryKey = (
+  systemSymbol?: string,
+  waypointSymbol?: string,
+) => {
+  return [
+    'infinite',
+    `/systems/${systemSymbol}/waypoints/${waypointSymbol}/shipyard`,
+  ] as const;
+};
+
 export const getGetShipyardQueryKey = (
   systemSymbol?: string,
   waypointSymbol?: string,
@@ -910,6 +1751,168 @@ export const getGetShipyardQueryKey = (
     `/systems/${systemSymbol}/waypoints/${waypointSymbol}/shipyard`,
   ] as const;
 };
+
+export const getGetShipyardInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipyard>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipyard>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetShipyardInfiniteQueryKey(systemSymbol, waypointSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getShipyard>>> = ({
+    signal,
+  }) => getShipyard(systemSymbol, waypointSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!(systemSymbol && waypointSymbol),
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getShipyard>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetShipyardInfiniteQueryError = ErrorType<unknown>;
+export type GetShipyardInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getShipyard>>
+>;
+
+export function useGetShipyardInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipyard>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipyard>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getShipyard>>,
+          TError,
+          Awaited<ReturnType<typeof getShipyard>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetShipyardInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipyard>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipyard>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getShipyard>>,
+          TError,
+          Awaited<ReturnType<typeof getShipyard>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetShipyardInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipyard>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipyard>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Shipyard
+ */
+
+export function useGetShipyardInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipyard>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipyard>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetShipyardInfiniteQueryOptions(
+    systemSymbol,
+    waypointSymbol,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetShipyardQueryOptions = <
   TData = Awaited<ReturnType<typeof getShipyard>>,
@@ -1073,6 +2076,16 @@ export const getJumpGate = (
   );
 };
 
+export const getGetJumpGateInfiniteQueryKey = (
+  systemSymbol?: string,
+  waypointSymbol?: string,
+) => {
+  return [
+    'infinite',
+    `/systems/${systemSymbol}/waypoints/${waypointSymbol}/jump-gate`,
+  ] as const;
+};
+
 export const getGetJumpGateQueryKey = (
   systemSymbol?: string,
   waypointSymbol?: string,
@@ -1081,6 +2094,168 @@ export const getGetJumpGateQueryKey = (
     `/systems/${systemSymbol}/waypoints/${waypointSymbol}/jump-gate`,
   ] as const;
 };
+
+export const getGetJumpGateInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getJumpGate>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getJumpGate>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetJumpGateInfiniteQueryKey(systemSymbol, waypointSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getJumpGate>>> = ({
+    signal,
+  }) => getJumpGate(systemSymbol, waypointSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!(systemSymbol && waypointSymbol),
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getJumpGate>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetJumpGateInfiniteQueryError = ErrorType<unknown>;
+export type GetJumpGateInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getJumpGate>>
+>;
+
+export function useGetJumpGateInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getJumpGate>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getJumpGate>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getJumpGate>>,
+          TError,
+          Awaited<ReturnType<typeof getJumpGate>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetJumpGateInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getJumpGate>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getJumpGate>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getJumpGate>>,
+          TError,
+          Awaited<ReturnType<typeof getJumpGate>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetJumpGateInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getJumpGate>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getJumpGate>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Jump Gate
+ */
+
+export function useGetJumpGateInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getJumpGate>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getJumpGate>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetJumpGateInfiniteQueryOptions(
+    systemSymbol,
+    waypointSymbol,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetJumpGateQueryOptions = <
   TData = Awaited<ReturnType<typeof getJumpGate>>,
@@ -1242,6 +2417,16 @@ export const getConstruction = (
   );
 };
 
+export const getGetConstructionInfiniteQueryKey = (
+  systemSymbol?: string,
+  waypointSymbol?: string,
+) => {
+  return [
+    'infinite',
+    `/systems/${systemSymbol}/waypoints/${waypointSymbol}/construction`,
+  ] as const;
+};
+
 export const getGetConstructionQueryKey = (
   systemSymbol?: string,
   waypointSymbol?: string,
@@ -1250,6 +2435,168 @@ export const getGetConstructionQueryKey = (
     `/systems/${systemSymbol}/waypoints/${waypointSymbol}/construction`,
   ] as const;
 };
+
+export const getGetConstructionInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getConstruction>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getConstruction>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetConstructionInfiniteQueryKey(systemSymbol, waypointSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getConstruction>>> = ({
+    signal,
+  }) => getConstruction(systemSymbol, waypointSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!(systemSymbol && waypointSymbol),
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getConstruction>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetConstructionInfiniteQueryError = ErrorType<unknown>;
+export type GetConstructionInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getConstruction>>
+>;
+
+export function useGetConstructionInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getConstruction>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getConstruction>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getConstruction>>,
+          TError,
+          Awaited<ReturnType<typeof getConstruction>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetConstructionInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getConstruction>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getConstruction>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getConstruction>>,
+          TError,
+          Awaited<ReturnType<typeof getConstruction>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetConstructionInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getConstruction>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getConstruction>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Construction Site
+ */
+
+export function useGetConstructionInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getConstruction>>>,
+  TError = ErrorType<unknown>,
+>(
+  systemSymbol: string,
+  waypointSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getConstruction>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetConstructionInfiniteQueryOptions(
+    systemSymbol,
+    waypointSymbol,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetConstructionQueryOptions = <
   TData = Awaited<ReturnType<typeof getConstruction>>,

@@ -21,22 +21,27 @@ We have a [Discord channel](https://discord.com/invite/jh6zurdWk5) where you can
 
  * OpenAPI spec version: 2.3.0
  */
+
 import type {
   DataTag,
   DefinedInitialDataOptions,
+  DefinedUseInfiniteQueryResult,
   DefinedUseQueryResult,
+  InfiniteData,
   MutationFunction,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseInfiniteQueryOptions,
+  UseInfiniteQueryResult,
   UseMutationOptions,
   UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 
 import type { ErrorType } from '../../client';
 import type { CreateChart201 } from '../createChart201';
@@ -114,9 +119,160 @@ export const getMyShips = (
   );
 };
 
+export const getGetMyShipsInfiniteQueryKey = (params?: GetMyShipsParams) => {
+  return ['infinite', `/my/ships`, ...(params ? [params] : [])] as const;
+};
+
 export const getGetMyShipsQueryKey = (params?: GetMyShipsParams) => {
   return [`/my/ships`, ...(params ? [params] : [])] as const;
 };
+
+export const getGetMyShipsInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShips>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetMyShipsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShips>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetMyShipsInfiniteQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyShips>>> = ({
+    signal,
+  }) => getMyShips(params, requestOptions, signal);
+
+  return { queryFn, queryKey, ...queryOptions } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getMyShips>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMyShipsInfiniteQueryError = ErrorType<unknown>;
+export type GetMyShipsInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMyShips>>
+>;
+
+export function useGetMyShipsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShips>>>,
+  TError = ErrorType<unknown>,
+>(
+  params: GetMyShipsParams | undefined,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShips>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyShips>>,
+          TError,
+          Awaited<ReturnType<typeof getMyShips>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyShipsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShips>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetMyShipsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShips>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyShips>>,
+          TError,
+          Awaited<ReturnType<typeof getMyShips>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyShipsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShips>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetMyShipsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShips>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary List Ships
+ */
+
+export function useGetMyShipsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShips>>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetMyShipsParams,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShips>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetMyShipsInfiniteQueryOptions(params, options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetMyShipsQueryOptions = <
   TData = Awaited<ReturnType<typeof getMyShips>>,
@@ -355,9 +511,165 @@ export const getMyShip = (
   );
 };
 
+export const getGetMyShipInfiniteQueryKey = (shipSymbol?: string) => {
+  return ['infinite', `/my/ships/${shipSymbol}`] as const;
+};
+
 export const getGetMyShipQueryKey = (shipSymbol?: string) => {
   return [`/my/ships/${shipSymbol}`] as const;
 };
+
+export const getGetMyShipInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShip>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetMyShipInfiniteQueryKey(shipSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyShip>>> = ({
+    signal,
+  }) => getMyShip(shipSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getMyShip>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMyShipInfiniteQueryError = ErrorType<unknown>;
+export type GetMyShipInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMyShip>>
+>;
+
+export function useGetMyShipInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShip>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyShip>>,
+          TError,
+          Awaited<ReturnType<typeof getMyShip>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyShipInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShip>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyShip>>,
+          TError,
+          Awaited<ReturnType<typeof getMyShip>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyShipInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShip>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Ship
+ */
+
+export function useGetMyShipInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShip>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetMyShipInfiniteQueryOptions(shipSymbol, options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetMyShipQueryOptions = <
   TData = Awaited<ReturnType<typeof getMyShip>>,
@@ -505,9 +817,168 @@ export const getMyShipCargo = (
   );
 };
 
+export const getGetMyShipCargoInfiniteQueryKey = (shipSymbol?: string) => {
+  return ['infinite', `/my/ships/${shipSymbol}/cargo`] as const;
+};
+
 export const getGetMyShipCargoQueryKey = (shipSymbol?: string) => {
   return [`/my/ships/${shipSymbol}/cargo`] as const;
 };
+
+export const getGetMyShipCargoInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShipCargo>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShipCargo>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetMyShipCargoInfiniteQueryKey(shipSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMyShipCargo>>> = ({
+    signal,
+  }) => getMyShipCargo(shipSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getMyShipCargo>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMyShipCargoInfiniteQueryError = ErrorType<unknown>;
+export type GetMyShipCargoInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMyShipCargo>>
+>;
+
+export function useGetMyShipCargoInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShipCargo>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShipCargo>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyShipCargo>>,
+          TError,
+          Awaited<ReturnType<typeof getMyShipCargo>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyShipCargoInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShipCargo>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShipCargo>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMyShipCargo>>,
+          TError,
+          Awaited<ReturnType<typeof getMyShipCargo>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMyShipCargoInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShipCargo>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShipCargo>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Ship Cargo
+ */
+
+export function useGetMyShipCargoInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMyShipCargo>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMyShipCargo>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetMyShipCargoInfiniteQueryOptions(
+    shipSymbol,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetMyShipCargoQueryOptions = <
   TData = Awaited<ReturnType<typeof getMyShipCargo>>,
@@ -936,9 +1407,168 @@ export const getShipCooldown = (
   );
 };
 
+export const getGetShipCooldownInfiniteQueryKey = (shipSymbol?: string) => {
+  return ['infinite', `/my/ships/${shipSymbol}/cooldown`] as const;
+};
+
 export const getGetShipCooldownQueryKey = (shipSymbol?: string) => {
   return [`/my/ships/${shipSymbol}/cooldown`] as const;
 };
+
+export const getGetShipCooldownInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipCooldown>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipCooldown>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetShipCooldownInfiniteQueryKey(shipSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getShipCooldown>>> = ({
+    signal,
+  }) => getShipCooldown(shipSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getShipCooldown>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetShipCooldownInfiniteQueryError = ErrorType<unknown>;
+export type GetShipCooldownInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getShipCooldown>>
+>;
+
+export function useGetShipCooldownInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipCooldown>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipCooldown>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getShipCooldown>>,
+          TError,
+          Awaited<ReturnType<typeof getShipCooldown>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetShipCooldownInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipCooldown>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipCooldown>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getShipCooldown>>,
+          TError,
+          Awaited<ReturnType<typeof getShipCooldown>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetShipCooldownInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipCooldown>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipCooldown>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Ship Cooldown
+ */
+
+export function useGetShipCooldownInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipCooldown>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipCooldown>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetShipCooldownInfiniteQueryOptions(
+    shipSymbol,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetShipCooldownQueryOptions = <
   TData = Awaited<ReturnType<typeof getShipCooldown>>,
@@ -1954,9 +2584,165 @@ export const getShipNav = (
   );
 };
 
+export const getGetShipNavInfiniteQueryKey = (shipSymbol?: string) => {
+  return ['infinite', `/my/ships/${shipSymbol}/nav`] as const;
+};
+
 export const getGetShipNavQueryKey = (shipSymbol?: string) => {
   return [`/my/ships/${shipSymbol}/nav`] as const;
 };
+
+export const getGetShipNavInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipNav>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipNav>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetShipNavInfiniteQueryKey(shipSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getShipNav>>> = ({
+    signal,
+  }) => getShipNav(shipSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getShipNav>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetShipNavInfiniteQueryError = ErrorType<unknown>;
+export type GetShipNavInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getShipNav>>
+>;
+
+export function useGetShipNavInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipNav>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipNav>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getShipNav>>,
+          TError,
+          Awaited<ReturnType<typeof getShipNav>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetShipNavInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipNav>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipNav>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getShipNav>>,
+          TError,
+          Awaited<ReturnType<typeof getShipNav>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetShipNavInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipNav>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipNav>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Ship Nav
+ */
+
+export function useGetShipNavInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipNav>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipNav>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetShipNavInfiniteQueryOptions(shipSymbol, options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetShipNavQueryOptions = <
   TData = Awaited<ReturnType<typeof getShipNav>>,
@@ -2956,9 +3742,165 @@ export const getMounts = (
   );
 };
 
+export const getGetMountsInfiniteQueryKey = (shipSymbol?: string) => {
+  return ['infinite', `/my/ships/${shipSymbol}/mounts`] as const;
+};
+
 export const getGetMountsQueryKey = (shipSymbol?: string) => {
   return [`/my/ships/${shipSymbol}/mounts`] as const;
 };
+
+export const getGetMountsInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getMounts>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMounts>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetMountsInfiniteQueryKey(shipSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getMounts>>> = ({
+    signal,
+  }) => getMounts(shipSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getMounts>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetMountsInfiniteQueryError = ErrorType<unknown>;
+export type GetMountsInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getMounts>>
+>;
+
+export function useGetMountsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMounts>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMounts>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMounts>>,
+          TError,
+          Awaited<ReturnType<typeof getMounts>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMountsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMounts>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMounts>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMounts>>,
+          TError,
+          Awaited<ReturnType<typeof getMounts>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetMountsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMounts>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMounts>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Mounts
+ */
+
+export function useGetMountsInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getMounts>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getMounts>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetMountsInfiniteQueryOptions(shipSymbol, options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetMountsQueryOptions = <
   TData = Awaited<ReturnType<typeof getMounts>>,
@@ -3297,9 +4239,165 @@ export const getScrapShip = (
   );
 };
 
+export const getGetScrapShipInfiniteQueryKey = (shipSymbol?: string) => {
+  return ['infinite', `/my/ships/${shipSymbol}/scrap`] as const;
+};
+
 export const getGetScrapShipQueryKey = (shipSymbol?: string) => {
   return [`/my/ships/${shipSymbol}/scrap`] as const;
 };
+
+export const getGetScrapShipInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getScrapShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getScrapShip>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetScrapShipInfiniteQueryKey(shipSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getScrapShip>>> = ({
+    signal,
+  }) => getScrapShip(shipSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getScrapShip>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetScrapShipInfiniteQueryError = ErrorType<unknown>;
+export type GetScrapShipInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getScrapShip>>
+>;
+
+export function useGetScrapShipInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getScrapShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getScrapShip>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScrapShip>>,
+          TError,
+          Awaited<ReturnType<typeof getScrapShip>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetScrapShipInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getScrapShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getScrapShip>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getScrapShip>>,
+          TError,
+          Awaited<ReturnType<typeof getScrapShip>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetScrapShipInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getScrapShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getScrapShip>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Scrap Ship
+ */
+
+export function useGetScrapShipInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getScrapShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getScrapShip>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetScrapShipInfiniteQueryOptions(shipSymbol, options);
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetScrapShipQueryOptions = <
   TData = Awaited<ReturnType<typeof getScrapShip>>,
@@ -3537,9 +4635,168 @@ export const getRepairShip = (
   );
 };
 
+export const getGetRepairShipInfiniteQueryKey = (shipSymbol?: string) => {
+  return ['infinite', `/my/ships/${shipSymbol}/repair`] as const;
+};
+
 export const getGetRepairShipQueryKey = (shipSymbol?: string) => {
   return [`/my/ships/${shipSymbol}/repair`] as const;
 };
+
+export const getGetRepairShipInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getRepairShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getRepairShip>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetRepairShipInfiniteQueryKey(shipSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getRepairShip>>> = ({
+    signal,
+  }) => getRepairShip(shipSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getRepairShip>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetRepairShipInfiniteQueryError = ErrorType<unknown>;
+export type GetRepairShipInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getRepairShip>>
+>;
+
+export function useGetRepairShipInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getRepairShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getRepairShip>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRepairShip>>,
+          TError,
+          Awaited<ReturnType<typeof getRepairShip>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetRepairShipInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getRepairShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getRepairShip>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getRepairShip>>,
+          TError,
+          Awaited<ReturnType<typeof getRepairShip>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetRepairShipInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getRepairShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getRepairShip>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Repair Ship
+ */
+
+export function useGetRepairShipInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getRepairShip>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getRepairShip>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetRepairShipInfiniteQueryOptions(
+    shipSymbol,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetRepairShipQueryOptions = <
   TData = Awaited<ReturnType<typeof getRepairShip>>,
@@ -3777,9 +5034,168 @@ export const getShipModules = (
   );
 };
 
+export const getGetShipModulesInfiniteQueryKey = (shipSymbol?: string) => {
+  return ['infinite', `/my/ships/${shipSymbol}/modules`] as const;
+};
+
 export const getGetShipModulesQueryKey = (shipSymbol?: string) => {
   return [`/my/ships/${shipSymbol}/modules`] as const;
 };
+
+export const getGetShipModulesInfiniteQueryOptions = <
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipModules>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipModules>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetShipModulesInfiniteQueryKey(shipSymbol);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getShipModules>>> = ({
+    signal,
+  }) => getShipModules(shipSymbol, requestOptions, signal);
+
+  return {
+    enabled: !!shipSymbol,
+    queryFn,
+    queryKey,
+    ...queryOptions,
+  } as UseInfiniteQueryOptions<
+    Awaited<ReturnType<typeof getShipModules>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type GetShipModulesInfiniteQueryError = ErrorType<unknown>;
+export type GetShipModulesInfiniteQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getShipModules>>
+>;
+
+export function useGetShipModulesInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipModules>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options: {
+    query: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipModules>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getShipModules>>,
+          TError,
+          Awaited<ReturnType<typeof getShipModules>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetShipModulesInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipModules>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipModules>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getShipModules>>,
+          TError,
+          Awaited<ReturnType<typeof getShipModules>>
+        >,
+        'initialData'
+      >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useGetShipModulesInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipModules>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipModules>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Get Ship Modules
+ */
+
+export function useGetShipModulesInfinite<
+  TData = InfiniteData<Awaited<ReturnType<typeof getShipModules>>>,
+  TError = ErrorType<unknown>,
+>(
+  shipSymbol: string,
+  options?: {
+    query?: Partial<
+      UseInfiniteQueryOptions<
+        Awaited<ReturnType<typeof getShipModules>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof clientInstance>;
+  },
+  queryClient?: QueryClient,
+): UseInfiniteQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getGetShipModulesInfiniteQueryOptions(
+    shipSymbol,
+    options,
+  );
+
+  const query = useInfiniteQuery(
+    queryOptions,
+    queryClient,
+  ) as UseInfiniteQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
 
 export const getGetShipModulesQueryOptions = <
   TData = Awaited<ReturnType<typeof getShipModules>>,

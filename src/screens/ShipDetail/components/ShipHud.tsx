@@ -1,6 +1,6 @@
 import { useLayout } from '@react-native-community/hooks';
 import { differenceInSeconds, isFuture } from 'date-fns';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, Chip, Text, useTheme } from 'react-native-paper';
 import { useCountdown } from 'usehooks-ts';

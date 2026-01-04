@@ -26,6 +26,7 @@ const orvalConfig: Config = {
           path: '../src/api/client.ts',
         },
         query: {
+          useInfinite: true,
           useQuery: true,
         },
       },
