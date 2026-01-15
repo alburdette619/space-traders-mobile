@@ -4,6 +4,7 @@
   "scripts": {
     "android": "expo run:android",
     "gen:api": "orval --config ./orval/orval.config.ts",
+    "gen:supabase": "supabase gen types typescript --project-id \"ylrafbarugyivogsunml\" --schema public,galaxy > src/types/database.types.ts",
     "ios": "expo run:ios",
     "lint": "expo lint",
     "lint:fix": "expo lint --fix",
