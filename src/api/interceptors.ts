@@ -6,6 +6,14 @@ import { agentKey } from '../constants/storageKeys';
 import { isSpaceTradersErrorResponse } from '../utils/typeCheckers';
 import { client } from './client';
 
+const invalidTokenCodes: number[] = [
+  accountErrorCodes.invalidTokenRequestError,
+  accountErrorCodes.invalidTokenSubjectError,
+  accountErrorCodes.tokenFailedToParseError,
+  accountErrorCodes.tokenInvalidSubjectError,
+  accountErrorCodes.tokenMissingSubjectError,
+];
+
 client.axiosInstance.interceptors.request.use(async (config) => {
   // Get agent key from secure storage and use it if available. Most traffic,
   // should use the agent key for requests.
@@ -42,8 +50,7 @@ client.axiosInstance.interceptors.response.use(
 
       if (
         spaceTradersError &&
-        spaceTradersError.error.code ===
-          accountErrorCodes.tokenFailedToParseError
+        invalidTokenCodes.includes(spaceTradersError.error.code)
       ) {
         // The agent is from before the server reset, we should clear the stored key.
         await deleteItemAsync(agentKey);
