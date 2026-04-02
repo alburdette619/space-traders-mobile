@@ -6,7 +6,7 @@ import { SpaceTradersErrorResponse } from '../types/spaceTraders';
 
 // By default, use the Supabase base URL.
 export const client = create({
-  baseURL: process.env.EXPO_PUBLIC_SUPABASE_BASE_URL,
+  baseURL: process.env.EXPO_PUBLIC_API_PROXY_URL,
 });
 
 export const clientInstance = async <T>(
