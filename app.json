@@ -7,7 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "voidrunner",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "config": {
         "usesNonExemptEncryption": false
@@ -25,7 +24,6 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.alburdette619.voidrunner"
     },
@@ -54,7 +52,9 @@
         {
           "backgroundColor": "#000020"
         }
-      ]
+      ],
+      "expo-image",
+      "expo-web-browser"
     ],
     "experiments": {
       "reactCompiler": true
