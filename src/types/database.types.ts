@@ -31,6 +31,22 @@ export type Database = {
     Functions: {
       galaxy_reset: { Args: never; Returns: undefined };
       refresh_system_bounds: { Args: never; Returns: undefined };
+      systems_in_view: {
+        Args: { max_x: number; max_y: number; min_x: number; min_y: number };
+        Returns: {
+          sector_symbol: null | string;
+          symbol: string;
+          type: null | string;
+          x: number;
+          y: number;
+        }[];
+        SetofOptions: {
+          from: '*';
+          isOneToOne: false;
+          isSetofReturn: true;
+          to: 'systems';
+        };
+      };
     };
     Tables: {
       sync_state: {
@@ -74,7 +90,6 @@ export type Database = {
       };
       systems: {
         Insert: {
-          geom: unknown;
           sector_symbol?: null | string;
           symbol: string;
           type?: null | string;
@@ -83,7 +98,6 @@ export type Database = {
         };
         Relationships: [];
         Row: {
-          geom: unknown;
           sector_symbol: null | string;
           symbol: string;
           type: null | string;
@@ -91,7 +105,6 @@ export type Database = {
           y: number;
         };
         Update: {
-          geom?: unknown;
           sector_symbol?: null | string;
           symbol?: string;
           type?: null | string;

@@ -71,25 +71,33 @@ export const BrandSplashScreen = () => {
 
   useEffect(() => {
     // linear ping-pong loops (autoReverse: true)
-    bgProgX.value = withRepeat(
-      withTiming(1, { duration: 12000, easing: Easing.linear }),
-      -1,
-      true,
+    bgProgX.set(
+      withRepeat(
+        withTiming(1, { duration: 12000, easing: Easing.linear }),
+        -1,
+        true,
+      ),
     );
-    bgProgY.value = withRepeat(
-      withTiming(1, { duration: 12000, easing: Easing.linear }),
-      -1,
-      true,
+    bgProgY.set(
+      withRepeat(
+        withTiming(1, { duration: 12000, easing: Easing.linear }),
+        -1,
+        true,
+      ),
     );
-    plProgX.value = withRepeat(
-      withTiming(1, { duration: 9000, easing: Easing.linear }),
-      -1,
-      true,
+    plProgX.set(
+      withRepeat(
+        withTiming(1, { duration: 9000, easing: Easing.linear }),
+        -1,
+        true,
+      ),
     );
-    plProgY.value = withRepeat(
-      withTiming(1, { duration: 14000, easing: Easing.linear }),
-      -1,
-      true,
+    plProgY.set(
+      withRepeat(
+        withTiming(1, { duration: 14000, easing: Easing.linear }),
+        -1,
+        true,
+      ),
     );
   }, [bgProgX, bgProgY, plProgX, plProgY]);
 
@@ -162,22 +170,22 @@ export const BrandSplashScreen = () => {
   const basePlanetY = imageLayout?.basePlanetY ?? 0;
 
   const bgX = useDerivedValue(() => {
-    const offset = Math.round((bgProgX.value * 2 - 1) * DRIFT_X_PX);
+    const offset = Math.round((bgProgX.get() * 2 - 1) * DRIFT_X_PX);
     return baseBgX + offset;
   }, [baseBgX]);
 
   const bgY = useDerivedValue(() => {
-    const offset = Math.round((bgProgY.value * 2 - 1) * DRIFT_Y_PX);
+    const offset = Math.round((bgProgY.get() * 2 - 1) * DRIFT_Y_PX);
     return baseBgY + offset;
   }, [baseBgY]);
 
   const planetX = useDerivedValue(() => {
-    const offset = Math.round((plProgX.value * 2 - 1) * 6);
+    const offset = Math.round((plProgX.get() * 2 - 1) * 6);
     return basePlanetX - offset;
   }, [basePlanetX]);
 
   const planetY = useDerivedValue(() => {
-    const offset = Math.round((plProgY.value * 2 - 1) * 2);
+    const offset = Math.round((plProgY.get() * 2 - 1) * 2);
     return basePlanetY + offset;
   }, [basePlanetY]);
 
