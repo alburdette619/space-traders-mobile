@@ -42,6 +42,7 @@ export const useGetSystemsInView = ({
   };
 
   return useQuery<SystemsInViewReturn>({
+    enabled: Object.values(queryArgs).some((value) => value !== 0),
     gcTime: 30 * 60_000,
     placeholderData: (prev) => prev,
     queryFn: ({ signal }) =>

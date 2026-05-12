@@ -97,22 +97,23 @@ export const GalaxyMapScreen = () => {
       { scale: scalePrevious.get() },
     ];
   });
-  const convertGalaxyToScreen = useCallback(
-    (
-      worldX: number,
-      worldY: number,
-      panXValue: number,
-      panYValue: number,
-      zoom: number,
-    ) => {
-      'worklet';
-      return {
-        x: (worldX + panXValue) * zoom,
-        y: (worldY + panYValue) * zoom,
-      };
-    },
-    [],
-  );
+
+  // const convertGalaxyToScreen = useCallback(
+  //   (
+  //     worldX: number,
+  //     worldY: number,
+  //     panXValue: number,
+  //     panYValue: number,
+  //     zoom: number,
+  //   ) => {
+  //     'worklet';
+  //     return {
+  //       x: worldX * zoom + panXValue,
+  //       y: worldY * zoom + panYValue,
+  //     };
+  //   },
+  //   [],
+  // );
 
   const convertScreenToGalaxy = useCallback(
     (
@@ -124,8 +125,8 @@ export const GalaxyMapScreen = () => {
     ) => {
       'worklet';
       return {
-        x: screenX / zoom - panXValue,
-        y: screenY / zoom - panYValue,
+        x: (screenX - panXValue) / zoom,
+        y: (screenY - panYValue) / zoom,
       };
     },
     [],
@@ -205,11 +206,11 @@ export const GalaxyMapScreen = () => {
     (next: string) => {
       const [left, top, right, bottom] = next.split(',').map(Number);
       const { x: newRawBoundsLeft, y: newRawBoundsTop } = convertGalaxyToRaw(
-        left,
-        top,
+        Math.ceil(left),
+        Math.ceil(top),
       );
       const { x: newRawBoundsRight, y: newRawBoundsBottom } =
-        convertGalaxyToRaw(right, bottom);
+        convertGalaxyToRaw(Math.ceil(right), Math.ceil(bottom));
 
       const rawBucketSize = 1000;
 
@@ -219,6 +220,7 @@ export const GalaxyMapScreen = () => {
         right: Math.ceil(newRawBoundsRight / rawBucketSize) * rawBucketSize,
         top: Math.ceil(newRawBoundsTop / rawBucketSize) * rawBucketSize,
       };
+
       setQueryBounds((prev) =>
         sameBounds(prev, newBounds) ? prev : newBounds,
       );
@@ -236,8 +238,6 @@ export const GalaxyMapScreen = () => {
     },
   );
 
-  console.log('Query bounds:', queryBounds);
-
   const { data: systemsInView } = useGetSystemsInView({
     queryArgs: {
       max_x: queryBounds?.right || 0,
@@ -246,8 +246,6 @@ export const GalaxyMapScreen = () => {
       min_y: queryBounds?.bottom || 0,
     },
   });
-
-  console.log('Systems in view:', systemsInView?.length);
 
   const shipsBounds = useMemo(
     () => ({
@@ -313,23 +311,12 @@ export const GalaxyMapScreen = () => {
         canvasHeight / shipBoundsHeight,
         MaxZoom,
       );
-      const nextPanX = canvasWidth / (2 * fitScale) - (left + right) / 2;
-      const nextPanY = canvasHeight / (2 * fitScale) - (top + bottom) / 2;
-      console.log('Ship bounds:', {
-        bottom,
-        fitScale,
-        left,
-        maxShipX,
-        maxShipY,
-        minShipX,
-        minShipY,
-        nextPanX,
-        nextPanY,
-        right,
-        shipBoundsHeight,
-        shipBoundsWidth,
-        top,
-      });
+      const centerX = (left + right) / 2;
+      const centerY = (top + bottom) / 2;
+
+      const nextPanX = canvasWidth / 2 - centerX * fitScale;
+      const nextPanY = canvasHeight / 2 - centerY * fitScale;
+
       scalePrevious.set(fitScale);
       panX.set(nextPanX);
       panY.set(nextPanY);
@@ -418,14 +405,12 @@ export const GalaxyMapScreen = () => {
       prevPanY.set(event.translationY);
     })
     .onEnd((event) => {
-      const currentScale = scalePrevious.get();
-
       // Add momentum with smooth physics
       panX.set(
         withDecay({
           clamp: [-5000, 5000],
           deceleration: 0.998,
-          velocity: event.velocityX / currentScale,
+          velocity: event.velocityX,
         }),
       );
 
@@ -433,7 +418,7 @@ export const GalaxyMapScreen = () => {
         withDecay({
           clamp: [-5000, 5000],
           deceleration: 0.998,
-          velocity: event.velocityY / currentScale,
+          velocity: event.velocityY,
         }),
       );
     });
@@ -465,8 +450,8 @@ export const GalaxyMapScreen = () => {
 
     // Update zoom and adjust pan to keep world point under focal point
     scalePrevious.set(newZoom);
-    panX.set(event.focalX / newZoom - worldX);
-    panY.set(event.focalY / newZoom - worldY);
+    panX.set(currentFocalX - worldX * newZoom);
+    panY.set(currentFocalY - worldY * newZoom);
   });
 
   // Combine gestures
@@ -500,10 +485,10 @@ export const GalaxyMapScreen = () => {
           onSize={canvasSize}
           style={[
             flexStyles.flex,
-            {
-              height: galaxyHeight,
-              width: galaxyWidth,
-            },
+            // {
+            //   height: galaxyHeight,
+            //   width: galaxyWidth,
+            // },
           ]}
         >
           {systemSprites !== undefined && (
