@@ -1,46 +1,18 @@
-import {
-  Atlas,
-  Canvas,
-  Circle,
-  Group,
-  rect,
-  useRSXformBuffer,
-  useTexture,
-} from '@shopify/react-native-skia';
 import { get, maxBy, minBy } from 'lodash';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef } from 'react';
 import { useWindowDimensions } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, {
-  useAnimatedReaction,
-  useDerivedValue,
-  useSharedValue,
-  withDecay,
-} from 'react-native-reanimated';
-import { runOnJS } from 'react-native-worklets';
+import { GestureDetector } from 'react-native-gesture-handler';
+import { useAnimatedReaction, useSharedValue } from 'react-native-reanimated';
 
 import { useGetMyShips } from '../api/models/fleet/fleet';
-import { useGetSystemsInView } from '../api/supabase/galaxySystems';
 import { useGetSystemsMeta } from '../api/supabase/galaxySystemsMeta';
-import { flexStyles } from '../theme/globalStyles';
-
-type VisibleBounds = {
-  bottom: number;
-  left: number;
-  right: number;
-  top: number;
-};
-
-const SpriteSize = 2;
-const HalfSpriteSize = SpriteSize / 2;
-
-const MaxZoom = 150;
-const OverscanPixels = 160;
+import { Map } from '../components/Map';
+import { MaxZoom } from '../constants/mapConstants';
+import { useMapGestures } from '../hooks/useMapGestures';
+import { useMapUtils } from '../hooks/useMapUtils';
 
 export const GalaxyMapScreen = () => {
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
-
-  const [queryBounds, setQueryBounds] = useState<null | VisibleBounds>(null);
 
   const hasInitializedView = useRef(false);
 
@@ -78,174 +50,10 @@ export const GalaxyMapScreen = () => {
 
   const canvasSize = useSharedValue({ height: 0, width: 0 });
 
-  // Core shared values for transform state
-  const panX = useSharedValue(0);
-  const panY = useSharedValue(0);
+  const { convertRawToGalaxy } = useMapUtils();
 
-  // Track previous pan position for delta calculation
-  const prevPanX = useSharedValue(0);
-  const prevPanY = useSharedValue(0);
-
-  // Zoom state
-  const scalePrevious = useSharedValue(1);
-
-  // Calculate transform matrix
-  const transform = useDerivedValue(() => {
-    return [
-      { translateX: panX.get() },
-      { translateY: panY.get() },
-      { scale: scalePrevious.get() },
-    ];
-  });
-
-  // const convertGalaxyToScreen = useCallback(
-  //   (
-  //     worldX: number,
-  //     worldY: number,
-  //     panXValue: number,
-  //     panYValue: number,
-  //     zoom: number,
-  //   ) => {
-  //     'worklet';
-  //     return {
-  //       x: worldX * zoom + panXValue,
-  //       y: worldY * zoom + panYValue,
-  //     };
-  //   },
-  //   [],
-  // );
-
-  const convertScreenToGalaxy = useCallback(
-    (
-      screenX: number,
-      screenY: number,
-      panXValue: number,
-      panYValue: number,
-      zoom: number,
-    ) => {
-      'worklet';
-      return {
-        x: (screenX - panXValue) / zoom,
-        y: (screenY - panYValue) / zoom,
-      };
-    },
-    [],
-  );
-
-  const convertRawToGalaxy = useCallback(
-    (x: number, y: number) => {
-      'worklet';
-      return {
-        x: (x - minX) * galaxyScale,
-        y: (maxY - y) * galaxyScale,
-      };
-    },
-    [galaxyScale, maxY, minX],
-  );
-
-  const convertGalaxyToRaw = useCallback(
-    (worldX: number, worldY: number) => {
-      'worklet';
-      return {
-        x: worldX / galaxyScale + minX,
-        y: maxY - worldY / galaxyScale,
-      };
-    },
-    [galaxyScale, maxY, minX],
-  );
-
-  const sameBounds = useCallback(
-    (a: null | VisibleBounds, b: null | VisibleBounds) =>
-      !!a &&
-      !!b &&
-      a.left === b.left &&
-      a.top === b.top &&
-      a.right === b.right &&
-      a.bottom === b.bottom,
-    [],
-  );
-
-  const visibleBoundsKey = useDerivedValue(() => {
-    const scale = scalePrevious.get();
-    if (!canvasSize.get().height || !canvasSize.get().width || scale === 0) {
-      return '0,0,0,0';
-    }
-    let { x: left, y: top } = convertScreenToGalaxy(
-      0,
-      0,
-      panX.get(),
-      panY.get(),
-      scalePrevious.get(),
-    );
-    let { x: right, y: bottom } = convertScreenToGalaxy(
-      canvasSize.get().width,
-      canvasSize.get().height,
-      panX.get(),
-      panY.get(),
-      scalePrevious.get(),
-    );
-
-    const overscanGalaxy = OverscanPixels / scale;
-
-    left -= overscanGalaxy;
-    top -= overscanGalaxy;
-    right += overscanGalaxy;
-    bottom += overscanGalaxy;
-
-    if (left === right) {
-      left = Math.max(left - overscanGalaxy, 0);
-    }
-    if (top === bottom) {
-      bottom = Math.max(bottom - overscanGalaxy, 0);
-    }
-
-    return `${left},${top},${right},${bottom}`;
-  });
-
-  const commitBounds = useCallback(
-    (next: string) => {
-      const [left, top, right, bottom] = next.split(',').map(Number);
-      const { x: newRawBoundsLeft, y: newRawBoundsTop } = convertGalaxyToRaw(
-        Math.ceil(left),
-        Math.ceil(top),
-      );
-      const { x: newRawBoundsRight, y: newRawBoundsBottom } =
-        convertGalaxyToRaw(Math.ceil(right), Math.ceil(bottom));
-
-      const rawBucketSize = 1000;
-
-      const newBounds = {
-        bottom: Math.floor(newRawBoundsBottom / rawBucketSize) * rawBucketSize,
-        left: Math.floor(newRawBoundsLeft / rawBucketSize) * rawBucketSize,
-        right: Math.ceil(newRawBoundsRight / rawBucketSize) * rawBucketSize,
-        top: Math.ceil(newRawBoundsTop / rawBucketSize) * rawBucketSize,
-      };
-
-      setQueryBounds((prev) =>
-        sameBounds(prev, newBounds) ? prev : newBounds,
-      );
-    },
-    [convertGalaxyToRaw, sameBounds],
-  );
-
-  useAnimatedReaction(
-    () => visibleBoundsKey.get(),
-    (next, prev) => {
-      if (!next || next === prev || next === '0,0,0,0') {
-        return;
-      }
-      runOnJS(commitBounds)(next);
-    },
-  );
-
-  const { data: systemsInView } = useGetSystemsInView({
-    queryArgs: {
-      max_x: queryBounds?.right || 0,
-      max_y: queryBounds?.top || 0,
-      min_x: queryBounds?.left || 0,
-      min_y: queryBounds?.bottom || 0,
-    },
-  });
+  const { composedGesture, groupTransform, panX, panY, scalePrevious } =
+    useMapGestures();
 
   const shipsBounds = useMemo(
     () => ({
@@ -292,8 +100,20 @@ export const GalaxyMapScreen = () => {
 
       const { maxShipX, maxShipY, minShipX, minShipY } = shipsBounds;
 
-      const maxPoint = convertRawToGalaxy(maxShipX, maxShipY);
-      const minPoint = convertRawToGalaxy(minShipX, minShipY);
+      const maxPoint = convertRawToGalaxy({
+        galaxyScale,
+        maxY,
+        minX,
+        rawX: maxShipX,
+        rawY: maxShipY,
+      });
+      const minPoint = convertRawToGalaxy({
+        galaxyScale,
+        maxY,
+        minX,
+        rawX: minShipX,
+        rawY: minShipY,
+      });
 
       const left = Math.min(minPoint.x, maxPoint.x);
       const right = Math.max(minPoint.x, maxPoint.x);
@@ -332,176 +152,25 @@ export const GalaxyMapScreen = () => {
     ],
   );
 
-  const systemsTexture = useTexture(
-    <Circle
-      color="lightblue"
-      cx={HalfSpriteSize}
-      cy={HalfSpriteSize}
-      r={HalfSpriteSize}
-    />,
-    {
-      height: SpriteSize,
-      width: SpriteSize,
-    },
-  );
-
-  const systemSprites = useMemo(
-    () => systemsInView?.map(() => rect(0, 0, SpriteSize, SpriteSize)),
-    [systemsInView],
-  );
-
-  const systemTransforms = useRSXformBuffer(
-    systemsInView?.length || 0,
-    (val, i) => {
-      'worklet';
-      const system = systemsInView?.[i];
-      if (!system) return;
-
-      const { x: galaxyX, y: galaxyY } = convertRawToGalaxy(system.x, system.y);
-
-      val.set(1, 0, galaxyX - HalfSpriteSize, galaxyY - HalfSpriteSize);
-    },
-  );
-
-  /**
-   * Handles tap gestures for item selection
-   * Converts screen coordinates to world coordinates and performs hit testing
-   */
-  // const handleTap = useCallback(
-  //   (
-  //     screenX: number,
-  //     screenY: number,
-  //     currentZoom: number,
-  //     currentPanX: number,
-  //     currentPanY: number,
-  //   ) => {},
-  //   [],
-  // );
-
-  // const tapGesture = Gesture.Tap().onStart((event) => {
-  //   scheduleOnRN(() =>
-  //     handleTap(event.x, event.y, scalePrevious.get(), panX.get(), panY.get()),
-  //   );
-  // });
-
-  // Pan gesture handler - 1:1 finger tracking with momentum
-  const panGesture = Gesture.Pan()
-    .onStart((event) => {
-      // Store the starting position
-      prevPanX.set(event.translationX);
-      prevPanY.set(event.translationY);
-    })
-    .onUpdate((event) => {
-      // Calculate the change since last frame
-      const deltaX = event.translationX - prevPanX.get();
-      const deltaY = event.translationY - prevPanY.get();
-
-      // Apply the delta to pan position
-      panX.set(panX.get() + deltaX / scalePrevious.get());
-      panY.set(panY.get() + deltaY / scalePrevious.get());
-
-      // Update previous position for next frame
-      prevPanX.set(event.translationX);
-      prevPanY.set(event.translationY);
-    })
-    .onEnd((event) => {
-      // Add momentum with smooth physics
-      panX.set(
-        withDecay({
-          clamp: [-5000, 5000],
-          deceleration: 0.998,
-          velocity: event.velocityX,
-        }),
-      );
-
-      panY.set(
-        withDecay({
-          clamp: [-5000, 5000],
-          deceleration: 0.998,
-          velocity: event.velocityY,
-        }),
-      );
-    });
-
-  // Pinch gesture handler - apply zoom continuously
-  const pinchGesture = Gesture.Pinch().onUpdate((event) => {
-    // Apply zoom sensitivity (slower zoom)
-    const zoomSensitivity = 0.05;
-    const rawScale = 1 + (event.scale - 1) * zoomSensitivity;
-    const newZoom = Math.max(
-      0.1,
-      Math.min(MaxZoom, scalePrevious.get() * rawScale),
-    );
-
-    // Get current focal point
-    const currentFocalX = event.focalX;
-    const currentFocalY = event.focalY;
-
-    const currentScale = scalePrevious.get();
-
-    // Calculate what world point is under the focal point at current zoom
-    const { x: worldX, y: worldY } = convertScreenToGalaxy(
-      currentFocalX,
-      currentFocalY,
-      panX.get(),
-      panY.get(),
-      currentScale,
-    );
-
-    // Update zoom and adjust pan to keep world point under focal point
-    scalePrevious.set(newZoom);
-    panX.set(currentFocalX - worldX * newZoom);
-    panY.set(currentFocalY - worldY * newZoom);
-  });
-
-  // Combine gestures
-  const composedGesture = Gesture.Simultaneous(
-    panGesture,
-    pinchGesture,
-    // tapGesture,
-  );
-
   if (
     isFetchingSystemsMeta ||
     isFetchingShips ||
     galaxyHeight === 0 ||
     galaxyWidth === 0
   ) {
-    console.log('No ships or initial bounds not set yet');
     return null;
   }
 
   return (
     <GestureDetector gesture={composedGesture}>
-      <Animated.View
-        style={[
-          flexStyles.flex,
-          {
-            backgroundColor: 'black',
-          },
-        ]}
-      >
-        <Canvas
-          onSize={canvasSize}
-          style={[
-            flexStyles.flex,
-            // {
-            //   height: galaxyHeight,
-            //   width: galaxyWidth,
-            // },
-          ]}
-        >
-          {systemSprites !== undefined && (
-            <Group transform={transform}>
-              <Atlas
-                image={systemsTexture}
-                sprites={systemSprites}
-                transforms={systemTransforms}
-              />
-            </Group>
-          )}
-        </Canvas>
-      </Animated.View>
+      <Map
+        canvasSize={canvasSize}
+        galaxyScale={galaxyScale}
+        groupTransform={groupTransform}
+        panX={panX}
+        panY={panY}
+        scalePrevious={scalePrevious}
+      />
     </GestureDetector>
   );
 };
