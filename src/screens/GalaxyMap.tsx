@@ -41,6 +41,13 @@ export const GalaxyMapScreen = () => {
 
     const longestDimension = Math.max(windowHeight, windowWidth);
     const scale = longestDimension / Math.max(domainWidth, domainHeight);
+    console.log('Galaxy dimensions and scale:', {
+      domainHeight,
+      domainWidth,
+      scale,
+      windowHeight,
+      windowWidth,
+    });
     return {
       galaxyHeight: domainHeight * scale,
       galaxyScale: scale,
@@ -53,7 +60,7 @@ export const GalaxyMapScreen = () => {
   const { convertRawToGalaxy } = useMapUtils();
 
   const { composedGesture, groupTransform, panX, panY, scalePrevious } =
-    useMapGestures();
+    useMapGestures({ galaxyHeight, galaxyWidth });
 
   const shipsBounds = useMemo(
     () => ({

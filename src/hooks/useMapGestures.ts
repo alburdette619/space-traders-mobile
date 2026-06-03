@@ -1,15 +1,25 @@
+import { useWindowDimensions } from 'react-native';
 import { Gesture } from 'react-native-gesture-handler';
 import {
   useDerivedValue,
   useSharedValue,
   withDecay,
 } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { MaxZoom } from '../constants/mapConstants';
+import { MapEdgeOverscan, MaxZoom, MinZoom } from '../constants/mapConstants';
 import { useMapUtils } from './useMapUtils';
 
-export const useMapGestures = () => {
+export const useMapGestures = ({
+  galaxyHeight,
+  galaxyWidth,
+}: {
+  galaxyHeight: number;
+  galaxyWidth: number;
+}) => {
   const { convertScreenToGalaxy } = useMapUtils();
+  const { bottom, left, right, top } = useSafeAreaInsets();
+  const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 
   // Core shared values for transform state
   const panX = useSharedValue(0);
@@ -30,6 +40,34 @@ export const useMapGestures = () => {
       { scale: scalePrevious.get() },
     ];
   });
+
+  const panBounds = useDerivedValue(() => {
+    const maxPanX = MapEdgeOverscan + left;
+    const minPanX =
+      -galaxyWidth * scalePrevious.get() -
+      right +
+      windowWidth -
+      MapEdgeOverscan +
+      left;
+    const maxPanY = MapEdgeOverscan + top;
+    const minPanY =
+      -galaxyHeight * scalePrevious.get() -
+      bottom +
+      windowHeight -
+      MapEdgeOverscan -
+      top;
+
+    return { maxPanX, maxPanY, minPanX, minPanY };
+  }, [
+    galaxyHeight,
+    galaxyWidth,
+    left,
+    right,
+    top,
+    bottom,
+    windowHeight,
+    windowWidth,
+  ]);
 
   /**
    * Handles tap gestures for item selection
@@ -65,8 +103,14 @@ export const useMapGestures = () => {
       const deltaY = event.translationY - prevPanY.get();
 
       // Apply the delta to pan position
-      panX.set(panX.get() + deltaX);
-      panY.set(panY.get() + deltaY);
+      const newPanX = panX.get() + deltaX;
+      const newPanY = panY.get() + deltaY;
+
+      // Optional: Clamp pan to galaxy bounds (with some overscan)
+      const { maxPanX, maxPanY, minPanX, minPanY } = panBounds.get();
+
+      panX.set(Math.min(maxPanX, Math.max(minPanX, newPanX)));
+      panY.set(Math.min(maxPanY, Math.max(minPanY, newPanY)));
 
       // Update previous position for next frame
       prevPanX.set(event.translationX);
@@ -76,6 +120,7 @@ export const useMapGestures = () => {
       // Add momentum with smooth physics
       panX.set(
         withDecay({
+          clamp: [panBounds.get().minPanX, panBounds.get().maxPanX],
           deceleration: 0.998,
           velocity: event.velocityX,
         }),
@@ -83,6 +128,7 @@ export const useMapGestures = () => {
 
       panY.set(
         withDecay({
+          clamp: [panBounds.get().minPanY, panBounds.get().maxPanY],
           deceleration: 0.998,
           velocity: event.velocityY,
         }),
@@ -95,7 +141,7 @@ export const useMapGestures = () => {
     const zoomSensitivity = 0.05;
     const rawScale = 1 + (event.scale - 1) * zoomSensitivity;
     const newZoom = Math.max(
-      0.1,
+      MinZoom,
       Math.min(MaxZoom, scalePrevious.get() * rawScale),
     );
 
