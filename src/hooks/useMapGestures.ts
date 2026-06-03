@@ -65,8 +65,8 @@ export const useMapGestures = () => {
       const deltaY = event.translationY - prevPanY.get();
 
       // Apply the delta to pan position
-      panX.set(panX.get() + deltaX / scalePrevious.get());
-      panY.set(panY.get() + deltaY / scalePrevious.get());
+      panX.set(panX.get() + deltaX);
+      panY.set(panY.get() + deltaY);
 
       // Update previous position for next frame
       prevPanX.set(event.translationX);
@@ -76,7 +76,6 @@ export const useMapGestures = () => {
       // Add momentum with smooth physics
       panX.set(
         withDecay({
-          clamp: [-5000, 5000],
           deceleration: 0.998,
           velocity: event.velocityX,
         }),
@@ -84,7 +83,6 @@ export const useMapGestures = () => {
 
       panY.set(
         withDecay({
-          clamp: [-5000, 5000],
           deceleration: 0.998,
           velocity: event.velocityY,
         }),

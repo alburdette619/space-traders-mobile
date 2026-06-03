@@ -2,6 +2,7 @@ import {
   Atlas,
   Canvas,
   Circle,
+  clamp,
   Group,
   rect,
   useRSXformBuffer,
@@ -182,7 +183,13 @@ export const Map = ({
         rawY: system.y,
       });
 
-      val.set(1, 0, galaxyX - HalfSpriteSize, galaxyY - HalfSpriteSize);
+      // Vary the size of the sprite based on zoom level, with a min and max size.
+      // TODO: This causes some jitter when zooming in and out, on sim, is it an issue?
+      const currentScale = scalePrevious.get();
+      const spriteScaleRaw = clamp(HalfSpriteSize / currentScale, 0.3, 1);
+      const spriteScale = Math.ceil(spriteScaleRaw * 10) / 10;
+
+      val.set(spriteScale, 0, galaxyX - spriteScale, galaxyY - spriteScale);
     },
   );
 
