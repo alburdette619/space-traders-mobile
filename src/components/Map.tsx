@@ -8,7 +8,7 @@ import {
   useRSXformBuffer,
   useTexture,
 } from '@shopify/react-native-skia';
-import { useMemo } from 'react';
+import { type ReactNode, useMemo } from 'react';
 import { SharedValue } from 'react-native-reanimated';
 
 import { type GalaxySystem } from '../api/supabase/galaxySystems';
@@ -17,27 +17,37 @@ import { useMapGestures } from '../hooks/useMapGestures';
 import { flexStyles } from '../theme/globalStyles';
 
 interface MapProps {
+  background?: ReactNode;
   canvasSize: SharedValue<{ height: number; width: number }>;
+  children?: ReactNode;
   galaxyScale: number;
   groupTransform?: ReturnType<typeof useMapGestures>['groupTransform'];
   maxY: number;
   minX: number;
+  overlay?: ReactNode;
   scalePrevious: SharedValue<number>;
+  spriteScreenSize?: number;
+  systemColor?: string;
   systems: GalaxySystem[];
 }
 
 export const Map = ({
+  background,
   canvasSize,
+  children,
   galaxyScale,
   groupTransform,
   maxY,
   minX,
+  overlay,
   scalePrevious,
+  spriteScreenSize,
+  systemColor = 'lightblue',
   systems,
 }: MapProps) => {
   const systemsTexture = useTexture(
     <Circle
-      color="lightblue"
+      color={systemColor}
       cx={HalfSpriteSize}
       cy={HalfSpriteSize}
       r={HalfSpriteSize}
@@ -71,8 +81,9 @@ export const Map = ({
 
       // Vary the size of the sprite based on zoom level, with a min and max size.
       const currentScale = scalePrevious.get();
-      const spriteScaleRaw = clamp(HalfSpriteSize / currentScale, 0.3, 1);
-      const spriteScale = Math.ceil(spriteScaleRaw * 10) / 10;
+      const spriteScale = spriteScreenSize
+        ? spriteScreenSize / SpriteSize / currentScale
+        : Math.ceil(clamp(HalfSpriteSize / currentScale, 0.3, 1) * 10) / 10;
 
       val.set(
         spriteScale,
@@ -85,15 +96,18 @@ export const Map = ({
 
   return (
     <Canvas onSize={canvasSize} style={[flexStyles.flex]}>
-      {systems.length > 0 && (
-        <Group transform={groupTransform}>
+      {background}
+      <Group transform={groupTransform}>
+        {systems.length > 0 && (
           <Atlas
             image={systemsTexture}
             sprites={systemSprites}
             transforms={systemTransforms}
           />
-        </Group>
-      )}
+        )}
+        {children}
+      </Group>
+      {overlay}
     </Canvas>
   );
 };

@@ -1,13 +1,19 @@
 import { useLayout } from '@react-native-community/hooks';
 import { differenceInSeconds, isFuture } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Card, Chip, Text, useTheme } from 'react-native-paper';
 import { useCountdown } from 'usehooks-ts';
-import { CartesianChart, Scatter } from 'victory-native';
 
 import { Ship } from '@/src/api/models/models-Ship/ship';
-import { useGetSystemWaypoints } from '@/src/api/models/systems/systems';
+import {
+  getSystemWaypoints,
+  useGetSystemWaypointsInfinite,
+} from '@/src/api/models/systems/systems';
+import {
+  MapSnapshot,
+  type MapSnapshotPoint,
+} from '@/src/components/MapSnapshot';
 import { ShipStatus } from '@/src/components/ShipStatus';
 import { voidRunnerIcons } from '@/src/constants/icons';
 import { useShipStatusText } from '@/src/hooks/useShipStatusText';
@@ -23,16 +29,47 @@ export const ShipHud = ({ ship }: ShipHudProps) => {
 
   const shipStatusText = useShipStatusText(ship);
 
-  const { data: waypointsData } = useGetSystemWaypoints(
+  const {
+    data: waypointPages,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isFetchNextPageError,
+  } = useGetSystemWaypointsInfinite(
     ship.nav.systemSymbol,
-    // { limit: 100 },
-    undefined,
+    { limit: 20 },
     {
-      query: { enabled: !!ship.nav.systemSymbol },
+      query: {
+        enabled: !!ship.nav.systemSymbol,
+        getNextPageParam: (lastPage) => {
+          if (!lastPage) return undefined;
+          const { meta } = lastPage;
+          return meta.page * meta.limit < meta.total
+            ? meta.page + 1
+            : undefined;
+        },
+        initialPageParam: 1,
+        queryFn: ({ pageParam, signal }) =>
+          getSystemWaypoints(
+            ship.nav.systemSymbol,
+            { limit: 20, page: Number(pageParam) },
+            undefined,
+            signal,
+          ),
+      },
     },
   );
 
-  console.log('Waypoints Data in HUD:', JSON.stringify(waypointsData, null, 2));
+  useEffect(() => {
+    if (hasNextPage && !isFetchingNextPage && !isFetchNextPageError) {
+      void fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, isFetchNextPageError, isFetchingNextPage]);
+
+  const waypoints = useMemo(
+    () => waypointPages?.pages.flatMap((page) => page?.data ?? []) ?? [],
+    [waypointPages?.pages],
+  );
 
   const { height: cardHeight, onLayout: onCardLayout } = useLayout();
 
@@ -64,7 +101,6 @@ export const ShipHud = ({ ship }: ShipHudProps) => {
         differenceInSeconds(new Date(ship.nav.route.arrival), new Date()),
       );
 
-      console.log(ship.nav.route.arrival, arrivalInSeconds);
       setInitialArrivalSeconds(arrivalInSeconds);
 
       resetArrivalCountdown();
@@ -86,7 +122,68 @@ export const ShipHud = ({ ship }: ShipHudProps) => {
     startCooldownCountdown,
   ]);
 
-  //   const {} = useMemo(() => {}, []);
+  const mapRoute = useMemo(() => {
+    const { destination, origin } = ship.nav.route;
+
+    if (
+      ship.nav.status !== 'IN_TRANSIT' ||
+      origin.systemSymbol !== destination.systemSymbol ||
+      destination.systemSymbol !== ship.nav.systemSymbol
+    ) {
+      return undefined;
+    }
+
+    return { destination, origin };
+  }, [ship.nav.route, ship.nav.status, ship.nav.systemSymbol]);
+
+  const mapProgressTick =
+    ship.nav.status === 'IN_TRANSIT' ? secondsTillArrival : 0;
+
+  const shipMapPoint = useMemo<MapSnapshotPoint | undefined>(() => {
+    if (mapRoute) {
+      const departureTime = new Date(ship.nav.route.departureTime).getTime();
+      const arrivalTime = new Date(ship.nav.route.arrival).getTime();
+      const routeDuration = arrivalTime - departureTime;
+      const currentTime =
+        mapProgressTick > 0 ? arrivalTime - mapProgressTick * 1000 : Date.now();
+      const routeProgress =
+        routeDuration <= 0
+          ? 1
+          : Math.min(
+              Math.max((currentTime - departureTime) / routeDuration, 0),
+              1,
+            );
+
+      return {
+        symbol: ship.symbol,
+        x:
+          mapRoute.origin.x +
+          (mapRoute.destination.x - mapRoute.origin.x) * routeProgress,
+        y:
+          mapRoute.origin.y +
+          (mapRoute.destination.y - mapRoute.origin.y) * routeProgress,
+      };
+    }
+
+    const currentWaypoint = waypoints.find(
+      ({ symbol }) => symbol === ship.nav.waypointSymbol,
+    );
+
+    if (currentWaypoint) return currentWaypoint;
+
+    const { destination, origin } = ship.nav.route;
+    const routeWaypoint = [destination, origin].find(
+      ({ systemSymbol }) => systemSymbol === ship.nav.systemSymbol,
+    );
+
+    return routeWaypoint
+      ? {
+          symbol: ship.symbol,
+          x: routeWaypoint.x,
+          y: routeWaypoint.y,
+        }
+      : undefined;
+  }, [mapProgressTick, mapRoute, ship.nav, ship.symbol, waypoints]);
 
   return (
     <Card onLayout={onCardLayout} style={[styles.card]}>
@@ -154,33 +251,11 @@ export const ShipHud = ({ ship }: ShipHudProps) => {
             },
           ]}
         >
-          <CartesianChart
-            data={[
-              { x: 1, y: 2 },
-              { x: 2, y: 3 },
-              { x: 3, y: 5 },
-              { x: 4, y: 4 },
-              { x: 5, y: 7 },
-            ]}
-            domain={{ x: [0, 10], y: [0, 10] }}
-            frame={{ lineWidth: 0 }}
-            xKey="x"
-            yKeys={['y']}
-          >
-            {({ points }) => {
-              console.log(points);
-
-              return (
-                <Scatter
-                  color="red"
-                  points={points.y}
-                  radius={10}
-                  shape="star"
-                  style="fill"
-                />
-              );
-            }}
-          </CartesianChart>
+          <MapSnapshot
+            focusPoint={shipMapPoint}
+            points={waypoints}
+            route={mapRoute}
+          />
         </View>
       </Card.Content>
     </Card>
@@ -201,7 +276,7 @@ const styles = StyleSheet.create({
     width: '56%',
   },
   rightHalfContainer: {
-    paddingLeft: 8,
+    overflow: 'hidden',
     width: '42%',
   },
   statusContainer: {
