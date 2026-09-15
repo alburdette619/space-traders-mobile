@@ -31,6 +31,7 @@ export const useMapGestures = ({
 
   // Zoom state
   const scalePrevious = useSharedValue(1);
+  const scaleAtPinchStart = useSharedValue(1);
 
   // Calculate transform matrix
   const groupTransform = useDerivedValue(() => {
@@ -136,35 +137,33 @@ export const useMapGestures = ({
     });
 
   // Pinch gesture handler - apply zoom continuously
-  const pinchGesture = Gesture.Pinch().onUpdate((event) => {
-    // Apply zoom sensitivity (slower zoom)
-    const zoomSensitivity = 0.05;
-    const rawScale = 1 + (event.scale - 1) * zoomSensitivity;
-    const newZoom = Math.max(
-      MinZoom,
-      Math.min(MaxZoom, scalePrevious.get() * rawScale),
-    );
+  const pinchGesture = Gesture.Pinch()
+    .onStart(() => {
+      scaleAtPinchStart.set(scalePrevious.get());
+    })
+    .onUpdate((event) => {
+      // event.scale is cumulative from the start of the current pinch.
+      const newZoom = Math.max(
+        MinZoom,
+        Math.min(MaxZoom, scaleAtPinchStart.get() * event.scale),
+      );
 
-    // Get current focal point
-    const currentFocalX = event.focalX;
-    const currentFocalY = event.focalY;
+      const currentFocalX = event.focalX;
+      const currentFocalY = event.focalY;
+      const currentScale = scalePrevious.get();
 
-    const currentScale = scalePrevious.get();
+      const { x: worldX, y: worldY } = convertScreenToGalaxy({
+        panXValue: panX.get(),
+        panYValue: panY.get(),
+        screenX: currentFocalX,
+        screenY: currentFocalY,
+        zoom: currentScale,
+      });
 
-    // Calculate what world point is under the focal point at current zoom
-    const { x: worldX, y: worldY } = convertScreenToGalaxy({
-      panXValue: panX.get(),
-      panYValue: panY.get(),
-      screenX: currentFocalX,
-      screenY: currentFocalY,
-      zoom: currentScale,
+      scalePrevious.set(newZoom);
+      panX.set(currentFocalX - worldX * newZoom);
+      panY.set(currentFocalY - worldY * newZoom);
     });
-
-    // Update zoom and adjust pan to keep world point under focal point
-    scalePrevious.set(newZoom);
-    panX.set(currentFocalX - worldX * newZoom);
-    panY.set(currentFocalY - worldY * newZoom);
-  });
 
   // Combine gestures
   const composedGesture = Gesture.Simultaneous(

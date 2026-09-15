@@ -17,10 +17,10 @@ import {
 import { runOnJS } from 'react-native-worklets';
 
 import { useGetSystemsInView } from '../api/supabase/galaxySystems';
-import { useGetSystemsMeta } from '../api/supabase/galaxySystemsMeta';
 import {
   HalfSpriteSize,
   OverscanPixels,
+  RawBoundsBucketSize,
   SpriteSize,
 } from '../constants/mapConstants';
 import { useMapGestures } from '../hooks/useMapGestures';
@@ -32,6 +32,8 @@ interface MapProps {
   canvasSize: SharedValue<{ height: number; width: number }>;
   galaxyScale: number;
   groupTransform?: ReturnType<typeof useMapGestures>['groupTransform'];
+  maxY: number;
+  minX: number;
   panX: SharedValue<number>;
   panY: SharedValue<number>;
   scalePrevious: SharedValue<number>;
@@ -41,16 +43,13 @@ export const Map = ({
   canvasSize,
   galaxyScale,
   groupTransform,
+  maxY,
+  minX,
   panX,
   panY,
   scalePrevious,
 }: MapProps) => {
   const [queryBounds, setQueryBounds] = useState<null | VisibleBounds>(null);
-
-  const { data: systemsMeta, isFetching: isFetchingSystemsMeta } =
-    useGetSystemsMeta();
-
-  const { max_y: maxY = 0, min_x: minX = 0 } = systemsMeta || {};
 
   const {
     convertGalaxyToRaw,
@@ -61,80 +60,74 @@ export const Map = ({
 
   const visibleBoundsKey = useDerivedValue(() => {
     const scale = scalePrevious.get();
-    if (!canvasSize.get().height || !canvasSize.get().width || scale === 0) {
-      return '0,0,0,0';
+    const { height, width } = canvasSize.get();
+    if (!height || !width || scale === 0 || galaxyScale === 0) {
+      return '';
     }
-    let { x: left, y: top } = convertScreenToGalaxy({
+    const { x: visibleLeft, y: visibleTop } = convertScreenToGalaxy({
       panXValue: panX.get(),
       panYValue: panY.get(),
       screenX: 0,
       screenY: 0,
-      zoom: scalePrevious.get(),
+      zoom: scale,
     });
-    let { x: right, y: bottom } = convertScreenToGalaxy({
+    const { x: visibleRight, y: visibleBottom } = convertScreenToGalaxy({
       panXValue: panX.get(),
       panYValue: panY.get(),
-      screenX: canvasSize.get().width,
-      screenY: canvasSize.get().height,
-      zoom: scalePrevious.get(),
+      screenX: width,
+      screenY: height,
+      zoom: scale,
     });
 
     const overscanGalaxy = OverscanPixels / scale;
+    const left = visibleLeft - overscanGalaxy;
+    const top = visibleTop - overscanGalaxy;
+    const right = visibleRight + overscanGalaxy;
+    const bottom = visibleBottom + overscanGalaxy;
 
-    left -= overscanGalaxy;
-    top -= overscanGalaxy;
-    right += overscanGalaxy;
-    bottom += overscanGalaxy;
+    const { x: rawLeft, y: rawTop } = convertGalaxyToRaw({
+      galaxyScale,
+      maxY,
+      minX,
+      worldX: left,
+      worldY: top,
+    });
+    const { x: rawRight, y: rawBottom } = convertGalaxyToRaw({
+      galaxyScale,
+      maxY,
+      minX,
+      worldX: right,
+      worldY: bottom,
+    });
 
-    if (left === right) {
-      left = Math.max(left - overscanGalaxy, 0);
-    }
-    if (top === bottom) {
-      bottom = Math.max(bottom - overscanGalaxy, 0);
-    }
+    const bucketedLeft =
+      Math.floor(rawLeft / RawBoundsBucketSize) * RawBoundsBucketSize;
+    const bucketedTop =
+      Math.ceil(rawTop / RawBoundsBucketSize) * RawBoundsBucketSize;
+    const bucketedRight =
+      Math.ceil(rawRight / RawBoundsBucketSize) * RawBoundsBucketSize;
+    const bucketedBottom =
+      Math.floor(rawBottom / RawBoundsBucketSize) * RawBoundsBucketSize;
 
-    return `${left},${top},${right},${bottom}`;
+    return `${bucketedLeft},${bucketedTop},${bucketedRight},${bucketedBottom}`;
   });
 
   const commitBounds = useCallback(
     (next: string) => {
       const [left, top, right, bottom] = next.split(',').map(Number);
-      const { x: newRawBoundsLeft, y: newRawBoundsTop } = convertGalaxyToRaw({
-        galaxyScale,
-        maxY,
-        minX,
-        worldX: Math.ceil(left),
-        worldY: Math.ceil(top),
-      });
-      const { x: newRawBoundsRight, y: newRawBoundsBottom } =
-        convertGalaxyToRaw({
-          galaxyScale,
-          maxY,
-          minX,
-          worldX: Math.ceil(right),
-          worldY: Math.ceil(bottom),
-        });
-
-      const rawBucketSize = 1000;
-
-      const newBounds = {
-        bottom: Math.floor(newRawBoundsBottom / rawBucketSize) * rawBucketSize,
-        left: Math.floor(newRawBoundsLeft / rawBucketSize) * rawBucketSize,
-        right: Math.ceil(newRawBoundsRight / rawBucketSize) * rawBucketSize,
-        top: Math.ceil(newRawBoundsTop / rawBucketSize) * rawBucketSize,
-      };
+      const newBounds = { bottom, left, right, top };
 
       setQueryBounds((prev) =>
         sameBounds(prev, newBounds) ? prev : newBounds,
       );
     },
-    [convertGalaxyToRaw, galaxyScale, maxY, minX, sameBounds],
+    [sameBounds],
   );
 
   useAnimatedReaction(
     () => visibleBoundsKey.get(),
     (next, prev) => {
-      if (!next || next === prev || next === '0,0,0,0') {
+      if (!next || next === prev) {
         return;
       }
       runOnJS(commitBounds)(next);
@@ -142,11 +135,12 @@ export const Map = ({
   );
 
   const { data: systemsInView } = useGetSystemsInView({
+    enabled: queryBounds !== null,
     queryArgs: {
-      max_x: queryBounds?.right || 0,
-      max_y: queryBounds?.top || 0,
-      min_x: queryBounds?.left || 0,
-      min_y: queryBounds?.bottom || 0,
+      max_x: queryBounds?.right ?? 0,
+      max_y: queryBounds?.top ?? 0,
+      min_x: queryBounds?.left ?? 0,
+      min_y: queryBounds?.bottom ?? 0,
     },
   });
 
@@ -192,10 +186,6 @@ export const Map = ({
       val.set(spriteScale, 0, galaxyX - spriteScale, galaxyY - spriteScale);
     },
   );
-
-  if (isFetchingSystemsMeta) {
-    return null;
-  }
 
   return (
     <Canvas onSize={canvasSize} style={[flexStyles.flex]}>

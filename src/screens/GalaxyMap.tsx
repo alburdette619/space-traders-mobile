@@ -1,10 +1,10 @@
-import { get, maxBy, minBy } from 'lodash';
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import { useAnimatedReaction, useSharedValue } from 'react-native-reanimated';
 
-import { useGetMyShips } from '../api/models/fleet/fleet';
+import { getMyShips, useGetMyShipsInfinite } from '../api/models/fleet/fleet';
+import { useGetSystemsBySymbols } from '../api/supabase/galaxySystems';
 import { useGetSystemsMeta } from '../api/supabase/galaxySystemsMeta';
 import { Map } from '../components/Map';
 import { MaxZoom } from '../constants/mapConstants';
@@ -14,9 +14,9 @@ import { useMapUtils } from '../hooks/useMapUtils';
 export const GalaxyMapScreen = () => {
   const { height: windowHeight, width: windowWidth } = useWindowDimensions();
 
-  const hasInitializedView = useRef(false);
+  const hasInitializedView = useSharedValue(false);
 
-  const { data: systemsMeta, isFetching: isFetchingSystemsMeta } =
+  const { data: systemsMeta, isPending: isPendingSystemsMeta } =
     useGetSystemsMeta();
 
   const {
@@ -26,7 +26,65 @@ export const GalaxyMapScreen = () => {
     min_y: minY = 0,
   } = systemsMeta || {};
 
-  const { data: ships, isFetching: isFetchingShips } = useGetMyShips();
+  const {
+    data: shipPages,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isFetchNextPageError,
+    isPending: isPendingShips,
+  } = useGetMyShipsInfinite(
+    { limit: 20 },
+    {
+      query: {
+        getNextPageParam: (lastPage) => {
+          if (!lastPage) return undefined;
+          const { meta } = lastPage;
+          return meta.page * meta.limit < meta.total
+            ? meta.page + 1
+            : undefined;
+        },
+        initialPageParam: 1,
+        queryFn: ({ pageParam, signal }) =>
+          getMyShips({ limit: 20, page: Number(pageParam) }, undefined, signal),
+      },
+    },
+  );
+
+  useEffect(() => {
+    if (hasNextPage && !isFetchingNextPage && !isFetchNextPageError) {
+      void fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, isFetchNextPageError, isFetchingNextPage]);
+
+  const ships = useMemo(
+    () => shipPages?.pages.flatMap((page) => page?.data ?? []) ?? [],
+    [shipPages?.pages],
+  );
+
+  const shipSystemSymbols = useMemo(
+    () =>
+      [
+        ...new Set(
+          ships.map((ship) => ship.nav.route.destination.systemSymbol),
+        ),
+      ].sort(),
+    [ships],
+  );
+
+  const {
+    data: shipSystems,
+    isPending: isPendingShipSystems,
+    isPlaceholderData: isPlaceholderShipSystems,
+  } = useGetSystemsBySymbols(shipSystemSymbols);
+
+  const isLoadingCompleteFleet =
+    isPendingShips ||
+    isFetchingNextPage ||
+    (!!hasNextPage && !isFetchNextPageError);
+  const isLoadingShipSystems =
+    shipSystemSymbols.length > 0 &&
+    (isPendingShipSystems || isPlaceholderShipSystems);
 
   const { galaxyHeight, galaxyScale, galaxyWidth } = useMemo(() => {
     if (maxX === 0 || maxY === 0) {
@@ -41,13 +99,6 @@ export const GalaxyMapScreen = () => {
 
     const longestDimension = Math.max(windowHeight, windowWidth);
     const scale = longestDimension / Math.max(domainWidth, domainHeight);
-    console.log('Galaxy dimensions and scale:', {
-      domainHeight,
-      domainWidth,
-      scale,
-      windowHeight,
-      windowWidth,
-    });
     return {
       galaxyHeight: domainHeight * scale,
       galaxyScale: scale,
@@ -62,31 +113,25 @@ export const GalaxyMapScreen = () => {
   const { composedGesture, groupTransform, panX, panY, scalePrevious } =
     useMapGestures({ galaxyHeight, galaxyWidth });
 
-  const shipsBounds = useMemo(
-    () => ({
-      maxShipX: get(
-        maxBy(ships?.data, 'nav.route.destination.x'),
-        'nav.route.destination.x',
-        0,
-      ),
-      maxShipY: get(
-        maxBy(ships?.data, 'nav.route.destination.y'),
-        'nav.route.destination.y',
-        0,
-      ),
-      minShipX: get(
-        minBy(ships?.data, 'nav.route.destination.x'),
-        'nav.route.destination.x',
-        0,
-      ),
-      minShipY: get(
-        minBy(ships?.data, 'nav.route.destination.y'),
-        'nav.route.destination.y',
-        0,
-      ),
-    }),
-    [ships?.data],
-  );
+  const shipSystemBounds = useMemo(() => {
+    if (!shipSystems?.length) return null;
+
+    const [firstSystem, ...remainingSystems] = shipSystems;
+    return remainingSystems.reduce(
+      (bounds, system) => ({
+        maxShipX: Math.max(bounds.maxShipX, system.x),
+        maxShipY: Math.max(bounds.maxShipY, system.y),
+        minShipX: Math.min(bounds.minShipX, system.x),
+        minShipY: Math.min(bounds.minShipY, system.y),
+      }),
+      {
+        maxShipX: firstSystem.x,
+        maxShipY: firstSystem.y,
+        minShipX: firstSystem.x,
+        minShipY: firstSystem.y,
+      },
+    );
+  }, [shipSystems]);
 
   useAnimatedReaction(
     () => canvasSize.get(),
@@ -95,17 +140,18 @@ export const GalaxyMapScreen = () => {
       // Return if we've already set initial bounds, haven't rendered the canvas yet,
       // or if we don't have ships or systems meta yet.
       if (
-        hasInitializedView.current ||
-        (shipsBounds.maxShipX === 0 && shipsBounds.maxShipY === 0) ||
-        isFetchingShips ||
-        isFetchingSystemsMeta ||
+        hasInitializedView.get() ||
+        !shipSystemBounds ||
+        isLoadingCompleteFleet ||
+        isLoadingShipSystems ||
+        !systemsMeta ||
         canvasHeight === 0 ||
         canvasWidth === 0
       ) {
         return;
       }
 
-      const { maxShipX, maxShipY, minShipX, minShipY } = shipsBounds;
+      const { maxShipX, maxShipY, minShipX, minShipY } = shipSystemBounds;
 
       const maxPoint = convertRawToGalaxy({
         galaxyScale,
@@ -127,17 +173,10 @@ export const GalaxyMapScreen = () => {
       const top = Math.min(minPoint.y, maxPoint.y);
       const bottom = Math.max(minPoint.y, maxPoint.y);
 
-      const shipBoundsWidth = right - left;
-      const shipBoundsHeight = bottom - top;
-      if (!shipBoundsWidth || !shipBoundsHeight) {
-        return;
-      }
-
-      const fitScale = Math.min(
-        canvasWidth / shipBoundsWidth,
-        canvasHeight / shipBoundsHeight,
-        MaxZoom,
-      );
+      const fitScaleX = left === right ? MaxZoom : canvasWidth / (right - left);
+      const fitScaleY =
+        top === bottom ? MaxZoom : canvasHeight / (bottom - top);
+      const fitScale = Math.min(fitScaleX, fitScaleY, MaxZoom);
       const centerX = (left + right) / 2;
       const centerY = (top + bottom) / 2;
 
@@ -147,12 +186,17 @@ export const GalaxyMapScreen = () => {
       scalePrevious.set(fitScale);
       panX.set(nextPanX);
       panY.set(nextPanY);
-      hasInitializedView.current = true;
+      hasInitializedView.set(true);
     },
     [
-      isFetchingShips,
-      isFetchingSystemsMeta,
-      shipsBounds,
+      galaxyScale,
+      hasInitializedView,
+      isLoadingCompleteFleet,
+      isLoadingShipSystems,
+      maxY,
+      minX,
+      shipSystemBounds,
+      systemsMeta,
       panX,
       panY,
       scalePrevious,
@@ -160,8 +204,10 @@ export const GalaxyMapScreen = () => {
   );
 
   if (
-    isFetchingSystemsMeta ||
-    isFetchingShips ||
+    isPendingSystemsMeta ||
+    isPendingShips ||
+    (shipSystemSymbols.length > 0 && isPendingShipSystems) ||
+    !systemsMeta ||
     galaxyHeight === 0 ||
     galaxyWidth === 0
   ) {
@@ -174,6 +220,8 @@ export const GalaxyMapScreen = () => {
         canvasSize={canvasSize}
         galaxyScale={galaxyScale}
         groupTransform={groupTransform}
+        maxY={maxY}
+        minX={minX}
         panX={panX}
         panY={panY}
         scalePrevious={scalePrevious}

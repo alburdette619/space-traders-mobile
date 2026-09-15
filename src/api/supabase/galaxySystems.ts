@@ -9,10 +9,29 @@ type GetSystemsInViewArgs = {
   signal: AbortSignal;
 };
 
+type SystemRow = Database['galaxy']['Tables']['systems']['Row'];
 type SystemsInViewArgs =
   Database['galaxy']['Functions']['systems_in_view']['Args'];
 type SystemsInViewReturn =
   Database['galaxy']['Functions']['systems_in_view']['Returns'];
+
+const getSystemsBySymbols = async ({
+  signal,
+  systemSymbols,
+}: {
+  signal: AbortSignal;
+  systemSymbols: string[];
+}): Promise<SystemRow[]> => {
+  const { data, error } = await supabase
+    .schema('galaxy')
+    .from('systems')
+    .select('*')
+    .in('symbol', systemSymbols)
+    .abortSignal(signal);
+
+  if (error) throw error;
+  return data;
+};
 
 const getSystemsInView = async ({
   queryArgs,
@@ -27,10 +46,21 @@ const getSystemsInView = async ({
   return data;
 };
 
+export const useGetSystemsBySymbols = (systemSymbols: string[]) =>
+  useQuery<SystemRow[]>({
+    enabled: systemSymbols.length > 0,
+    placeholderData: (prev) => prev,
+    queryFn: ({ signal }) => getSystemsBySymbols({ signal, systemSymbols }),
+    queryKey: ['galaxy', 'systems', ...systemSymbols],
+    staleTime: 60_000,
+  });
+
 export const useGetSystemsInView = ({
+  enabled = true,
   padding = 0,
   queryArgs,
 }: {
+  enabled?: boolean;
   padding?: number;
   queryArgs: SystemsInViewArgs;
 }) => {
@@ -42,7 +72,7 @@ export const useGetSystemsInView = ({
   };
 
   return useQuery<SystemsInViewReturn>({
-    enabled: Object.values(queryArgs).some((value) => value !== 0),
+    enabled,
     gcTime: 30 * 60_000,
     placeholderData: (prev) => prev,
     queryFn: ({ signal }) =>
