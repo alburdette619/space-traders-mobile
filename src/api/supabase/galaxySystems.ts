@@ -4,80 +4,73 @@ import { type Database } from '@/src/types/database.types';
 
 import { supabase } from './supabaseClient';
 
-type GetSystemsInViewArgs = {
-  queryArgs: SystemsInViewArgs;
-  signal: AbortSignal;
-};
+export type GalaxySystem = Pick<
+  Database['galaxy']['Tables']['systems']['Row'],
+  'symbol' | 'x' | 'y'
+>;
 
-type SystemRow = Database['galaxy']['Tables']['systems']['Row'];
-type SystemsInViewArgs =
-  Database['galaxy']['Functions']['systems_in_view']['Args'];
-type SystemsInViewReturn =
-  Database['galaxy']['Functions']['systems_in_view']['Returns'];
+const SystemsPageConcurrency = 3;
+const SystemsPageSize = 1000;
 
-const getSystemsBySymbols = async ({
-  signal,
-  systemSymbols,
-}: {
-  signal: AbortSignal;
-  systemSymbols: string[];
-}): Promise<SystemRow[]> => {
-  const { data, error } = await supabase
+const getGalaxySystems = async (signal: AbortSignal) => {
+  const {
+    count,
+    data: firstPage,
+    error: firstPageError,
+  } = await supabase
     .schema('galaxy')
     .from('systems')
-    .select('*')
-    .in('symbol', systemSymbols)
+    .select('symbol, x, y', { count: 'exact' })
+    .order('symbol')
+    .range(0, SystemsPageSize - 1)
     .abortSignal(signal);
 
-  if (error) throw error;
-  return data;
+  if (firstPageError) throw firstPageError;
+
+  const total = count ?? firstPage.length;
+  const remainingPageStarts = Array.from(
+    { length: Math.max(Math.ceil(total / SystemsPageSize) - 1, 0) },
+    (_, index) => (index + 1) * SystemsPageSize,
+  );
+
+  const remainingPages: GalaxySystem[][] = [];
+
+  for (
+    let startIndex = 0;
+    startIndex < remainingPageStarts.length;
+    startIndex += SystemsPageConcurrency
+  ) {
+    const pageStarts = remainingPageStarts.slice(
+      startIndex,
+      startIndex + SystemsPageConcurrency,
+    );
+    const pages = await Promise.all(
+      pageStarts.map(async (start) => {
+        const { data, error } = await supabase
+          .schema('galaxy')
+          .from('systems')
+          .select('symbol, x, y')
+          .order('symbol')
+          .range(start, start + SystemsPageSize - 1)
+          .abortSignal(signal);
+
+        if (error) throw error;
+        return data;
+      }),
+    );
+
+    remainingPages.push(...pages);
+  }
+
+  return [firstPage, ...remainingPages].flat();
 };
 
-const getSystemsInView = async ({
-  queryArgs,
-  signal,
-}: GetSystemsInViewArgs): Promise<SystemsInViewReturn> => {
-  const { data, error } = await supabase
-    .schema('galaxy')
-    .rpc('systems_in_view', queryArgs)
-    .abortSignal(signal);
-
-  if (error) throw error;
-  return data;
-};
-
-export const useGetSystemsBySymbols = (systemSymbols: string[]) =>
-  useQuery<SystemRow[]>({
-    enabled: systemSymbols.length > 0,
-    placeholderData: (prev) => prev,
-    queryFn: ({ signal }) => getSystemsBySymbols({ signal, systemSymbols }),
-    queryKey: ['galaxy', 'systems', ...systemSymbols],
-    staleTime: 60_000,
-  });
-
-export const useGetSystemsInView = ({
-  enabled = true,
-  padding = 0,
-  queryArgs,
-}: {
-  enabled?: boolean;
-  padding?: number;
-  queryArgs: SystemsInViewArgs;
-}) => {
-  const paddedQueryArgs = {
-    max_x: Math.ceil(queryArgs.max_x + padding),
-    max_y: Math.ceil(queryArgs.max_y + padding),
-    min_x: Math.floor(queryArgs.min_x - padding),
-    min_y: Math.floor(queryArgs.min_y - padding),
-  };
-
-  return useQuery<SystemsInViewReturn>({
-    enabled,
+export const useGetGalaxySystems = (galaxyVersion?: string) =>
+  useQuery<GalaxySystem[]>({
+    enabled: !!galaxyVersion,
     gcTime: 30 * 60_000,
-    placeholderData: (prev) => prev,
-    queryFn: ({ signal }) =>
-      getSystemsInView({ queryArgs: paddedQueryArgs, signal }),
-    queryKey: ['galaxy', 'systems_in_view', ...Object.values(paddedQueryArgs)],
-    staleTime: 60_000, // “don’t refetch for 60s”
+    placeholderData: (previous) => previous,
+    queryFn: ({ signal }) => getGalaxySystems(signal),
+    queryKey: ['galaxy', 'systems', galaxyVersion],
+    staleTime: Infinity,
   });
-};

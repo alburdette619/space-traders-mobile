@@ -4,7 +4,7 @@ import { GestureDetector } from 'react-native-gesture-handler';
 import { useAnimatedReaction, useSharedValue } from 'react-native-reanimated';
 
 import { getMyShips, useGetMyShipsInfinite } from '../api/models/fleet/fleet';
-import { useGetSystemsBySymbols } from '../api/supabase/galaxySystems';
+import { useGetGalaxySystems } from '../api/supabase/galaxySystems';
 import { useGetSystemsMeta } from '../api/supabase/galaxySystemsMeta';
 import { Map } from '../components/Map';
 import { MaxZoom } from '../constants/mapConstants';
@@ -25,6 +25,12 @@ export const GalaxyMapScreen = () => {
     min_x: minX = 0,
     min_y: minY = 0,
   } = systemsMeta || {};
+
+  const {
+    data: systems = [],
+    isPending: isPendingSystems,
+    isPlaceholderData: isPlaceholderSystems,
+  } = useGetGalaxySystems(systemsMeta?.updated_at);
 
   const {
     data: shipPages,
@@ -62,29 +68,10 @@ export const GalaxyMapScreen = () => {
     [shipPages?.pages],
   );
 
-  const shipSystemSymbols = useMemo(
-    () =>
-      [
-        ...new Set(
-          ships.map((ship) => ship.nav.route.destination.systemSymbol),
-        ),
-      ].sort(),
-    [ships],
-  );
-
-  const {
-    data: shipSystems,
-    isPending: isPendingShipSystems,
-    isPlaceholderData: isPlaceholderShipSystems,
-  } = useGetSystemsBySymbols(shipSystemSymbols);
-
   const isLoadingCompleteFleet =
     isPendingShips ||
     isFetchingNextPage ||
     (!!hasNextPage && !isFetchNextPageError);
-  const isLoadingShipSystems =
-    shipSystemSymbols.length > 0 &&
-    (isPendingShipSystems || isPlaceholderShipSystems);
 
   const { galaxyHeight, galaxyScale, galaxyWidth } = useMemo(() => {
     if (maxX === 0 || maxY === 0) {
@@ -114,6 +101,16 @@ export const GalaxyMapScreen = () => {
     useMapGestures({ galaxyHeight, galaxyWidth });
 
   const shipSystemBounds = useMemo(() => {
+    const systemsBySymbol = new globalThis.Map(
+      systems.map((system) => [system.symbol, system]),
+    );
+    const shipSystems = [
+      ...new Set(ships.map((ship) => ship.nav.route.destination.systemSymbol)),
+    ].flatMap((symbol) => {
+      const system = systemsBySymbol.get(symbol);
+      return system ? [system] : [];
+    });
+
     if (!shipSystems?.length) return null;
 
     const [firstSystem, ...remainingSystems] = shipSystems;
@@ -131,7 +128,7 @@ export const GalaxyMapScreen = () => {
         minShipY: firstSystem.y,
       },
     );
-  }, [shipSystems]);
+  }, [ships, systems]);
 
   useAnimatedReaction(
     () => canvasSize.get(),
@@ -143,7 +140,8 @@ export const GalaxyMapScreen = () => {
         hasInitializedView.get() ||
         !shipSystemBounds ||
         isLoadingCompleteFleet ||
-        isLoadingShipSystems ||
+        isPendingSystems ||
+        isPlaceholderSystems ||
         !systemsMeta ||
         canvasHeight === 0 ||
         canvasWidth === 0
@@ -192,7 +190,8 @@ export const GalaxyMapScreen = () => {
       galaxyScale,
       hasInitializedView,
       isLoadingCompleteFleet,
-      isLoadingShipSystems,
+      isPendingSystems,
+      isPlaceholderSystems,
       maxY,
       minX,
       shipSystemBounds,
@@ -205,8 +204,8 @@ export const GalaxyMapScreen = () => {
 
   if (
     isPendingSystemsMeta ||
+    isPendingSystems ||
     isPendingShips ||
-    (shipSystemSymbols.length > 0 && isPendingShipSystems) ||
     !systemsMeta ||
     galaxyHeight === 0 ||
     galaxyWidth === 0
@@ -222,9 +221,8 @@ export const GalaxyMapScreen = () => {
         groupTransform={groupTransform}
         maxY={maxY}
         minX={minX}
-        panX={panX}
-        panY={panY}
         scalePrevious={scalePrevious}
+        systems={systems}
       />
     </GestureDetector>
   );
