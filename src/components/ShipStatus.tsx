@@ -58,7 +58,7 @@ export const ShipStatus = ({
               style={[styles.statsText, mode === 'icon' && styles.smallText]}
               variant="bodySmall"
             >
-              {fuelStatus * 100}%
+              {Math.round(fuelStatus * 100)}%
             </Text>
             {isProgressBarShown && (
               <ProgressBar
@@ -86,8 +86,7 @@ export const ShipStatus = ({
               style={[styles.statsText, mode === 'icon' && styles.smallText]}
               variant="bodySmall"
             >
-              {/* {cargoStatus * 100}% */}
-              100%
+              {Math.round(cargoStatus * 100)}%
             </Text>
             {isProgressBarShown && (
               <ProgressBar

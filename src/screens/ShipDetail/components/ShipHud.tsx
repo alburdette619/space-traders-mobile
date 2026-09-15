@@ -26,6 +26,7 @@ interface ShipHudProps {
 
 export const ShipHud = ({ ship }: ShipHudProps) => {
   const { colors, roundness } = useTheme();
+  const hudRadius = roundness * 1.5;
 
   const shipStatusText = useShipStatusText(ship);
 
@@ -186,13 +187,17 @@ export const ShipHud = ({ ship }: ShipHudProps) => {
   }, [mapProgressTick, mapRoute, ship.nav, ship.symbol, waypoints]);
 
   return (
-    <Card onLayout={onCardLayout} style={[styles.card]}>
+    <Card
+      mode="contained"
+      onLayout={onCardLayout}
+      style={[styles.card, { borderRadius: hudRadius }]}
+    >
       <Card.Content
         style={[
           flexStyles.flexRow,
           {
             backgroundColor: `${colors.secondary}5c`,
-            borderRadius: roundness * 3,
+            borderRadius: hudRadius,
             paddingHorizontal: 0,
             paddingVertical: 0,
           },
@@ -243,10 +248,10 @@ export const ShipHud = ({ ship }: ShipHudProps) => {
             styles.rightHalfContainer,
             {
               backgroundColor: 'black',
-              borderBottomRightRadius: roundness * 2.9,
+              borderBottomRightRadius: hudRadius,
               borderLeftColor: colors.onSecondaryContainer,
               borderLeftWidth: StyleSheet.hairlineWidth,
-              borderTopRightRadius: roundness * 2.9,
+              borderTopRightRadius: hudRadius,
               height: cardHeight,
             },
           ]}
@@ -265,6 +270,7 @@ export const ShipHud = ({ ship }: ShipHudProps) => {
 const styles = StyleSheet.create({
   card: {
     marginHorizontal: 8,
+    overflow: 'hidden',
   },
   halfContainer: {
     justifyContent: 'center',
