@@ -17,12 +17,12 @@ import { flexStyles, miscStyles } from '../../theme/globalStyles';
 import { AgentHeader } from './components/AgentHeader';
 import { ShipItem } from './components/ShipItem';
 
-const shipSections: { data: ShipWithAlerts[]; title: string }[] = [
-  { data: [], title: 'Needs Attention' },
-  { data: [], title: 'En Route' },
-  { data: [], title: 'Cooldown' },
-  { data: [], title: 'Idle' },
-] as const;
+const createShipSections = () => [
+  { data: [] as ShipWithAlerts[], title: 'Needs Attention' },
+  { data: [] as ShipWithAlerts[], title: 'En Route' },
+  { data: [] as ShipWithAlerts[], title: 'Cooldown' },
+  { data: [] as ShipWithAlerts[], title: 'Idle' },
+];
 
 export const FleetScreen = () => {
   const { colors } = useTheme();
@@ -34,8 +34,10 @@ export const FleetScreen = () => {
   const { alerts, isCritical, isFetchingAlerts } = fleetAlerts;
 
   const sectionedShipData = useMemo(() => {
+    const shipSections = createShipSections();
+
     if (!ships?.data || isFetchingShips || isFetchingAlerts) {
-      return [...shipSections];
+      return shipSections;
     }
 
     return reduce(
@@ -67,7 +69,7 @@ export const FleetScreen = () => {
 
         return acc;
       },
-      [...shipSections],
+      shipSections,
     );
   }, [alerts, isFetchingAlerts, isFetchingShips, ships?.data]);
 
@@ -85,7 +87,11 @@ export const FleetScreen = () => {
   );
 
   const renderSectionHeader = useCallback(
-    ({ section }: { section: (typeof shipSections)[0] }) => {
+    ({
+      section,
+    }: {
+      section: ReturnType<typeof createShipSections>[number];
+    }) => {
       if (section.data.length === 0) {
         return null;
       }
@@ -119,7 +125,6 @@ export const FleetScreen = () => {
       ]}
     >
       <SectionList
-        // bounces={false}
         contentContainerStyle={styles.listContainer}
         keyExtractor={(item) => item.symbol}
         ListHeaderComponent={renderHeader}
