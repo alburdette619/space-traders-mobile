@@ -9,6 +9,7 @@ import { WaypointTraitSymbol } from '../api/models/models-WaypointTraitSymbol/wa
 import { WaypointType } from '../api/models/models-WaypointType/waypointType';
 import { useGetMarket, useGetWaypoint } from '../api/models/systems/systems';
 import {
+  ShipActionUnavailableReasons,
   ShipModuleCapabilities,
   ShipMountCapabilities,
 } from '../constants/shipActionConstants';
@@ -112,10 +113,14 @@ export const useGetShipActions = (ship: Ship) => {
       waypoint?.traits.some(({ symbol }) => symbol === traitSymbol) ?? false;
     const cooldownReason =
       ship.cooldown.remainingSeconds > 0
-        ? `Cooldown: ${getHumanReadableCountdown(ship.cooldown.remainingSeconds)}`
+        ? ShipActionUnavailableReasons.cooldown(
+            getHumanReadableCountdown(ship.cooldown.remainingSeconds),
+          )
         : undefined;
     const hasCargoSpace = ship.cargo.units < ship.cargo.capacity;
-    const cargoSpaceReason = hasCargoSpace ? undefined : 'Cargo hold is full';
+    const cargoSpaceReason = hasCargoSpace
+      ? undefined
+      : ShipActionUnavailableReasons.cargoFull;
 
     if (isDocked) {
       addAction(
@@ -260,7 +265,9 @@ export const useGetShipActions = (ship: Ship) => {
     if (hasRefinery) {
       const unavailableReason =
         cooldownReason ??
-        (!hasProcessableCargo ? 'Requires 100 units of raw cargo' : undefined);
+        (!hasProcessableCargo
+          ? ShipActionUnavailableReasons.rawCargoRequired
+          : undefined);
       addAction(
         {
           isEnabled: !unavailableReason,

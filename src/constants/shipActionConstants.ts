@@ -2,6 +2,12 @@ import { ShipModuleSymbol } from '../api/models/models-ShipModule/shipModuleSymb
 import { ShipMountSymbol } from '../api/models/models-ShipMount/shipMountSymbol';
 import { type ShipActionType } from '../types/spaceTraders';
 
+export const ShipActionUnavailableReasons = {
+  cargoFull: 'Cargo hold is full',
+  cooldown: (countdown: string) => `Cooldown: ${countdown}`,
+  rawCargoRequired: 'Requires 100 units of raw cargo',
+} as const;
+
 export const ShipModuleCapabilities = {
   [ShipModuleSymbol.MODULE_CARGO_HOLD_I]: [],
   [ShipModuleSymbol.MODULE_CARGO_HOLD_II]: [],
