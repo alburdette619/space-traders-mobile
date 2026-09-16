@@ -26,7 +26,6 @@ export type ShipActionType =
   | 'dock'
   | 'enterOrbit'
   | 'extract'
-  | 'manageLoadout'
   | 'navigate'
   | 'refine'
   | 'refuel'

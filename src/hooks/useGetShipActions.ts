@@ -282,15 +282,6 @@ export const useGetShipActions = (ship: Ship) => {
     const hasShipyard = hasTrait(WaypointTraitSymbol.SHIPYARD);
 
     if (isDocked && hasShipyard) {
-      addAction(
-        {
-          isEnabled: true,
-          label: 'Manage loadout',
-          type: 'manageLoadout',
-        },
-        50,
-      );
-
       const needsRepair = [ship.engine, ship.frame, ship.reactor].some(
         ({ condition }) => condition < 1,
       );
