@@ -1,3 +1,5 @@
+import { type ShipActionType } from '../types/spaceTraders';
+
 // Mapping of icon names to their corresponding icon identifiers from material-design-icons.
 // These icons are used throughout the Void Runner application for various UI elements.
 export const voidRunnerIcons = {
@@ -21,3 +23,18 @@ export const shipStatusIcons = {
   inOrbit: 'orbit',
   inTransit: voidRunnerIcons.fleet,
 } as const;
+
+export const shipActionIcons: Record<ShipActionType, string> = {
+  chart: 'map-marker-plus-outline',
+  dock: 'anchor',
+  enterOrbit: 'orbit',
+  extract: 'pickaxe',
+  navigate: 'navigation-variant-outline',
+  refine: 'recycle',
+  refuel: 'gas-station-outline',
+  repair: 'wrench-outline',
+  scan: 'radar',
+  siphon: 'pipe',
+  survey: 'map-search-outline',
+  trade: 'swap-horizontal',
+};
