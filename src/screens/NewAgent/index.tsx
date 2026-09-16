@@ -16,6 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useGetMyAgent } from '@/src/api/models/agents/agents';
 import { Register201 } from '@/src/api/models/register201';
+import { BrandedTitle } from '@/src/components/BrandedTitle';
 import { CountdownContainer } from '@/src/components/CountdownContainer';
 import { voidRunnerIcons } from '@/src/constants/icons';
 import { useServerResetCountdown } from '@/src/hooks/useServerResetCountdown';
@@ -164,9 +165,11 @@ export const NewAgentScreen = () => {
       <View style={[flexStyles.flex, { backgroundColor: colors.background }]}>
         <SafeAreaView style={flexStyles.flex}>
           <View style={gapStyles.gapSmall}>
-            <Text style={miscStyles.screenPadding} variant="displayLarge">
-              {'/// New Agent'}
-            </Text>
+            <BrandedTitle
+              style={miscStyles.screenPadding}
+              title="New Agent"
+              variant="displayLarge"
+            />
             <CountdownContainer countdownString={humanReadableResetDate} />
           </View>
           <View style={[flexStyles.flex, miscStyles.screenPadding]}>

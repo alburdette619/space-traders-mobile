@@ -6,10 +6,11 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { Divider, Text, useTheme } from 'react-native-paper';
+import { Divider, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useGetMyShips } from '@/src/api/models/fleet/fleet';
+import { BrandedTitle } from '@/src/components/BrandedTitle';
 import { useFleetAlerts } from '@/src/hooks/useFleetAlerts';
 import { ShipWithAlerts } from '@/src/types/spaceTraders';
 
@@ -104,7 +105,7 @@ export const FleetScreen = () => {
             { backgroundColor: colors.background },
           ]}
         >
-          <Text variant="titleMedium">{`/// ${section.title}`}</Text>
+          <BrandedTitle title={section.title} variant="titleMedium" />
           <Divider bold />
         </View>
       );

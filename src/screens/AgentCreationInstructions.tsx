@@ -4,6 +4,7 @@ import { Divider, List, Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { BackButton } from '../components/BackButton';
+import { BrandedTitle } from '../components/BrandedTitle';
 import { spaceTradersLogin } from '../constants/urls';
 import { flexStyles, miscStyles } from '../theme/globalStyles';
 
@@ -25,9 +26,10 @@ export const AgentCreationInstructionsScreen = () => {
           contentContainerStyle={styles.container}
           style={flexStyles.flex}
         >
-          <Text variant="headlineLarge">
-            {'/// Agent Creation Instructions'}
-          </Text>
+          <BrandedTitle
+            title="Agent Creation Instructions"
+            variant="headlineLarge"
+          />
           <List.Accordion
             left={(props) => (
               <List.Icon

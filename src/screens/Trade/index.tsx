@@ -25,6 +25,7 @@ import { type ShipCargoItem } from '@/src/api/models/models-ShipCargoItem/shipCa
 import { useGetMarket } from '@/src/api/models/systems/systems';
 import { AsyncScreenState } from '@/src/components/AsyncScreenState';
 import { BackButton } from '@/src/components/BackButton';
+import { BrandedTitle } from '@/src/components/BrandedTitle';
 import { CargoTradeItem } from '@/src/components/CargoTradeItem';
 import { useMarketTradeController } from '@/src/hooks/useMarketTradeController';
 import { RootNavigatorParams } from '@/src/navigation/navigationParams';
@@ -168,7 +169,7 @@ const TradeContent = ({
       <View style={[flexStyles.flexRow, gapStyles.gapMedium, styles.header]}>
         <BackButton />
         <View style={flexStyles.flex}>
-          <Text variant="titleLarge">Market trade</Text>
+          <BrandedTitle title="Market Trade" variant="titleLarge" />
           <Text style={{ color: colors.onSurfaceVariant }} variant="labelSmall">
             {ship.nav.waypointSymbol}
           </Text>

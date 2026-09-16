@@ -9,7 +9,7 @@ import {
 import * as SecureStore from 'expo-secure-store';
 import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, useWindowDimensions } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import {
   Easing,
   useDerivedValue,
@@ -18,6 +18,7 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 
+import { BrandedTitle } from '../components/BrandedTitle';
 import { agentKey } from '../constants/storageKeys';
 import { useLoadFonts } from '../hooks/useLoadFonts';
 import { useUserStore } from '../stores/userStore';
@@ -216,9 +217,11 @@ export const BrandSplashScreen = () => {
           y={planetY}
         />
       </Canvas>
-      <Text style={styles.appNameText} variant="displayLarge">
-        {'/// VOID RUNNER'}
-      </Text>
+      <BrandedTitle
+        style={styles.appNameText}
+        title="VOID RUNNER"
+        variant="displayLarge"
+      />
     </>
   );
 };
