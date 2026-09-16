@@ -43,7 +43,7 @@ export const CargoTradeItem = ({
   return (
     <Card mode="outlined">
       <Card.Content style={gapStyles.gapMedium}>
-        <View style={[flexStyles.flexRow, styles.header]}>
+        <View style={[flexStyles.flexRow, flexStyles.justifyBetween]}>
           <View style={flexStyles.flex}>
             <Text variant="titleMedium">{name}</Text>
             {shouldShowSymbol && (
@@ -55,7 +55,7 @@ export const CargoTradeItem = ({
               </Text>
             )}
           </View>
-          <View style={styles.price}>
+          <View style={flexStyles.alignEnd}>
             <View style={[flexStyles.flexRow, gapStyles.gapSmall]}>
               {price !== undefined && (
                 <Icon size={16} source={voidRunnerIcons.credits} />
@@ -93,7 +93,13 @@ export const CargoTradeItem = ({
             Add
           </Button>
         ) : (
-          <View style={styles.quantityRow}>
+          <View
+            style={[
+              flexStyles.flexRow,
+              flexStyles.justifyEnd,
+              styles.quantityRow,
+            ]}
+          >
             {quantity > 1 && (
               <IconButton
                 accessibilityLabel={`Remove ${name} from cart`}
@@ -121,6 +127,7 @@ export const CargoTradeItem = ({
             />
             <View
               style={[
+                flexStyles.justifyCenter,
                 styles.quantityValue,
                 {
                   backgroundColor: colors.surfaceVariant,
@@ -154,28 +161,18 @@ export const CargoTradeItem = ({
 };
 
 const styles = StyleSheet.create({
-  header: {
-    justifyContent: 'space-between',
-  },
-  price: {
-    alignItems: 'flex-end',
-  },
   quantityButton: {
     height: 36,
     margin: 0,
     width: 36,
   },
   quantityRow: {
-    alignItems: 'center',
-    flexDirection: 'row',
     gap: 6,
-    justifyContent: 'flex-end',
   },
   quantityValue: {
     alignItems: 'baseline',
     borderWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
-    justifyContent: 'center',
     minWidth: 72,
     paddingHorizontal: 8,
     paddingVertical: 8,

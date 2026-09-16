@@ -48,8 +48,7 @@ export const ShipStatus = ({
           <View
             style={[
               flexStyles.flexRow,
-              isVertical &&
-                !isProgressBarShown && { justifyContent: 'space-between' },
+              isVertical && !isProgressBarShown && flexStyles.justifyBetween,
             ]}
           >
             {mode === 'icon' && <Icon size={16} source="barrel-outline" />}
@@ -74,8 +73,7 @@ export const ShipStatus = ({
           <View
             style={[
               flexStyles.flexRow,
-              isVertical &&
-                !isProgressBarShown && { justifyContent: 'space-between' },
+              isVertical && !isProgressBarShown && flexStyles.justifyBetween,
             ]}
           >
             {mode === 'icon' && (
@@ -102,8 +100,7 @@ export const ShipStatus = ({
           <View
             style={[
               flexStyles.flexRow,
-              isVertical &&
-                !isProgressBarShown && { justifyContent: 'space-between' },
+              isVertical && !isProgressBarShown && flexStyles.justifyBetween,
             ]}
           >
             {mode === 'icon' && (

@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useGetMyShip } from '../../api/models/fleet/fleet';
 import { AsyncScreenState } from '../../components/AsyncScreenState';
 import { RootNavigatorParams } from '../../navigation/navigationParams';
-import { flexStyles } from '../../theme/globalStyles';
+import { flexStyles, miscStyles } from '../../theme/globalStyles';
 import { ShipDetailSections } from './components/ShipDetailSections';
 import { ShipHeader } from './components/ShipHeader';
 import { ShipHud } from './components/ShipHud';
@@ -51,7 +51,7 @@ export const ShipDetailScreen = () => {
           <ShipHeader ship={ship} />
           <ShipHud ship={ship} />
         </View>
-        <View style={styles.contentContainer}>
+        <View style={[flexStyles.flex, miscStyles.screenPadding]}>
           <ShipDetailSections ship={ship} />
         </View>
       </ScrollView>
@@ -60,10 +60,6 @@ export const ShipDetailScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  contentContainer: {
-    flex: 1,
-    paddingHorizontal: 16,
-  },
   stickyHeaderContainer: {
     paddingBottom: 8,
   },

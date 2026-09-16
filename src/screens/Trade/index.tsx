@@ -28,7 +28,7 @@ import { BackButton } from '@/src/components/BackButton';
 import { CargoTradeItem } from '@/src/components/CargoTradeItem';
 import { useMarketTradeController } from '@/src/hooks/useMarketTradeController';
 import { RootNavigatorParams } from '@/src/navigation/navigationParams';
-import { flexStyles, gapStyles } from '@/src/theme/globalStyles';
+import { flexStyles, gapStyles, miscStyles } from '@/src/theme/globalStyles';
 
 interface TradeContentProps {
   credits: number;
@@ -165,7 +165,7 @@ const TradeContent = ({
 
   return (
     <>
-      <View style={styles.header}>
+      <View style={[flexStyles.flexRow, gapStyles.gapMedium, styles.header]}>
         <BackButton />
         <View style={flexStyles.flex}>
           <Text variant="titleLarge">Market trade</Text>
@@ -176,10 +176,18 @@ const TradeContent = ({
         {isRefreshing && <ActivityIndicator size="small" />}
       </View>
 
-      <View style={styles.screenContent}>
+      <View
+        style={[
+          flexStyles.flex,
+          miscStyles.screenPadding,
+          styles.screenContent,
+        ]}
+      >
         <Surface
           elevation={0}
           style={[
+            flexStyles.flexRow,
+            flexStyles.justifyBetween,
             styles.accountSummary,
             {
               backgroundColor: colors.surfaceVariant,
@@ -201,7 +209,7 @@ const TradeContent = ({
               {credits.toLocaleString()}
             </Text>
           </View>
-          <View style={styles.summaryValue}>
+          <View style={flexStyles.alignEnd}>
             <Text
               style={{ color: colors.onSurfaceVariant }}
               variant="labelSmall"
@@ -233,7 +241,7 @@ const TradeContent = ({
         />
 
         <ScrollView
-          contentContainerStyle={styles.itemList}
+          contentContainerStyle={[gapStyles.gapMedium, styles.itemList]}
           keyboardShouldPersistTaps="handled"
           style={flexStyles.flex}
         >
@@ -297,22 +305,22 @@ const TradeContent = ({
                 elevation={1}
                 style={[styles.checkoutSummary, { borderRadius: roundness }]}
               >
-                <View style={styles.summaryRow}>
+                <View style={[flexStyles.flexRow, flexStyles.justifyBetween]}>
                   <Text variant="bodyMedium">Estimated sales</Text>
                   <Text variant="bodyMedium">
                     +{saleRevenue.toLocaleString()} credits
                   </Text>
                 </View>
-                <View style={styles.summaryRow}>
+                <View style={[flexStyles.flexRow, flexStyles.justifyBetween]}>
                   <Text variant="bodyMedium">Estimated purchases</Text>
                   <Text variant="bodyMedium">
                     −{purchaseCost.toLocaleString()} credits
                   </Text>
                 </View>
                 <Divider />
-                <View style={styles.summaryRow}>
+                <View style={[flexStyles.flexRow, flexStyles.justifyBetween]}>
                   <Text variant="labelLarge">After checkout</Text>
-                  <View style={styles.summaryValue}>
+                  <View style={flexStyles.alignEnd}>
                     <Text
                       style={
                         projectedCredits < 0
@@ -344,7 +352,7 @@ const TradeContent = ({
                   </Text>
                 )}
 
-                <View style={styles.checkoutActions}>
+                <View style={[flexStyles.flexRow, flexStyles.justifyEnd]}>
                   <Button
                     buttonColor={colors.secondary}
                     disabled={!canCheckout || isRefreshing}
@@ -436,39 +444,20 @@ export const TradeScreen = () => {
 
 const styles = StyleSheet.create({
   accountSummary: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     padding: 12,
-  },
-  checkoutActions: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
   },
   checkoutSummary: {
     gap: 10,
     padding: 16,
   },
   header: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 8,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
   itemList: {
-    gap: 8,
     paddingBottom: 24,
   },
   screenContent: {
-    flex: 1,
     gap: 12,
-    paddingHorizontal: 16,
-  },
-  summaryRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  summaryValue: {
-    alignItems: 'flex-end',
   },
 });

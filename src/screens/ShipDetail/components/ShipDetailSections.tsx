@@ -5,8 +5,7 @@ import { Ship } from '@/src/api/models/models-Ship/ship';
 import { gapStyles } from '@/src/theme/globalStyles';
 
 import { ShipActions } from './ShipActions';
-
-const CargoPlaceholders = ['cargo-1', 'cargo-2', 'cargo-3', 'cargo-4'];
+import { ShipCargo } from './ShipCargo';
 
 export const ShipDetailSections = ({ ship }: { ship: Ship }) => {
   const { colors, roundness } = useTheme();
@@ -17,7 +16,7 @@ export const ShipDetailSections = ({ ship }: { ship: Ship }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[gapStyles.gapXLarge, styles.container]}>
       <ShipActions ship={ship} />
 
       <View style={gapStyles.gapMedium}>
@@ -42,7 +41,7 @@ export const ShipDetailSections = ({ ship }: { ship: Ship }) => {
 
         <View style={gapStyles.gapSmall}>
           <Text variant="titleSmall">Core systems</Text>
-          <View style={styles.coreSystems}>
+          <View style={gapStyles.gapMedium}>
             <View style={gapStyles.gapSmall}>
               <Text variant="labelMedium">Frame</Text>
               <View style={[styles.systemPlaceholder, placeholderStyle]} />
@@ -73,24 +72,9 @@ export const ShipDetailSections = ({ ship }: { ship: Ship }) => {
 };
 
 const styles = StyleSheet.create({
-  cargoGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  cargoPlaceholder: {
-    aspectRatio: 1.5,
-    borderWidth: StyleSheet.hairlineWidth,
-    flexBasis: '48%',
-    flexGrow: 1,
-  },
   container: {
-    gap: 24,
     paddingBottom: 32,
     paddingTop: 8,
-  },
-  coreSystems: {
-    gap: 8,
   },
   crewPlaceholder: {
     borderWidth: StyleSheet.hairlineWidth,

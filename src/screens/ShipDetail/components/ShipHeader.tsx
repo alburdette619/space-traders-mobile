@@ -5,7 +5,7 @@ import { Icon, Text } from 'react-native-paper';
 import { type Ship } from '@/src/api/models/models-Ship/ship';
 import { BackButton } from '@/src/components/BackButton';
 import { shipStatusIcons } from '@/src/constants/icons';
-import { flexStyles } from '@/src/theme/globalStyles';
+import { flexStyles, gapStyles } from '@/src/theme/globalStyles';
 
 interface ShipHeaderProps {
   ship?: Ship;
@@ -18,7 +18,14 @@ export const ShipHeader = ({ ship }: ShipHeaderProps) => {
   return (
     <View style={[flexStyles.flexRow, styles.container]}>
       <BackButton />
-      <View style={[flexStyles.flex, flexStyles.flexRow, styles.content]}>
+      <View
+        style={[
+          flexStyles.flex,
+          flexStyles.flexRow,
+          flexStyles.justifyBetween,
+          gapStyles.gapMedium,
+        ]}
+      >
         <View style={styles.registration}>
           <Text numberOfLines={1} variant="titleLarge">
             {title}
@@ -46,12 +53,7 @@ export const ShipHeader = ({ ship }: ShipHeaderProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
     paddingRight: 16,
-  },
-  content: {
-    gap: 8,
-    justifyContent: 'space-between',
   },
   registration: {
     flex: 1,

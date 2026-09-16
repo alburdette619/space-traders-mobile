@@ -21,11 +21,16 @@ export const gapStyles = StyleSheet.create({
 });
 
 export const flexStyles = StyleSheet.create({
+  alignCenter: { alignItems: 'center' },
+  alignEnd: { alignItems: 'flex-end' },
   flex: { flex: 1 },
   flexRow: {
     alignItems: 'center',
     flexDirection: 'row',
   },
+  justifyBetween: { justifyContent: 'space-between' },
+  justifyCenter: { justifyContent: 'center' },
+  justifyEnd: { justifyContent: 'flex-end' },
 });
 
 export const miscStyles = StyleSheet.create({

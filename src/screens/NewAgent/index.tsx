@@ -27,7 +27,7 @@ import { useRegister } from '../../api/models/global/global';
 import { Faction } from '../../api/models/models-Faction/faction';
 import { agentKey } from '../../constants/storageKeys';
 import { getFactionImageUrl } from '../../constants/urls';
-import { flexStyles, gapStyles } from '../../theme/globalStyles';
+import { flexStyles, gapStyles, miscStyles } from '../../theme/globalStyles';
 import { FactionsBottomSheet } from './components/FactionsBottomSheet';
 
 export const NewAgentScreen = () => {
@@ -161,21 +161,28 @@ export const NewAgentScreen = () => {
 
   return (
     <>
-      <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={[flexStyles.flex, { backgroundColor: colors.background }]}>
         <SafeAreaView style={flexStyles.flex}>
           <View style={gapStyles.gapSmall}>
-            <Text style={styles.containerPadding} variant="displayLarge">
+            <Text style={miscStyles.screenPadding} variant="displayLarge">
               {'/// New Agent'}
             </Text>
             <CountdownContainer countdownString={humanReadableResetDate} />
           </View>
-          <View style={[flexStyles.flex, styles.containerPadding]}>
-            <View style={styles.innerContainer}>
+          <View style={[flexStyles.flex, miscStyles.screenPadding]}>
+            <View
+              style={[
+                flexStyles.flex,
+                flexStyles.justifyCenter,
+                gapStyles.gapXLarge,
+              ]}
+            >
               <View style={gapStyles.gapLarge}>
                 <View style={gapStyles.gapMedium}>
                   <Pressable
                     onPress={handleAgentCreationInfo}
                     style={[
+                      flexStyles.flexRow,
                       gapStyles.gapMedium,
                       styles.agentCreationInstructionsContainer,
                       { borderColor: colors.primary },
@@ -201,7 +208,7 @@ export const NewAgentScreen = () => {
                   Login
                 </Button>
               </View>
-              <View style={[gapStyles.gapMedium, styles.dividerContainer]}>
+              <View style={[flexStyles.flexRow, gapStyles.gapMedium]}>
                 <Divider bold style={flexStyles.flex} />
                 <Text variant="bodyMedium">OR</Text>
                 <Divider bold style={flexStyles.flex} />
@@ -227,7 +234,9 @@ export const NewAgentScreen = () => {
                     disabled={isFetchingFactions}
                     onPress={handleChangeFaction}
                     style={[
+                      flexStyles.justifyCenter,
                       styles.selectFactionButton,
+                      !selectedFaction && flexStyles.alignCenter,
                       !selectedFaction && styles.selectFactionButtonEmpty,
                       {
                         borderColor: colors.primary,
@@ -281,43 +290,24 @@ export const NewAgentScreen = () => {
 
 const styles = StyleSheet.create({
   agentCreationInstructionsContainer: {
-    alignItems: 'center',
     alignSelf: 'flex-end',
     borderRadius: 32,
     borderWidth: 1,
-    flexDirection: 'row',
     paddingHorizontal: 12,
     paddingVertical: 8,
-  },
-  container: {
-    flex: 1,
-  },
-  containerPadding: {
-    paddingHorizontal: 16,
-  },
-  dividerContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
   },
   factionImage: {
     borderRadius: 20,
     height: 40,
     width: 40,
   },
-  innerContainer: {
-    flex: 1,
-    gap: 24,
-    justifyContent: 'center',
-  },
   selectFactionButton: {
     borderRadius: 4,
     borderWidth: 1,
     height: 48,
-    justifyContent: 'center',
     padding: 12,
   },
   selectFactionButtonEmpty: {
-    alignItems: 'center',
     borderStyle: 'dashed',
   },
 });

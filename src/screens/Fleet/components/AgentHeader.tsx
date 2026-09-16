@@ -91,7 +91,7 @@ export const AgentHeader = ({
           <Text style={styles.agentSymbolText} variant="titleLarge">
             {agent?.data.symbol}
           </Text>
-          <View style={[flexStyles.flexRow, styles.detailsContainer]}>
+          <View style={[flexStyles.flexRow, flexStyles.justifyBetween]}>
             <View>
               <View style={[flexStyles.flexRow, gapStyles.gapSmall]}>
                 <Icon size={16} source={voidRunnerIcons.credits} />
@@ -137,9 +137,6 @@ export const AgentHeader = ({
 const styles = StyleSheet.create({
   agentSymbolText: {
     marginBottom: 8,
-  },
-  detailsContainer: {
-    justifyContent: 'space-between',
   },
   headerContainer: {
     borderBottomLeftRadius: 12,

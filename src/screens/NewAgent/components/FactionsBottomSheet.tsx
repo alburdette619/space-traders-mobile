@@ -8,6 +8,7 @@ import { StyleSheet } from 'react-native';
 import { Divider, useTheme } from 'react-native-paper';
 
 import { Faction } from '@/src/api/models/models-Faction/faction';
+import { miscStyles } from '@/src/theme/globalStyles';
 
 import { FactionListItem } from './FactionListItem';
 
@@ -78,6 +79,7 @@ export const FactionsBottomSheet = ({
         alwaysBounceVertical={false}
         bounces={false}
         contentContainerStyle={[
+          miscStyles.screenPadding,
           { backgroundColor: colors.background },
           styles.bottomSheetContent,
         ]}
@@ -93,6 +95,5 @@ export const FactionsBottomSheet = ({
 const styles = StyleSheet.create({
   bottomSheetContent: {
     paddingBottom: 32,
-    paddingHorizontal: 16,
   },
 });

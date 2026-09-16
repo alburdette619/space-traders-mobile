@@ -14,7 +14,14 @@ export const AsyncScreenState = ({
   isError,
   onRetry,
 }: AsyncScreenStateProps) => (
-  <View style={[flexStyles.flex, styles.content]}>
+  <View
+    style={[
+      flexStyles.flex,
+      flexStyles.alignCenter,
+      flexStyles.justifyCenter,
+      styles.content,
+    ]}
+  >
     {isError ? (
       <>
         <Text variant="bodyLarge">{errorMessage}</Text>
@@ -32,9 +39,7 @@ export const AsyncScreenState = ({
 
 const styles = StyleSheet.create({
   content: {
-    alignItems: 'center',
     gap: 12,
-    justifyContent: 'center',
     padding: 24,
   },
 });

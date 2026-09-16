@@ -38,7 +38,13 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
 
   const renderTitle = useCallback(() => {
     return (
-      <View style={[flexStyles.flexRow, styles.titleContainer]}>
+      <View
+        style={[
+          flexStyles.flexRow,
+          flexStyles.justifyBetween,
+          styles.titleContainer,
+        ]}
+      >
         <View style={flexStyles.flexRow}>
           <Text variant="titleSmall">
             {ship.registration?.name || ship.symbol}
@@ -126,10 +132,17 @@ export const ShipItem = ({ ship }: ShipItemProps) => {
     <Card onPress={handlePress} style={[styles.card]}>
       <List.Item description={renderSubtitle()} title={renderTitle()} />
       <Card.Content
-        style={[gapStyles.gapMedium, flexStyles.flexRow, , styles.cardContent]}
+        style={[
+          gapStyles.gapMedium,
+          flexStyles.flexRow,
+          flexStyles.justifyBetween,
+        ]}
       >
         {renderStatuses()}
-        <ShipStatus containerStyle={styles.statsContainer} ship={ship} />
+        <ShipStatus
+          containerStyle={[flexStyles.alignEnd, styles.statsContainer]}
+          ship={ship}
+        />
       </Card.Content>
     </Card>
   );
@@ -141,7 +154,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     paddingVertical: 4,
   },
-  cardContent: { justifyContent: 'space-between' },
   contentDivider: {
     height: 36,
   },
@@ -152,8 +164,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   statsContainer: {
-    alignItems: 'flex-end',
     width: '100%',
   },
-  titleContainer: { justifyContent: 'space-between', width: '100%' },
+  titleContainer: { width: '100%' },
 });

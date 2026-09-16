@@ -18,7 +18,7 @@ import { type Ship } from '@/src/api/models/models-Ship/ship';
 import { TradeSymbol } from '@/src/api/models/models-TradeSymbol/tradeSymbol';
 import { useGetMarket } from '@/src/api/models/systems/systems';
 import { shipActionIcons } from '@/src/constants/icons';
-import { gapStyles } from '@/src/theme/globalStyles';
+import { flexStyles, gapStyles } from '@/src/theme/globalStyles';
 
 const FuelPerMarketUnit = 100;
 
@@ -118,7 +118,7 @@ export const RefuelDialog = ({
     <Portal>
       <Dialog dismissable={!isPending} onDismiss={onDismiss} visible={visible}>
         <Dialog.Content style={gapStyles.gapMedium}>
-          <View style={styles.header}>
+          <View style={[flexStyles.flexRow, styles.header]}>
             <Icon
               color={colors.secondary}
               size={32}
@@ -129,6 +129,7 @@ export const RefuelDialog = ({
 
           <View
             style={[
+              gapStyles.gapMedium,
               styles.fuelPanel,
               {
                 backgroundColor: colors.surfaceVariant,
@@ -137,7 +138,7 @@ export const RefuelDialog = ({
               },
             ]}
           >
-            <View style={styles.fuelSummary}>
+            <View style={flexStyles.alignCenter}>
               <Text
                 style={{ color: colors.onSurfaceVariant }}
                 variant="labelMedium"
@@ -163,7 +164,13 @@ export const RefuelDialog = ({
             </Text>
           ) : (
             <View style={gapStyles.gapMedium}>
-              <View style={styles.quantityControls}>
+              <View
+                style={[
+                  flexStyles.flexRow,
+                  flexStyles.justifyCenter,
+                  gapStyles.gapSmall,
+                ]}
+              >
                 <IconButton
                   accessibilityLabel="Decrease market fuel units"
                   disabled={
@@ -211,6 +218,8 @@ export const RefuelDialog = ({
                   {wastedFuel > 0 && (
                     <View
                       style={[
+                        flexStyles.flexRow,
+                        gapStyles.gapMedium,
                         styles.wasteWarning,
                         {
                           backgroundColor: colors.errorContainer,
@@ -310,30 +319,15 @@ export const RefuelDialog = ({
 const styles = StyleSheet.create({
   fuelPanel: {
     borderWidth: StyleSheet.hairlineWidth,
-    gap: 8,
     padding: 12,
   },
-  fuelSummary: {
-    alignItems: 'center',
-  },
   header: {
-    alignItems: 'center',
-    flexDirection: 'row',
     gap: 12,
-  },
-  quantityControls: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 4,
-    justifyContent: 'center',
   },
   quantityInput: {
     width: 144,
   },
   wasteWarning: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    gap: 8,
     padding: 10,
   },
   wasteWarningAmount: {

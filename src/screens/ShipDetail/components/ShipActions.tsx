@@ -57,7 +57,7 @@ export const ShipActions = ({ ship }: { ship: Ship }) => {
 
   return (
     <View style={gapStyles.gapMedium}>
-      <View style={[flexStyles.flexRow, styles.sectionHeader]}>
+      <View style={[flexStyles.flexRow, flexStyles.justifyBetween]}>
         <Text variant="titleLarge">Actions</Text>
         {isPending && <ActivityIndicator size="small" />}
       </View>
@@ -69,11 +69,11 @@ export const ShipActions = ({ ship }: { ship: Ship }) => {
       )}
 
       {actions.length > 0 ? (
-        <View style={styles.actionGrid}>
+        <View style={gapStyles.gapMedium}>
           {actionRows.map((actionRow) => (
             <View
               key={actionRow.map(({ type }) => type).join('-')}
-              style={styles.actionRow}
+              style={[gapStyles.gapMedium, styles.actionRow]}
             >
               {actionRow.map((action) => {
                 const isDisabled = !action.isEnabled || !!pendingActionType;
@@ -159,14 +159,7 @@ const styles = StyleSheet.create({
   actionContainer: {
     flex: 1,
   },
-  actionGrid: {
-    gap: 8,
-  },
   actionRow: {
     flexDirection: 'row',
-    gap: 8,
-  },
-  sectionHeader: {
-    justifyContent: 'space-between',
   },
 });

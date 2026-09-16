@@ -206,14 +206,20 @@ export const ShipHud = ({ ship }: ShipHudProps) => {
         <View
           style={[
             flexStyles.flex,
-            styles.halfContainer,
+            flexStyles.justifyCenter,
             gapStyles.gapSmall,
             styles.leftHalfContainer,
           ]}
         >
           <Text variant="labelSmall">{ship.symbol}</Text>
           <Text variant="labelSmall">{shipStatusText}</Text>
-          <View style={[flexStyles.flexRow, styles.statusContainer]}>
+          <View
+            style={[
+              flexStyles.flexRow,
+              flexStyles.justifyBetween,
+              styles.statusContainer,
+            ]}
+          >
             <ShipStatus
               isProgressBarShown={false}
               isVertical
@@ -244,7 +250,7 @@ export const ShipHud = ({ ship }: ShipHudProps) => {
         </View>
         <View
           style={[
-            styles.halfContainer,
+            flexStyles.justifyCenter,
             styles.rightHalfContainer,
             {
               backgroundColor: 'black',
@@ -272,9 +278,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     overflow: 'hidden',
   },
-  halfContainer: {
-    justifyContent: 'center',
-  },
   leftHalfContainer: {
     paddingLeft: 12,
     paddingRight: 8,
@@ -286,7 +289,6 @@ const styles = StyleSheet.create({
     width: '42%',
   },
   statusContainer: {
-    justifyContent: 'space-between',
     width: '100%',
   },
 });
