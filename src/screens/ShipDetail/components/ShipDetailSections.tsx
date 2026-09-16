@@ -19,17 +19,7 @@ export const ShipDetailSections = ({ ship }: { ship: Ship }) => {
     <View style={[gapStyles.gapXLarge, styles.container]}>
       <ShipActions ship={ship} />
 
-      <View style={gapStyles.gapMedium}>
-        <Text variant="titleLarge">Cargo</Text>
-        <View style={styles.cargoGrid}>
-          {CargoPlaceholders.map((placeholder) => (
-            <View
-              key={placeholder}
-              style={[styles.cargoPlaceholder, placeholderStyle]}
-            />
-          ))}
-        </View>
-      </View>
+      <ShipCargo cargo={ship.cargo} />
 
       <View style={gapStyles.gapMedium}>
         <Text variant="titleLarge">Crew</Text>
