@@ -19,10 +19,16 @@ export const ShipHeader = ({ ship }: ShipHeaderProps) => {
     <View style={[flexStyles.flexRow, styles.container]}>
       <BackButton />
       <View style={[flexStyles.flex, flexStyles.flexRow, styles.content]}>
-        <Text numberOfLines={1} style={styles.title} variant="titleLarge">
-          {title}
-          {role ? ` • ${role}` : ''}
-        </Text>
+        <View style={styles.registration}>
+          <Text numberOfLines={1} variant="titleLarge">
+            {title}
+          </Text>
+          {ship && (
+            <Text numberOfLines={1} variant="labelSmall">
+              {ship.registration.factionSymbol} • {role}
+            </Text>
+          )}
+        </View>
         {ship && (
           <Icon
             size={28}
@@ -47,7 +53,7 @@ const styles = StyleSheet.create({
     gap: 8,
     justifyContent: 'space-between',
   },
-  title: {
+  registration: {
     flex: 1,
   },
 });

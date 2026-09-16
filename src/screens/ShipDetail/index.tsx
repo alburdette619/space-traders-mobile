@@ -8,6 +8,7 @@ import { useGetMyShip } from '../../api/models/fleet/fleet';
 import { AsyncScreenState } from '../../components/AsyncScreenState';
 import { RootNavigatorParams } from '../../navigation/navigationParams';
 import { flexStyles } from '../../theme/globalStyles';
+import { ShipDetailSections } from './components/ShipDetailSections';
 import { ShipHeader } from './components/ShipHeader';
 import { ShipHud } from './components/ShipHud';
 
@@ -39,18 +40,20 @@ export const ShipDetailScreen = () => {
     >
       <ScrollView
         contentContainerStyle={{ flexGrow: 1 }}
-        stickyHeaderIndices={[1]}
+        stickyHeaderIndices={[0]}
       >
-        <ShipHeader ship={ship} />
         <View
           style={[
-            styles.stickyHudContainer,
+            styles.stickyHeaderContainer,
             { backgroundColor: colors.background },
           ]}
         >
+          <ShipHeader ship={ship} />
           <ShipHud ship={ship} />
         </View>
-        <View style={styles.contentContainer}></View>
+        <View style={styles.contentContainer}>
+          <ShipDetailSections ship={ship} />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -61,7 +64,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 16,
   },
-  stickyHudContainer: {
+  stickyHeaderContainer: {
     paddingBottom: 8,
   },
 });

@@ -14,6 +14,28 @@ export interface ContractAlert extends Omit<ShipAlert, 'shipId'> {
   type: 'deadline';
 }
 
+export interface ShipAction {
+  isEnabled: boolean;
+  label: string;
+  type: ShipActionType;
+  unavailableReason?: string;
+}
+
+export type ShipActionType =
+  | 'chart'
+  | 'dock'
+  | 'enterOrbit'
+  | 'extract'
+  | 'manageLoadout'
+  | 'navigate'
+  | 'refine'
+  | 'refuel'
+  | 'repair'
+  | 'scan'
+  | 'siphon'
+  | 'survey'
+  | 'trade';
+
 export interface ShipAlert {
   severity: 'crit' | 'warn';
   shipId: string;
