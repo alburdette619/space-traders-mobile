@@ -4,6 +4,7 @@ import { AgentCreationInstructionsScreen } from '../screens/AgentCreationInstruc
 import { BrandSplashScreen } from '../screens/BrandSplash';
 import { NewAgentScreen } from '../screens/NewAgent';
 import { ShipDetailScreen } from '../screens/ShipDetail';
+import { TradeScreen } from '../screens/Trade';
 import { useUserStore } from '../stores/userStore';
 import { MainAppTabs } from './MainAppTabs';
 import { RootNavigatorParams } from './navigationParams';
@@ -22,6 +23,7 @@ export const RootStack = () => {
         <Stack.Group>
           <Stack.Screen component={MainAppTabs} name="MainAppTabs" />
           <Stack.Screen component={ShipDetailScreen} name="ShipDetail" />
+          <Stack.Screen component={TradeScreen} name="Trade" />
         </Stack.Group>
       ) : (
         <Stack.Group>

@@ -13,6 +13,7 @@ import {
   useTheme,
 } from 'react-native-paper';
 
+import { useGetMyAgent } from '@/src/api/models/agents/agents';
 import { type Ship } from '@/src/api/models/models-Ship/ship';
 import { TradeSymbol } from '@/src/api/models/models-TradeSymbol/tradeSymbol';
 import { useGetMarket } from '@/src/api/models/systems/systems';
@@ -58,6 +59,7 @@ export const RefuelDialog = ({
       },
     },
   );
+  const agentQuery = useGetMyAgent({ query: { enabled: visible } });
 
   const parsedMarketUnits = Number.parseInt(marketUnitInput, 10);
   const marketUnits = Number.isNaN(parsedMarketUnits)
@@ -91,8 +93,15 @@ export const RefuelDialog = ({
     !quantityError
       ? marketUnits * fuelPrice
       : undefined;
+  const availableCredits = agentQuery.data?.data.credits;
+  const hasEnoughCredits =
+    estimatedCost !== undefined &&
+    availableCredits !== undefined &&
+    estimatedCost <= availableCredits;
+  const isRefreshingQuote = marketQuery.isFetching || agentQuery.isFetching;
 
-  const canConfirm = fuelToBuy > 0 && estimatedCost !== undefined && !isPending;
+  const canConfirm =
+    fuelToBuy > 0 && hasEnoughCredits && !isPending && !isRefreshingQuote;
   const targetProgress =
     ship.fuel.capacity > 0 ? Math.min(targetFuel / ship.fuel.capacity, 1) : 0;
 
@@ -237,7 +246,7 @@ export const RefuelDialog = ({
                     >
                       Add a market unit to refuel this ship.
                     </Text>
-                  ) : marketQuery.isPending ? (
+                  ) : isRefreshingQuote ? (
                     <ActivityIndicator size="small" />
                   ) : estimatedCost !== undefined && fuelPrice !== undefined ? (
                     <View>
@@ -252,6 +261,20 @@ export const RefuelDialog = ({
                         Adds {fuelToBuy.toLocaleString()} tank fuel ·{' '}
                         {marketUnits?.toLocaleString()} ×{' '}
                         {fuelPrice.toLocaleString()} credits
+                      </Text>
+                      <Text
+                        style={{
+                          color: hasEnoughCredits
+                            ? colors.onSurfaceVariant
+                            : colors.error,
+                        }}
+                        variant="labelSmall"
+                      >
+                        Agent credits:{' '}
+                        {availableCredits?.toLocaleString() ?? '—'}
+                        {!hasEnoughCredits && availableCredits !== undefined
+                          ? ` · ${(estimatedCost - availableCredits).toLocaleString()} more needed`
+                          : ''}
                       </Text>
                     </View>
                   ) : (

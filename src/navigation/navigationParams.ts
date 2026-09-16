@@ -11,6 +11,7 @@ export type RootNavigatorParams = {
   MainAppTabs: undefined;
   NewAgent: undefined;
   ShipDetail: { shipId: string };
+  Trade: { shipId: string };
 };
 
 /* eslint-disable @typescript-eslint/no-empty-object-type */
