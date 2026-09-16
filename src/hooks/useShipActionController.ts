@@ -1,5 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
 import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { useStore } from 'zustand';
 
 import { getGetMyAgentQueryKey } from '../api/models/agents/agents';
 import {
@@ -18,19 +20,29 @@ import {
   getGetMarketQueryKey,
   getGetWaypointQueryKey,
 } from '../api/models/systems/systems';
+import { createShipActionStore } from '../stores/shipActionStore';
 import { type ShipActionType } from '../types/spaceTraders';
 
 const getActionErrorMessage = (error: unknown) =>
   error instanceof Error ? error.message : 'The ship action failed.';
 
 export const useShipActionController = (ship: Ship) => {
+  const { navigate } = useNavigation();
   const queryClient = useQueryClient();
-  const pendingActionRef = useRef<ShipActionType | undefined>(undefined);
-  const [feedbackMessage, setFeedbackMessage] = useState<string>();
-  const [isFeedbackError, setIsFeedbackError] = useState(false);
-  const [pendingActionType, setPendingActionType] = useState<ShipActionType>();
-  const [requestedActionType, setRequestedActionType] =
-    useState<ShipActionType>();
+  const [actionStore] = useState(createShipActionStore);
+  const {
+    beginAction,
+    completeAction,
+    dismissFeedback,
+    dismissRequestedAction,
+    failAction,
+    feedbackMessage,
+    finishAction,
+    isFeedbackError,
+    pendingActionType,
+    requestAction,
+    requestedActionType,
+  } = useStore(actionStore);
 
   const chartMutation = useCreateChart();
   const dockMutation = useDockShip();
@@ -59,26 +71,19 @@ export const useShipActionController = (ship: Ship) => {
       command: () => Promise<unknown>,
       successMessage: string,
     ) => {
-      if (pendingActionRef.current) return;
-
-      pendingActionRef.current = actionType;
-      setFeedbackMessage(undefined);
-      setIsFeedbackError(false);
-      setPendingActionType(actionType);
+      if (!beginAction(actionType)) return;
 
       try {
         await command();
         await refreshShipQueries();
-        setFeedbackMessage(successMessage);
+        completeAction(successMessage);
       } catch (error: unknown) {
-        setFeedbackMessage(getActionErrorMessage(error));
-        setIsFeedbackError(true);
+        failAction(getActionErrorMessage(error));
       } finally {
-        pendingActionRef.current = undefined;
-        setPendingActionType(undefined);
+        finishAction();
       }
     },
-    [refreshShipQueries],
+    [beginAction, completeAction, failAction, finishAction, refreshShipQueries],
   );
 
   const handleChart = useCallback(() => {
@@ -128,7 +133,7 @@ export const useShipActionController = (ship: Ship) => {
 
   const handleRefuel = useCallback(
     (units: number) => {
-      setRequestedActionType(undefined);
+      dismissRequestedAction();
       void runCommand(
         'refuel',
         async () => {
@@ -151,7 +156,7 @@ export const useShipActionController = (ship: Ship) => {
         'Ship refueled.',
       );
     },
-    [queryClient, refuelMutation, runCommand, ship],
+    [dismissRequestedAction, queryClient, refuelMutation, runCommand, ship],
   );
 
   const handleSiphon = useCallback(() => {
@@ -162,13 +167,9 @@ export const useShipActionController = (ship: Ship) => {
     );
   }, [runCommand, ship.symbol, siphonMutation]);
 
-  const requestActionFlow = useCallback((actionType: ShipActionType) => {
-    if (!pendingActionRef.current) {
-      setRequestedActionType(
-        (currentActionType) => currentActionType ?? actionType,
-      );
-    }
-  }, []);
+  const handleTrade = useCallback(() => {
+    navigate('Trade', { shipId: ship.symbol });
+  }, [navigate, ship.symbol]);
 
   const handlers = useMemo(
     () =>
@@ -177,14 +178,14 @@ export const useShipActionController = (ship: Ship) => {
         dock: handleDock,
         enterOrbit: handleEnterOrbit,
         extract: handleExtract,
-        navigate: () => requestActionFlow('navigate'),
-        refine: () => requestActionFlow('refine'),
-        refuel: () => requestActionFlow('refuel'),
-        repair: () => requestActionFlow('repair'),
-        scan: () => requestActionFlow('scan'),
+        navigate: () => requestAction('navigate'),
+        refine: () => requestAction('refine'),
+        refuel: () => requestAction('refuel'),
+        repair: () => requestAction('repair'),
+        scan: () => requestAction('scan'),
         siphon: handleSiphon,
-        survey: () => requestActionFlow('survey'),
-        trade: () => requestActionFlow('trade'),
+        survey: () => requestAction('survey'),
+        trade: handleTrade,
       }) satisfies Record<ShipActionType, () => void>,
     [
       handleChart,
@@ -192,26 +193,18 @@ export const useShipActionController = (ship: Ship) => {
       handleEnterOrbit,
       handleExtract,
       handleSiphon,
-      requestActionFlow,
+      handleTrade,
+      requestAction,
     ],
   );
 
   const startAction = useCallback(
     (actionType: ShipActionType) => {
-      if (pendingActionRef.current) return;
+      if (actionStore.getState().pendingActionType) return;
       handlers[actionType]();
     },
-    [handlers],
+    [actionStore, handlers],
   );
-
-  const dismissFeedback = useCallback(() => {
-    setFeedbackMessage(undefined);
-    setIsFeedbackError(false);
-  }, []);
-
-  const dismissRequestedAction = useCallback(() => {
-    setRequestedActionType(undefined);
-  }, []);
 
   return {
     confirmRefuel: handleRefuel,
