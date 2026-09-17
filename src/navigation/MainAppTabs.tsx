@@ -6,9 +6,9 @@ import { CommonActions } from '@react-navigation/native';
 import { BottomNavigation, Icon, useTheme } from 'react-native-paper';
 
 import { voidRunnerIcons } from '../constants/icons';
-import { ContractsScreen } from '../screens/Contracts';
 import { FleetScreen } from '../screens/Fleet';
 import { GalaxyMapScreen } from '../screens/GalaxyMap';
+import { OperationsScreen } from '../screens/Operations';
 import { StatsScreen } from '../screens/Stats';
 import { MainAppTabsParams } from './navigationParams';
 
@@ -87,22 +87,22 @@ export const MainAppTabs = () => {
         }}
       />
       <TabsNavigator.Screen
-        component={ContractsScreen}
-        name="Contracts"
+        component={OperationsScreen}
+        name="Operations"
         options={{
-          tabBarButtonTestID: 'contracts-tab-button',
+          tabBarButtonTestID: 'operations-tab-button',
           tabBarIcon: ({ color, focused, size }) => (
             <Icon
               color={color}
               size={size}
               source={
                 focused
-                  ? voidRunnerIcons.contractsFocused
-                  : voidRunnerIcons.contracts
+                  ? voidRunnerIcons.operationsFocused
+                  : voidRunnerIcons.operations
               }
             />
           ),
-          tabBarLabel: 'Contracts',
+          tabBarLabel: 'Operations',
         }}
       />
       <TabsNavigator.Screen

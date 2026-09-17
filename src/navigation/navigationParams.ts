@@ -1,7 +1,7 @@
 export type MainAppTabsParams = {
-  Contracts: undefined;
   Fleet: undefined;
   GalaxyMap: undefined;
+  Operations: undefined;
   Stats: undefined;
 };
 

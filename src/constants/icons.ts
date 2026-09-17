@@ -14,6 +14,8 @@ export const voidRunnerIcons = {
   galaxyMap: 'creation-outline',
   galaxyMapFocused: 'creation',
   help: 'help-circle',
+  operations: 'briefcase-outline',
+  operationsFocused: 'briefcase',
   stats: 'chart-box-outline',
   statsFocused: 'chart-box',
 } as const;
