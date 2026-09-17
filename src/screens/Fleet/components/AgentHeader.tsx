@@ -2,12 +2,13 @@ import { useLocales } from 'expo-localization';
 import { camelCase, countBy } from 'lodash';
 import { useMemo } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { Chip, Icon, Surface, Text, useTheme } from 'react-native-paper';
+import { Icon, Surface, Text, useTheme } from 'react-native-paper';
 import Animated, { StretchInY, StretchOutX } from 'react-native-reanimated';
 
 import { useGetMyAgent } from '@/src/api/models/agents/agents';
 import { useGetContracts } from '@/src/api/models/contracts/contracts';
 import { useGetMyShips } from '@/src/api/models/fleet/fleet';
+import { CompactChip } from '@/src/components/CompactChip';
 import { shipStatusIcons, voidRunnerIcons } from '@/src/constants/icons';
 import { getFactionImageUrl } from '@/src/constants/urls';
 import {
@@ -30,10 +31,9 @@ export const AgentHeader = ({
   const { colors } = useTheme();
   const [locale] = useLocales();
 
-  const { data: agent, isFetching: isFetchingAgent } = useGetMyAgent();
+  const { data: agent } = useGetMyAgent();
   const { data: ships, isFetching: isFetchingShips } = useGetMyShips();
-  const { data: contracts, isFetching: isFetchingContracts } =
-    useGetContracts();
+  const { data: contracts } = useGetContracts();
 
   const shipStatusCounts: ShipStatusCounts = useMemo(() => {
     if (isFetchingShips) {
@@ -112,19 +112,22 @@ export const AgentHeader = ({
             </View>
             {alertCount > 0 && (
               <Animated.View entering={StretchInY} exiting={StretchOutX}>
-                <Chip
-                  mode="outlined"
+                <CompactChip
+                  accessibilityLabel={`${alertCount} alert${alertCount !== 1 ? 's' : ''}`}
+                  accessibilityRole="alert"
+                  icon={voidRunnerIcons.alert}
+                  iconColor={isAlertCritical ? colors.error : colors.onSurface}
                   style={{
                     backgroundColor: isAlertCritical
                       ? colors.errorContainer
                       : colors.surface,
                   }}
+                  textColor={
+                    isAlertCritical ? colors.onErrorContainer : colors.onSurface
+                  }
                 >
-                  <View style={[flexStyles.flexRow, gapStyles.gapSmall]}>
-                    <Icon size={16} source={voidRunnerIcons.alert} />
-                    <Text variant="bodySmall">{`${alertCount} Alert${alertCount !== 1 ? 's' : ''}`}</Text>
-                  </View>
-                </Chip>
+                  {`${alertCount} Alert${alertCount !== 1 ? 's' : ''}`}
+                </CompactChip>
               </Animated.View>
             )}
           </View>

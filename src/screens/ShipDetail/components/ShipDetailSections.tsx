@@ -6,9 +6,17 @@ import { gapStyles } from '@/src/theme/globalStyles';
 
 import { ShipActions } from './ShipActions';
 import { ShipCargo } from './ShipCargo';
+import { ShipLocalServices } from './ShipLocalServices';
 
 export const ShipDetailSections = ({ ship }: { ship: Ship }) => {
   const { colors, roundness } = useTheme();
+  const hasCargoHold =
+    ship.cargo.capacity > 0 || ship.cargo.inventory.length > 0;
+  const hasCrew =
+    ship.crew.capacity > 0 || ship.crew.current > 0 || ship.crew.required > 0;
+  const hasModuleSlots = ship.frame.moduleSlots > 0 || ship.modules.length > 0;
+  const hasMountingPoints =
+    ship.frame.mountingPoints > 0 || ship.mounts.length > 0;
   const placeholderStyle = {
     backgroundColor: colors.surfaceVariant,
     borderColor: colors.outlineVariant,
@@ -17,14 +25,18 @@ export const ShipDetailSections = ({ ship }: { ship: Ship }) => {
 
   return (
     <View style={[gapStyles.gapXLarge, styles.container]}>
+      <ShipLocalServices ship={ship} />
+
       <ShipActions ship={ship} />
 
-      <ShipCargo cargo={ship.cargo} />
+      {hasCargoHold && <ShipCargo cargo={ship.cargo} />}
 
-      <View style={gapStyles.gapMedium}>
-        <Text variant="titleLarge">Crew</Text>
-        <View style={[styles.crewPlaceholder, placeholderStyle]} />
-      </View>
+      {hasCrew && (
+        <View style={gapStyles.gapMedium}>
+          <Text variant="titleLarge">Crew</Text>
+          <View style={[styles.crewPlaceholder, placeholderStyle]} />
+        </View>
+      )}
 
       <View style={gapStyles.gapMedium}>
         <Text variant="titleLarge">Loadout</Text>
@@ -47,15 +59,19 @@ export const ShipDetailSections = ({ ship }: { ship: Ship }) => {
           </View>
         </View>
 
-        <View style={gapStyles.gapSmall}>
-          <Text variant="titleSmall">Modules</Text>
-          <View style={[styles.listPlaceholder, placeholderStyle]} />
-        </View>
+        {hasModuleSlots && (
+          <View style={gapStyles.gapSmall}>
+            <Text variant="titleSmall">Modules</Text>
+            <View style={[styles.listPlaceholder, placeholderStyle]} />
+          </View>
+        )}
 
-        <View style={gapStyles.gapSmall}>
-          <Text variant="titleSmall">Mounts</Text>
-          <View style={[styles.listPlaceholder, placeholderStyle]} />
-        </View>
+        {hasMountingPoints && (
+          <View style={gapStyles.gapSmall}>
+            <Text variant="titleSmall">Mounts</Text>
+            <View style={[styles.listPlaceholder, placeholderStyle]} />
+          </View>
+        )}
       </View>
     </View>
   );

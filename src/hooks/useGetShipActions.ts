@@ -133,7 +133,7 @@ export const useGetShipActions = (ship: Ship) => {
       );
     }
 
-    if (isInOrbit) {
+    if (isInOrbit && ship.fuel.capacity > 0) {
       addAction(
         {
           isEnabled: true,
@@ -142,6 +142,9 @@ export const useGetShipActions = (ship: Ship) => {
         },
         10,
       );
+    }
+
+    if (isInOrbit) {
       addAction(
         {
           isEnabled: true,
